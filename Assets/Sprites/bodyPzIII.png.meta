@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: e0eed727d8bfd6f44a9da5fdefe6e076
+guid: 4d7fedf13208dc449aec68dc2b1c2d34
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 6109044011567193366
-    second: simplex_terrain_ground_0
+      213: -8380491218068469806
+    second: bodyPzIII_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: simplex_terrain_ground_0
+      name: bodyPzIII_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 27
         y: 0
-        width: 500
-        height: 300
+        width: 159
+        height: 77
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 61d90b2592fa7c450800000000000000
-      internalID: 6109044011567193366
+      spriteID: 2d78fbf83a382bb80800000000000000
+      internalID: -8380491218068469806
       vertices: []
       indices: 
       edges: []
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      simplex_terrain_ground_0: 6109044011567193366
+      bodyPzIII_0: -8380491218068469806
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

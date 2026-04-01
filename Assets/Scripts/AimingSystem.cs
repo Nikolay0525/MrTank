@@ -22,6 +22,10 @@ public class AimingSystem : MonoBehaviour
     private bool isAiming = false;
     private Quaternion defaultGunRotation;
 
+    [Header("Spawning")]
+    public GameObject projectilePrefab;
+    public Transform firePoint; 
+
     private void Awake()
     {
         lineRenderer = GetComponent<LineRenderer>();
@@ -51,18 +55,28 @@ public class AimingSystem : MonoBehaviour
         lineRenderer.enabled = true;
     }
 
-    public Vector2 ExecuteShot()
+    public void ExecuteShot()
     {
         isAiming = false;
         lineRenderer.enabled = false;
 
-        // Повертаємо гармату у вихідне положення після пострілу (можна зробити плавно через Lerp)
-        if (gunPivot != null) gunPivot.localRotation = defaultGunRotation;
-
         float angleRad = currentAngle * Mathf.Deg2Rad;
         Vector2 shootVector = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad)) * projectileSpeed;
 
-        return shootVector;
+        // Інстанціювання снаряда та передача вектора швидкості
+        if (projectilePrefab != null && firePoint != null)
+        {
+            GameObject projectile = Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
+            Projectile projScript = projectile.GetComponent<Projectile>();
+
+            if (projScript != null)
+            {
+                projScript.Initialize(shootVector);
+            }
+        }
+
+        // Повернення гармати у вихідне положення
+        if (gunPivot != null) gunPivot.localRotation = defaultGunRotation;
     }
 
     private void OscillateAngle()
