@@ -15,7 +15,7 @@ public class AimingSystem : MonoBehaviour
     public float aimSpeed = 4f;
 
     [Header("Trajectory Rendering")]
-    public int linePoints = 30;
+    public int linePoints = 120;
     public float timeStep = 0.05f;
 
     [Header("Spawning")]
@@ -68,14 +68,14 @@ public class AimingSystem : MonoBehaviour
         }
     }
 
-    // Змінено тип повернення з void на GameObject для відстеження життєвого циклу снаряда
     public GameObject ExecuteShot(Action<bool> onResolutionCallback = null)
     {
         isAiming = false;
         lineRenderer.enabled = false;
 
-        float angleRad = currentAngle * Mathf.Deg2Rad;
-        Vector2 shootVector = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad)) * projectileSpeed;
+        // Отримуємо актуальний світовий кут у момент пострілу
+        float worldAngleRad = gunPivot.eulerAngles.z * Mathf.Deg2Rad;
+        Vector2 shootVector = new Vector2(Mathf.Cos(worldAngleRad), Mathf.Sin(worldAngleRad)) * projectileSpeed;
 
         GameObject projectileInstance = null;
 
@@ -86,8 +86,7 @@ public class AimingSystem : MonoBehaviour
 
             if (projScript != null)
             {
-                // Передача вектора швидкості та функції зворотного виклику
-                projScript.Initialize(shootVector, onResolutionCallback);
+                projScript.Initialize(shootVector, Projectile.ShootDirection.Right, onResolutionCallback);
             }
         }
 
@@ -115,18 +114,20 @@ public class AimingSystem : MonoBehaviour
 
     private void DrawTrajectory()
     {
-        float angleRad = currentAngle * Mathf.Deg2Rad;
-        Vector2 startPos = (gunPivot != null) ? (Vector2)gunPivot.position : (Vector2)transform.position;
+        // Отримуємо світовий кут дула в градусах, а потім переводимо в радіани
+        float worldAngleRad = gunPivot.eulerAngles.z * Mathf.Deg2Rad;
+
+        Vector2 startPos = firePoint.position; // Використовуємо firePoint для точності
         Vector2 gravity = Physics2D.gravity;
 
         for (int i = 0; i < linePoints; i++)
         {
             float t = i * timeStep;
 
-            // Рівняння балістичної кривої
+            // Використовуємо світовий кут (worldAngleRad)
             Vector2 point = startPos + new Vector2(
-                projectileSpeed * Mathf.Cos(angleRad) * t,
-                projectileSpeed * Mathf.Sin(angleRad) * t + 0.5f * gravity.y * t * t
+                projectileSpeed * Mathf.Cos(worldAngleRad) * t,
+                projectileSpeed * Mathf.Sin(worldAngleRad) * t + 0.5f * gravity.y * t * t
             );
 
             lineRenderer.SetPosition(i, point);

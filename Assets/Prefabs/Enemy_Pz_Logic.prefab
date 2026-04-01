@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4618530006010333306}
   - component: {fileID: 4447219840363830134}
-  m_Layer: 9
+  m_Layer: 6
   m_Name: Enemy_Gun_Visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -102,7 +102,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7715024796706888240}
   - component: {fileID: 5162229523910723229}
-  m_Layer: 9
+  m_Layer: 6
   m_Name: Enemy_Body_Visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -199,7 +199,7 @@ GameObject:
   - component: {fileID: 4292206461503941373}
   - component: {fileID: 8031972322344257965}
   - component: {fileID: 7817234390064361356}
-  m_Layer: 9
+  m_Layer: 6
   m_Name: Enemy_Pz_Logic
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -363,7 +363,7 @@ MonoBehaviour:
   enemyProjectilePrefab: {fileID: 252163599096119134, guid: 8e7a3fff1ffbd714f8a2a4c8851cfa51, type: 3}
   firePoint: {fileID: 4066744998069205079}
   gunPivot: {fileID: 7447703699192111638}
-  projectileSpeed: 20
+  projectileSpeed: 12
 --- !u!114 &7817234390064361356
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -376,8 +376,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8378cc5507722b64caeb1419cf4dda3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VisualDeathHandler
-  renderersToDarken:
-  - {fileID: 5162229523910723229}
 --- !u!1 &6699842397318382684
 GameObject:
   m_ObjectHideFlags: 0
@@ -388,7 +386,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7447703699192111638}
   - component: {fileID: 1062486942420873937}
-  m_Layer: 9
+  m_Layer: 6
   m_Name: Enemy_Gun_Pivot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -480,7 +478,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4066744998069205079}
   - component: {fileID: 5189776137638372349}
-  m_Layer: 9
+  m_Layer: 6
   m_Name: FirePoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}

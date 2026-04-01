@@ -10,6 +10,8 @@ public enum DamageType
 [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
 public class Projectile : MonoBehaviour
 {
+    public enum ShootDirection { Right, Left }
+
     [Header("Damage Configuration")]
     public DamageType damageType = DamageType.Direct;
     public float damageAmount = 25f;
@@ -18,24 +20,48 @@ public class Projectile : MonoBehaviour
     public float explosionRadius = 2.5f;
     public LayerMask enemyLayer;
 
+    [Header("Orientation Settings")]
+    [Tooltip("Початковий напрямок стрільби (для орієнтації спрайту)")]
+    public ShootDirection initialDirection;
+
     private Rigidbody2D rb;
     private Action<bool> onResolutionCallback; // Змінна для зберігання делегата
+    private bool isInitialized = false;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
     }
 
-    // Збереження делегата при ініціалізації
-    public void Initialize(Vector2 initialVelocity, Action<bool> callback = null)
+    public void Initialize(Vector2 initialVelocity, ShootDirection direction, Action<bool> callback = null)
     {
         rb.linearVelocity = initialVelocity;
+        initialDirection = direction;
         onResolutionCallback = callback;
+        isInitialized = true;
+    }
+
+    private void FixedUpdate()
+    {
+        if (isInitialized && rb != null && rb.linearVelocity.sqrMagnitude > 0.1f)
+        {
+            Vector2 v = rb.linearVelocity;
+
+            // Отримання абсолютного світового кута вектора швидкості
+            float angleRad = Mathf.Atan2(v.y, v.x);
+            float angleDeg = angleRad * Mathf.Rad2Deg;
+
+            // Застосування константи зміщення для спрайту, зорієнтованого вгору
+            angleDeg -= 90f;
+
+            transform.rotation = Quaternion.Euler(0, 0, angleDeg);
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         bool isHit = false;
+        isInitialized = false;
 
         switch (damageType)
         {
@@ -55,7 +81,7 @@ public class Projectile : MonoBehaviour
 
     private bool ApplyDirectDamage(GameObject target)
     {
-        Health health = target.GetComponent<Health>();
+        Health health = target.GetComponentInParent<Health>();
         if (health != null)
         {
             health.TakeDamage(damageAmount);

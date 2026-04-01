@@ -16,8 +16,8 @@ public class TankController : MonoBehaviour
 
     [Header("Timer Equation Parameters")]
     public float baseAimTime = 5f;
-    public float minAimTime = 1.5f;
-    public float timeReductionCoefficient = 0.01f;
+    public float minAimTime = 2f;
+    public float timeReductionCoefficient = 0.001f;
 
     public static float CurrentGlobalSpeed { get; private set; }
 

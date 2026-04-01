@@ -2,13 +2,14 @@
 
 public class VisualDeathHandler : MonoBehaviour
 {
-    [Tooltip("Масив усіх спрайтів об'єкта, які потрібно затемнити")]
-    public SpriteRenderer[] renderersToDarken;
-
     // Метод підключається через UnityEvent OnDeath у компоненті Health
     public void HandleDeathVisuals()
     {
-        foreach (SpriteRenderer sr in renderersToDarken)
+        // Збір усіх SpriteRenderer на поточному об'єкті та всіх його дочірніх об'єктах.
+        // Параметр 'true' дозволяє знаходити навіть тимчасово деактивовані об'єкти.
+        SpriteRenderer[] allRenderers = GetComponentsInChildren<SpriteRenderer>(true);
+
+        foreach (SpriteRenderer sr in allRenderers)
         {
             if (sr != null)
             {
@@ -16,8 +17,8 @@ public class VisualDeathHandler : MonoBehaviour
             }
         }
 
-        // Відключення колайдерів для запобігання подальшим колізіям
-        Collider2D[] colliders = GetComponentsInChildren<Collider2D>();
+        // Відключення всіх колайдерів для усунення фізичної оболонки
+        Collider2D[] colliders = GetComponentsInChildren<Collider2D>(true);
         foreach (Collider2D col in colliders)
         {
             col.enabled = false;

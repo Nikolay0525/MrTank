@@ -63,21 +63,22 @@ public class TerrainChunk : MonoBehaviour
 
     public void GenerateChunk(float globalXOffset)
     {
+        // Очищення старих об'єктів
         for (int i = transform.childCount - 1; i >= 0; i--)
         {
             Destroy(transform.GetChild(i).gameObject);
         }
 
+        // Параметри: перший чанк (20f) — плаский, наступний — плавно переходить у шум
+        float flatZone = 20f;
+        float transitionZone = 20f;
+
         Vector3[] vertices = new Vector3[resolution + 1];
         Vector2[] colliderPoints = new Vector2[resolution + 1];
         int[] triangles = new int[resolution * 6];
-
-        // Новий масив для UV-координат (розмір дорівнює повній кількості вершин)
         Vector2[] uvs = new Vector2[(resolution + 1) * 2];
 
         float step = width / resolution;
-
-        // Випадковий сид береться з ChunkManager
         float currentSeed = ChunkManager.SessionSeed;
 
         for (int i = 0; i <= resolution; i++)
@@ -85,12 +86,35 @@ public class TerrainChunk : MonoBehaviour
             float localX = i * step;
             float globalX = globalXOffset + localX;
 
-            float y = Mathf.PerlinNoise(globalX * noiseScale, currentSeed) * heightMultiplier;
+            // Базова висота шуму
+            float rawY = Mathf.PerlinNoise(globalX * noiseScale, currentSeed) * heightMultiplier;
 
-            vertices[i] = new Vector3(localX, y, 0f);
-            colliderPoints[i] = new Vector2(localX, y);
+            float weight = 0f;
+
+            if (globalX <= flatZone)
+            {
+                // Перші 20 метрів (перший чанк) — гарантовано нульова висота
+                weight = 0f;
+            }
+            else if (globalX <= flatZone + transitionZone)
+            {
+                // Плавна S-подібна крива замість "трикутника"
+                float t = (globalX - flatZone) / transitionZone;
+                weight = Mathf.SmoothStep(0f, 1f, t);
+            }
+            else
+            {
+                // Далі йде повноцінний ландшафт
+                weight = 1f;
+            }
+
+            float finalY = rawY * weight;
+
+            vertices[i] = new Vector3(localX, finalY, 0f);
+            colliderPoints[i] = new Vector2(localX, finalY);
         }
 
+        // Побудова геометрії (Вершини + UV)
         Vector3[] fullVertices = new Vector3[(resolution + 1) * 2];
         float bottomY = -10f;
 
@@ -99,16 +123,12 @@ public class TerrainChunk : MonoBehaviour
             fullVertices[i] = vertices[i];
             fullVertices[i + resolution + 1] = new Vector3(vertices[i].x, bottomY, 0f);
 
-            // Математичний розрахунок проекції текстури (UV)
-            // Координата X текстури прив'язується до глобальної осі X середовища
-            // Координата Y текстури прив'язується до локальної осі Y вершини
             float globalX = globalXOffset + vertices[i].x;
-
             uvs[i] = new Vector2(globalX * textureScale, vertices[i].y * textureScale);
             uvs[i + resolution + 1] = new Vector2(globalX * textureScale, bottomY * textureScale);
         }
 
-        // Розрахунок індексів трикутників залишається без змін
+        // Тріангуляція
         int vert = 0;
         int tris = 0;
         for (int i = 0; i < resolution; i++)
@@ -119,15 +139,15 @@ public class TerrainChunk : MonoBehaviour
             triangles[tris + 3] = vert + 1;
             triangles[tris + 4] = vert + resolution + 1;
             triangles[tris + 5] = vert + resolution + 2;
-
             vert++;
             tris += 6;
         }
 
+        // Оновлення Mesh
         mesh.Clear();
         mesh.vertices = fullVertices;
         mesh.triangles = triangles;
-        mesh.uv = uvs; // Передача масиву UV у відеокарту
+        mesh.uv = uvs;
         mesh.RecalculateNormals();
         mesh.RecalculateBounds();
 

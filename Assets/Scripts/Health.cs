@@ -40,6 +40,6 @@ public class Health : MonoBehaviour
     {
         OnDeath?.Invoke();
         // Логіка знищення або перезавантаження
-        gameObject.SetActive(false);
+        //gameObject.SetActive(false);
     }
 }

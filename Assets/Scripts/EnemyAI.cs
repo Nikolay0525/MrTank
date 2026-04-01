@@ -6,7 +6,19 @@ public class EnemyAI : MonoBehaviour
     public GameObject enemyProjectilePrefab;
     public Transform firePoint;
     public Transform gunPivot;
-    public float projectileSpeed = 20f; // Висока швидкість для гарантованого влучання
+    public float projectileSpeed = 20f;
+
+    private Health myHealth;
+
+    private void Awake()
+    {
+        // Ініціалізація компонента контролю здоров'я
+        myHealth = GetComponent<Health>();
+        if (myHealth == null)
+        {
+            myHealth = GetComponentInParent<Health>();
+        }
+    }
 
     public void ExecutePerfectShot(TankController playerController)
     {
@@ -15,8 +27,14 @@ public class EnemyAI : MonoBehaviour
 
     private IEnumerator ShotSequence(TankController playerController)
     {
-        // Пауза перед пострілом для візуального сприйняття гравцем
         yield return new WaitForSeconds(1f);
+
+        // Валідація життєздатності об'єкта після затримки.
+        // Переривання співпрограми, якщо танк класифіковано як знищений.
+        if (myHealth != null && myHealth.currentHealth <= 0)
+        {
+            yield break;
+        }
 
         Vector2 startPos = firePoint.position;
         Vector2 targetPos = playerController.transform.position;
@@ -28,7 +46,6 @@ public class EnemyAI : MonoBehaviour
 
         float discriminant = Mathf.Pow(v, 4) - g * (g * x * x + 2 * y * v * v);
 
-        // Локальна змінна стану для синхронізації життєвого циклу снаряда
         bool isProjectileResolved = false;
 
         if (discriminant >= 0)
@@ -44,27 +61,16 @@ public class EnemyAI : MonoBehaviour
 
             if (projScript != null)
             {
-                // Передача анонімної функції (лямбда-виразу), яка змінить стан прапорця при колізії
-                projScript.Initialize(velocity, (hitResult) => { isProjectileResolved = true; });
+                projScript.Initialize(velocity, Projectile.ShootDirection.Left, (hitResult) => { isProjectileResolved = true; });
             }
-            else
-            {
-                isProjectileResolved = true; // Захист від нескінченного циклу у разі відсутності компонента
-            }
+            else isProjectileResolved = true;
         }
-        else
-        {
-            // Якщо математично постріл неможливий, дозволяємо співпрограмі продовжити виконання
-            isProjectileResolved = true;
-        }
+        else isProjectileResolved = true;
 
-        // Апаратне призупинення виконання співпрограми до моменту детонації снаряда
         yield return new WaitUntil(() => isProjectileResolved);
 
-        // Коротка пост-пауза для відображення результату (вибуху) перед початком ходу гравця
         yield return new WaitForSeconds(0.5f);
 
-        // Перевірка стану гравця. Якщо гравець живий (не Dead), надаємо йому новий хід
         if (playerController.currentState != TankController.TankState.Dead)
         {
             playerController.StartPlayerTurn();
