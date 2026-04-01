@@ -3,6 +3,17 @@
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer), typeof(EdgeCollider2D))]
 public class TerrainChunk : MonoBehaviour
 {
+    [Header("Entity Spawning")]
+    [Tooltip("Посилання на префаб ворога (Pz.III)")]
+    public GameObject enemyPrefab;
+    [Tooltip("Ймовірність появи ворога на цьому чанку (від 0.0 до 1.0)")]
+    [Range(0f, 1f)] public float spawnProbability = 0.4f;
+    [Tooltip("Зміщення по осі Y для запобігання застряганню в текстурах")]
+    public float spawnHeightOffset = 0.5f;
+
+    [Header("Texture Mapping")]
+    public float textureScale = 10f; // Регулює щільність тайлінгу текстури
+
     [Header("Generation Parameters")]
     public float width = 20f;
     public float heightMultiplier = 5f;
@@ -19,38 +30,105 @@ public class TerrainChunk : MonoBehaviour
         edgeCollider = GetComponent<EdgeCollider2D>();
     }
 
+    private void SpawnEnemy(Vector2[] surfacePoints)
+    {
+        float safeZoneLimit = 20f; // При ширині чанка 20: 20 * 3 = 60
+
+        // Перевірка: якщо початкова точка чанка в межах безпечної зони, спавн скасовується
+        if (transform.position.x < safeZoneLimit)
+        {
+            return;
+        }
+
+        if (enemyPrefab == null || Random.value > spawnProbability) return;
+
+        // Вибір випадкової координати на поверхні чанка.
+        // Відступи у 10 індексів з країв гарантують, що ворог не з'явиться на стику двох чанків.
+        int safeMargin = 10;
+        if (surfacePoints.Length <= safeMargin * 2) return; // Захист від помилки індексу
+
+        int randomIndex = Random.Range(safeMargin, surfacePoints.Length - safeMargin);
+        Vector2 spawnPoint = surfacePoints[randomIndex];
+
+        // Формування локальної позиції зі зміщенням по висоті
+        Vector3 finalSpawnPosition = new Vector3(spawnPoint.x, spawnPoint.y + spawnHeightOffset, 0f);
+
+        // Інстанціювання об'єкта.
+        // Передача 'transform' у якості другого параметра робить об'єкт дочірнім до поточного чанка.
+        GameObject enemyInstance = Instantiate(enemyPrefab, transform);
+
+        // Застосування локальних координат
+        enemyInstance.transform.localPosition = finalSpawnPosition;
+    }
+
     public void GenerateChunk(float globalXOffset)
     {
+        // Очищення старих об'єктів
+        for (int i = transform.childCount - 1; i >= 0; i--)
+        {
+            Destroy(transform.GetChild(i).gameObject);
+        }
+
+        // Параметри: перший чанк (20f) — плаский, наступний — плавно переходить у шум
+        float flatZone = 20f;
+        float transitionZone = 20f;
+
         Vector3[] vertices = new Vector3[resolution + 1];
         Vector2[] colliderPoints = new Vector2[resolution + 1];
         int[] triangles = new int[resolution * 6];
+        Vector2[] uvs = new Vector2[(resolution + 1) * 2];
 
         float step = width / resolution;
+        float currentSeed = ChunkManager.SessionSeed;
 
-        // Вычисление точек верхнего контура рельефа
         for (int i = 0; i <= resolution; i++)
         {
             float localX = i * step;
             float globalX = globalXOffset + localX;
 
-            // Заміна константи 0f на статичну змінну сиду
-            float y = Mathf.PerlinNoise(globalX * noiseScale, ChunkManager.SessionSeed) * heightMultiplier;
+            // Базова висота шуму
+            float rawY = Mathf.PerlinNoise(globalX * noiseScale, currentSeed) * heightMultiplier;
 
-            vertices[i] = new Vector3(localX, y, 0f);
-            colliderPoints[i] = new Vector2(localX, y);
+            float weight = 0f;
+
+            if (globalX <= flatZone)
+            {
+                // Перші 20 метрів (перший чанк) — гарантовано нульова висота
+                weight = 0f;
+            }
+            else if (globalX <= flatZone + transitionZone)
+            {
+                // Плавна S-подібна крива замість "трикутника"
+                float t = (globalX - flatZone) / transitionZone;
+                weight = Mathf.SmoothStep(0f, 1f, t);
+            }
+            else
+            {
+                // Далі йде повноцінний ландшафт
+                weight = 1f;
+            }
+
+            float finalY = rawY * weight;
+
+            vertices[i] = new Vector3(localX, finalY, 0f);
+            colliderPoints[i] = new Vector2(localX, finalY);
         }
 
-        // Формирование полного массива вершин (включая основание)
+        // Побудова геометрії (Вершини + UV)
         Vector3[] fullVertices = new Vector3[(resolution + 1) * 2];
-        float bottomY = -10f; // Глубина основания ландшафта
+        float bottomY = -10f;
 
         for (int i = 0; i <= resolution; i++)
         {
             fullVertices[i] = vertices[i];
             fullVertices[i + resolution + 1] = new Vector3(vertices[i].x, bottomY, 0f);
+
+            float globalX = globalXOffset + vertices[i].x;
+            uvs[i] = new Vector2(globalX * textureScale, vertices[i].y * textureScale);
+            uvs[i + resolution + 1] = new Vector2(globalX * textureScale, bottomY * textureScale);
         }
 
-        // Расчет индексов треугольников
+        // Тріангуляція
         int vert = 0;
         int tris = 0;
         for (int i = 0; i < resolution; i++)
@@ -61,18 +139,20 @@ public class TerrainChunk : MonoBehaviour
             triangles[tris + 3] = vert + 1;
             triangles[tris + 4] = vert + resolution + 1;
             triangles[tris + 5] = vert + resolution + 2;
-
             vert++;
             tris += 6;
         }
 
-        // Применение данных к сетке
+        // Оновлення Mesh
         mesh.Clear();
         mesh.vertices = fullVertices;
         mesh.triangles = triangles;
+        mesh.uv = uvs;
         mesh.RecalculateNormals();
+        mesh.RecalculateBounds();
 
-        // Применение коллайдера
         edgeCollider.points = colliderPoints;
+
+        SpawnEnemy(colliderPoints);
     }
 }

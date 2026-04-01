@@ -2,6 +2,7 @@
 
 public class ChunkManager : MonoBehaviour
 {
+    public static float TotalDistanceTraveled { get; private set; }
 
     [Header("Dependencies")]
     public ObjectPool chunkPool;
@@ -75,5 +76,6 @@ public class ChunkManager : MonoBehaviour
         // Оновлення посилань та лічильників для наступного циклу
         lastSpawnedChunk = chunkObj.transform;
         currentGlobalX += chunkWidth;
+        TotalDistanceTraveled = currentGlobalX;
     }
 }
