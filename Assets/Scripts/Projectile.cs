@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 
 public enum DamageType
 {
@@ -15,67 +16,68 @@ public class Projectile : MonoBehaviour
 
     [Header("Explosive Parameters (For AoE)")]
     public float explosionRadius = 2.5f;
-    public LayerMask enemyLayer; // Шар, на якому знаходяться об'єкти ворогів
+    public LayerMask enemyLayer;
 
     private Rigidbody2D rb;
+    private Action<bool> onResolutionCallback; // Змінна для зберігання делегата
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
     }
 
-    public void Initialize(Vector2 initialVelocity)
+    // Збереження делегата при ініціалізації
+    public void Initialize(Vector2 initialVelocity, Action<bool> callback = null)
     {
         rb.linearVelocity = initialVelocity;
+        onResolutionCallback = callback;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        // Маршрутизація логіки залежно від обраного типу
+        bool isHit = false;
+
         switch (damageType)
         {
             case DamageType.Direct:
-                ApplyDirectDamage(collision.gameObject);
+                isHit = ApplyDirectDamage(collision.gameObject);
                 break;
             case DamageType.AreaOfEffect:
-                ApplyAreaDamage(collision.contacts[0].point);
+                isHit = ApplyAreaDamage(collision.contacts[0].point);
                 break;
         }
 
-        // Знищення об'єкта снаряда після обчислення пошкоджень
+        // Виклик делегата передає системі результат (true - влучання, false - промах)
+        onResolutionCallback?.Invoke(isHit);
+
         Destroy(gameObject);
     }
 
-    private void ApplyDirectDamage(GameObject target)
+    private bool ApplyDirectDamage(GameObject target)
     {
-        // Перевірка наявності компонента здоров'я на об'єкті
-        // EnemyHealth health = target.GetComponent<EnemyHealth>();
-        // if (health != null) health.TakeDamage(damageAmount);
-
-        Debug.Log($"Direct hit on {target.name} for {damageAmount} damage.");
+        Health health = target.GetComponent<Health>();
+        if (health != null)
+        {
+            health.TakeDamage(damageAmount);
+            return true; // Реєстрація успішного влучання
+        }
+        return false; // Колізія з ландшафтом або іншим об'єктом
     }
 
-    private void ApplyAreaDamage(Vector2 impactPoint)
+    private bool ApplyAreaDamage(Vector2 impactPoint)
     {
-        // Сканування простору в заданому радіусі
+        bool hitAnyEnemy = false;
         Collider2D[] colliders = Physics2D.OverlapCircleAll(impactPoint, explosionRadius, enemyLayer);
 
         foreach (Collider2D hitCollider in colliders)
         {
-            // EnemyHealth health = hitCollider.GetComponent<EnemyHealth>();
-            // if (health != null) health.TakeDamage(damageAmount);
-
-            Debug.Log($"Splash damage hit {hitCollider.name} for {damageAmount} damage.");
+            Health health = hitCollider.GetComponent<Health>();
+            if (health != null)
+            {
+                health.TakeDamage(damageAmount);
+                hitAnyEnemy = true;
+            }
         }
-    }
-
-    // Метод для візуалізації радіуса вибуху в редакторі (Scene View)
-    private void OnDrawGizmosSelected()
-    {
-        if (damageType == DamageType.AreaOfEffect)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, explosionRadius);
-        }
+        return hitAnyEnemy;
     }
 }

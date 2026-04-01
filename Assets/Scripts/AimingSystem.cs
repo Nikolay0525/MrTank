@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 [RequireComponent(typeof(LineRenderer))]
 public class AimingSystem : MonoBehaviour
@@ -17,14 +18,14 @@ public class AimingSystem : MonoBehaviour
     public int linePoints = 30;
     public float timeStep = 0.05f;
 
+    [Header("Spawning")]
+    public GameObject projectilePrefab;
+    public Transform firePoint;
+
     private LineRenderer lineRenderer;
     private float currentAngle;
     private bool isAiming = false;
     private Quaternion defaultGunRotation;
-
-    [Header("Spawning")]
-    public GameObject projectilePrefab;
-    public Transform firePoint; 
 
     private void Awake()
     {
@@ -34,7 +35,7 @@ public class AimingSystem : MonoBehaviour
 
         if (gunPivot != null)
         {
-            // Запам'ятовуємо початкове положення гармати (прямо)
+            // Фіксація початкового положення гармати
             defaultGunRotation = gunPivot.localRotation;
         }
     }
@@ -45,7 +46,7 @@ public class AimingSystem : MonoBehaviour
         {
             OscillateAngle();
             DrawTrajectory();
-            RotateGun(); // Новий метод
+            RotateGun();
         }
     }
 
@@ -55,7 +56,20 @@ public class AimingSystem : MonoBehaviour
         lineRenderer.enabled = true;
     }
 
-    public void ExecuteShot()
+    // Метод для примусового скасування прицілювання (наприклад, при вичерпанні таймера)
+    public void CancelAiming()
+    {
+        isAiming = false;
+        lineRenderer.enabled = false;
+
+        if (gunPivot != null)
+        {
+            gunPivot.localRotation = defaultGunRotation;
+        }
+    }
+
+    // Змінено тип повернення з void на GameObject для відстеження життєвого циклу снаряда
+    public GameObject ExecuteShot(Action<bool> onResolutionCallback = null)
     {
         isAiming = false;
         lineRenderer.enabled = false;
@@ -63,20 +77,26 @@ public class AimingSystem : MonoBehaviour
         float angleRad = currentAngle * Mathf.Deg2Rad;
         Vector2 shootVector = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad)) * projectileSpeed;
 
-        // Інстанціювання снаряда та передача вектора швидкості
+        GameObject projectileInstance = null;
+
         if (projectilePrefab != null && firePoint != null)
         {
-            GameObject projectile = Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
-            Projectile projScript = projectile.GetComponent<Projectile>();
+            projectileInstance = Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
+            Projectile projScript = projectileInstance.GetComponent<Projectile>();
 
             if (projScript != null)
             {
-                projScript.Initialize(shootVector);
+                // Передача вектора швидкості та функції зворотного виклику
+                projScript.Initialize(shootVector, onResolutionCallback);
             }
         }
 
-        // Повернення гармати у вихідне положення
-        if (gunPivot != null) gunPivot.localRotation = defaultGunRotation;
+        if (gunPivot != null)
+        {
+            gunPivot.localRotation = defaultGunRotation;
+        }
+
+        return projectileInstance;
     }
 
     private void OscillateAngle()
@@ -85,12 +105,10 @@ public class AimingSystem : MonoBehaviour
         currentAngle = Mathf.Lerp(minAngle, maxAngle, t);
     }
 
-    // Новий метод для фізичного повороту гармати
     private void RotateGun()
     {
         if (gunPivot != null)
         {
-            // Обертаємо локально відносно корпусу
             gunPivot.localRotation = Quaternion.Euler(0f, 0f, currentAngle);
         }
     }
@@ -98,17 +116,19 @@ public class AimingSystem : MonoBehaviour
     private void DrawTrajectory()
     {
         float angleRad = currentAngle * Mathf.Deg2Rad;
-        // Траєкторія починається від гармати
         Vector2 startPos = (gunPivot != null) ? (Vector2)gunPivot.position : (Vector2)transform.position;
         Vector2 gravity = Physics2D.gravity;
 
         for (int i = 0; i < linePoints; i++)
         {
             float t = i * timeStep;
+
+            // Рівняння балістичної кривої
             Vector2 point = startPos + new Vector2(
                 projectileSpeed * Mathf.Cos(angleRad) * t,
                 projectileSpeed * Mathf.Sin(angleRad) * t + 0.5f * gravity.y * t * t
             );
+
             lineRenderer.SetPosition(i, point);
         }
     }

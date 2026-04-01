@@ -32,7 +32,14 @@ public class TerrainChunk : MonoBehaviour
 
     private void SpawnEnemy(Vector2[] surfacePoints)
     {
-        // Перевірка наявності префабу та розрахунок математичної ймовірності
+        float safeZoneLimit = 20f; // При ширині чанка 20: 20 * 3 = 60
+
+        // Перевірка: якщо початкова точка чанка в межах безпечної зони, спавн скасовується
+        if (transform.position.x < safeZoneLimit)
+        {
+            return;
+        }
+
         if (enemyPrefab == null || Random.value > spawnProbability) return;
 
         // Вибір випадкової координати на поверхні чанка.
