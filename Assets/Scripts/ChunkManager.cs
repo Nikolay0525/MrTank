@@ -68,7 +68,7 @@ public class ChunkManager : MonoBehaviour
         TerrainChunk chunkLogic = chunkObj.GetComponent<TerrainChunk>();
         if (chunkLogic != null)
         {
-            chunkLogic.GenerateChunk(currentGlobalX);
+            chunkLogic.GenerateChunkAsync(currentGlobalX);
         }
 
         chunkObj.SetActive(true);
