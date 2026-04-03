@@ -832,6 +832,65 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!1 &1774764585
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1774764587}
+  - component: {fileID: 1774764589}
+  - component: {fileID: 1774764588}
+  m_Layer: 0
+  m_Name: ProjectilesPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1774764587
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1774764585}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -109.46381, y: 17.75703, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1774764588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1774764585}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad1c71ee2dc2d184d95b52c0a3934a99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectilePoolManager
+--- !u!114 &1774764589
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1774764585}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91514581e6ab48449a4b3ea1cf60cd26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectPool
+  prefab: {fileID: 252163599096119134, guid: 8ce68054dff866c4cb45a8dac932e55e, type: 3}
+  poolSize: 10
 --- !u!1 &1844827996
 GameObject:
   m_ObjectHideFlags: 0
@@ -957,9 +1016,10 @@ MonoBehaviour:
   minAngle: 15
   maxAngle: 75
   aimSpeed: 4
+  damage: 15
+  projectileSize: 0.8
   linePoints: 30
   timeStep: 0.05
-  projectilePrefab: {fileID: 0}
   firePoint: {fileID: 0}
 --- !u!120 &1900322344
 LineRenderer:
@@ -1110,9 +1170,9 @@ MonoBehaviour:
   currentPhase: 0
   environmentSpeed: 5
   aimingSystem: {fileID: 1959359290}
-  baseAimTime: 4
-  minAimTime: 2
-  timeReductionCoefficient: 0.001
+  baseAimTime: 4.5
+  minAimTime: 1.5
+  timeReductionCoefficient: 0.005
 --- !u!4 &1959359288
 Transform:
   m_ObjectHideFlags: 0
@@ -1168,9 +1228,10 @@ MonoBehaviour:
   minAngle: 0
   maxAngle: 90
   aimSpeed: 2
+  damage: 100
+  projectileSize: 1
   linePoints: 60
-  timeStep: 0.05
-  projectilePrefab: {fileID: 252163599096119134, guid: 8ce68054dff866c4cb45a8dac932e55e, type: 3}
+  timeStep: 0.1
   firePoint: {fileID: 1900322342}
 --- !u!120 &1959359291
 LineRenderer:
@@ -1625,3 +1686,4 @@ SceneRoots:
   - {fileID: 418226871}
   - {fileID: 1959359288}
   - {fileID: 991288952}
+  - {fileID: 1774764587}

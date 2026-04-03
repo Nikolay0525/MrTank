@@ -360,6 +360,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6011650019b606545850536b3ed9da9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAI
+  projectilePool: {fileID: 0}
   firePoint: {fileID: 4066744998069205079}
   gunPivot: {fileID: 7447703699192111638}
   projectileSpeed: 12
@@ -495,7 +496,7 @@ Transform:
   m_GameObject: {fileID: 7271866418231998021}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.43, y: 0, z: 0}
+  m_LocalPosition: {x: -0.5, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

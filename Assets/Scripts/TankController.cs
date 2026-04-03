@@ -14,11 +14,6 @@ public class TankController : MonoBehaviour
     public float environmentSpeed = 5f;
     public AimingSystem aimingSystem;
 
-    [Header("Timer Equation Parameters")]
-    public float baseAimTime = 5f;
-    public float minAimTime = 2f;
-    public float timeReductionCoefficient = 0.001f;
-
     public static float CurrentGlobalSpeed { get; private set; }
 
     private float currentAimTimer;
@@ -86,7 +81,9 @@ public class TankController : MonoBehaviour
     public void StartPlayerTurn()
     {
         currentPhase = CombatPhase.PlayerAiming;
-        currentAimTimer = Mathf.Max(minAimTime, baseAimTime - (timeReductionCoefficient * ChunkManager.TotalDistanceTraveled));
+
+        currentAimTimer = DifficultyManager.Instance.CalculatePlayerAimTime();
+
         aimingSystem.StartAiming();
     }
 
@@ -124,6 +121,8 @@ public class TankController : MonoBehaviour
 
     private void InitiateEnemyTurn()
     {
+        if (currentPhase == CombatPhase.EnemyTurn) return;
+
         currentPhase = CombatPhase.EnemyTurn;
         if (currentTarget != null)
         {
