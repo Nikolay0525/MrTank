@@ -42,22 +42,18 @@ public class EnemyAI : MonoBehaviour
         Vector2 startPos = firePoint.position;
         Vector2 targetPos = playerController.transform.position;
 
-        // --- ВИКОРИСТАННЯ ЄДИНОГО ЦЕНТРУ СКЛАДНОСТІ ---
-
-        float totalHitChance = DifficultyManager.Instance.CalculateEnemyHitChance(localShotsFired);
+        float hitChance = DifficultyManager.Instance.GetEnemyHitChance(localShotsFired);
         float missOffset = 0f;
 
-        if (Random.value > totalHitChance)
+        if (Random.value > hitChance)
         {
-            // Промах
-            float currentMissRadius = DifficultyManager.Instance.CalculateEnemyMissRadius();
-            float randomMiss = Random.Range(1.5f, currentMissRadius);
+            float radius = DifficultyManager.Instance.GetEnemyMissRadius();
+            float randomMiss = Random.Range(1.5f, radius);
             missOffset = Random.value > 0.5f ? randomMiss : -randomMiss;
         }
         else
         {
-            // Влучання
-            missOffset = Random.Range(-0.3f, 0.3f);
+            missOffset = Random.Range(-0.2f, 0.2f);
         }
 
         targetPos += new Vector2(missOffset, 0f);

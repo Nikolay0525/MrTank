@@ -82,7 +82,7 @@ public class TankController : MonoBehaviour
     {
         currentPhase = CombatPhase.PlayerAiming;
 
-        currentAimTimer = DifficultyManager.Instance.CalculatePlayerAimTime();
+        currentAimTimer = DifficultyManager.Instance.GetPlayerAimTime();
 
         aimingSystem.StartAiming();
     }
@@ -100,21 +100,22 @@ public class TankController : MonoBehaviour
     {
         if (isHit)
         {
-            // Якщо снаряд повідомив про влучання у ворога
+            // Перевіряємо, чи ворог помер
             if (currentTarget == null || targetHealth == null || targetHealth.currentHealth <= 0)
             {
+                // ЦЕЙ МОМЕНТ: додаємо бал у складність
+                DifficultyManager.Instance.AddKill();
+
                 currentPhase = CombatPhase.None;
                 ResumeDriving();
             }
             else
             {
-                // Ворог отримав шкоду, але вижив (опціонально для майбутнього)
                 InitiateEnemyTurn();
             }
         }
         else
         {
-            // Якщо снаряд повідомив про промах (влучання в ландшафт або виліт за межі)
             InitiateEnemyTurn();
         }
     }

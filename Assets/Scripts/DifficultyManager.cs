@@ -4,65 +4,70 @@ public class DifficultyManager : MonoBehaviour
 {
     public static DifficultyManager Instance { get; private set; }
 
-    [Header("Global Progression")]
-    [Tooltip("Кількість метрів, яка вважається одним 'рівнем' складності")]
-    public float distancePerLevel = 60f;
+    [Header("Progression Stats")]
+    public int totalKills = 0;
+    [Tooltip("Скільки кілів потрібно для підняття одного рівня складності")]
+    public int killsPerLevel = 5;
 
-    [Header("Player Aim Time")]
+    [Header("Player Settings")]
     public float baseAimTime = 5f;
-    public float minAimTime = 2f;
-    [Tooltip("На скільки секунд зменшується час прицілювання за кожен 'рівень'")]
-    public float aimTimeReductionPerLevel = 0.1f;
+    public float minAimTime = 1.5f;
+    public float aimReductionPerLevel = 0.2f;
 
-    [Header("Enemy Accuracy")]
-    public float baseHitChance = 0.1f; // 10% базово
-    public float maxHitChance = 0.9f;  // 90% максимум
-    [Tooltip("На скільки зростає точність за кожен 'рівень' дистанції")]
-    public float globalAccuracyBonusPerLevel = 0.05f;
-    [Tooltip("На скільки зростає точність за кожен постріл у поточній дуелі")]
-    public float localSightingBonus = 0.1f;
-
-    [Header("Enemy Miss Radius")]
-    public float initialMissRadius = 8f;
-    public float minMissRadius = 2f;
-    [Tooltip("На скільки метрів зменшується розкид за кожен 'рівень' дистанції")]
-    public float radiusReductionPerLevel = 0.5f;
+    [Header("Enemy Settings")]
+    public float baseHitChance = 0.15f;
+    public float maxHitChance = 0.9f;
+    public float hitChanceGainPerLevel = 0.07f;
+    
+    public float initialMissRadius = 7f;
+    public float minMissRadius = 1.5f;
+    public float radiusReductionPerLevel = 0.6f;
 
     private void Awake()
     {
-        if (Instance == null) Instance = this;
-        else Destroy(gameObject);
+        if (Instance == null) {
+            Instance = this;
+            totalKills = PlayerPrefs.GetInt("TotalKills", 0);
+        } else Destroy(gameObject);
     }
 
-    // Допоміжний метод: рахує "рівень" складності на основі проїханих чанків
-    private float GetCurrentDifficultyLevel()
+    // Метод для реєстрації вбивства
+    public void AddKill()
     {
-        return ChunkManager.TotalDistanceTraveled / distancePerLevel;
+        totalKills++;
+        PlayerPrefs.SetInt("TotalKills", totalKills);
+        // Можна також додавати візуальні ефекти чи сповіщення тут
     }
 
-    // ФОРМУЛА 1: Час прицілювання гравця
-    public float CalculatePlayerAimTime()
+    // Розрахунок поточного рівня (0, 1.5, 3.2 і т.д.)
+    public float GetDifficultyLevel()
     {
-        float level = GetCurrentDifficultyLevel();
-        float calculatedTime = baseAimTime - (level * aimTimeReductionPerLevel);
-        return Mathf.Max(minAimTime, calculatedTime);
+        return (float)totalKills / killsPerLevel;
     }
 
-    // ФОРМУЛА 2: Точність ворога (з урахуванням глобального досвіду та локальної пристрілки)
-    public float CalculateEnemyHitChance(int localShotsFired)
-    {
-        float level = GetCurrentDifficultyLevel();
-        float globalBonus = level * globalAccuracyBonusPerLevel;
-        float localBonus = localShotsFired * localSightingBonus;
+    // --- ФОРМУЛИ ---
 
+    public float GetPlayerAimTime()
+    {
+        float level = GetDifficultyLevel();
+        float time = baseAimTime - (level * aimReductionPerLevel);
+        return Mathf.Max(minAimTime, time);
+    }
+
+    public float GetEnemyHitChance(int shotsFiredInDuel)
+    {
+        float level = GetDifficultyLevel();
+        float globalBonus = level * hitChanceGainPerLevel;
+        // Додаємо локальну пристрілку (shotsFiredInDuel)
+        float localBonus = shotsFiredInDuel * 0.1f; 
+        
         return Mathf.Clamp(baseHitChance + globalBonus + localBonus, 0f, maxHitChance);
     }
 
-    // ФОРМУЛА 3: Радіус промаху ворога
-    public float CalculateEnemyMissRadius()
+    public float GetEnemyMissRadius()
     {
-        float level = GetCurrentDifficultyLevel();
-        float calculatedRadius = initialMissRadius - (level * radiusReductionPerLevel);
-        return Mathf.Max(minMissRadius, calculatedRadius);
+        float level = GetDifficultyLevel();
+        float radius = initialMissRadius - (level * radiusReductionPerLevel);
+        return Mathf.Max(minMissRadius, radius);
     }
 }
