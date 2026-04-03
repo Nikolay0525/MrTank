@@ -3,10 +3,12 @@ using System.Collections;
 
 public class EnemyAI : MonoBehaviour
 {
-    public GameObject enemyProjectilePrefab;
     public Transform firePoint;
     public Transform gunPivot;
+    [Header("Ammunition Stats")]
     public float projectileSpeed = 20f;
+    public float damage = 15f;          // Слабший урон для звичайного ворога
+    public float projectileSize = 0.8f; // Трохи менший снаряд
 
     private Health myHealth;
 
@@ -56,12 +58,16 @@ public class EnemyAI : MonoBehaviour
 
             Vector2 velocity = new Vector2(-Mathf.Cos(angleRad), Mathf.Sin(angleRad)) * v;
 
-            GameObject proj = Instantiate(enemyProjectilePrefab, startPos, Quaternion.identity);
+            GameObject proj = ProjectilePoolManager.Instance.GetProjectile();
+            proj.transform.position = startPos;
+            proj.transform.rotation = Quaternion.identity;
+            proj.SetActive(true);
+
             Projectile projScript = proj.GetComponent<Projectile>();
 
             if (projScript != null)
             {
-                projScript.Initialize(velocity, Projectile.ShootDirection.Left, (hitResult) => { isProjectileResolved = true; });
+                projScript.Initialize(velocity, damage, projectileSize, (hitResult) => { isProjectileResolved = true; });
             }
             else isProjectileResolved = true;
         }

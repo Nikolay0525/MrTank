@@ -360,10 +360,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6011650019b606545850536b3ed9da9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAI
-  enemyProjectilePrefab: {fileID: 252163599096119134, guid: 8e7a3fff1ffbd714f8a2a4c8851cfa51, type: 3}
   firePoint: {fileID: 4066744998069205079}
   gunPivot: {fileID: 7447703699192111638}
   projectileSpeed: 12
+  damage: 33
+  projectileSize: 0.5
 --- !u!114 &7817234390064361356
 MonoBehaviour:
   m_ObjectHideFlags: 0
