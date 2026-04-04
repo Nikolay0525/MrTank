@@ -27,14 +27,12 @@ public class DifficultyManager : MonoBehaviour
     {
         if (Instance == null) {
             Instance = this;
-            totalKills = PlayerPrefs.GetInt("TotalKills", 0);
         } else Destroy(gameObject);
     }
 
     public void AddKill()
     {
         totalKills++;
-        PlayerPrefs.SetInt("TotalKills", totalKills);
     }
 
     public float GetDifficultyLevel()

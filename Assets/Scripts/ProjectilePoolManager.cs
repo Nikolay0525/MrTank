@@ -14,7 +14,6 @@ public class ProjectilePoolManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            // Автоматично знаходимо ObjectPool на цьому ж об'єкті
             pool = GetComponent<ObjectPool>();
         }
         else

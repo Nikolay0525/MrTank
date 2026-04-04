@@ -11,9 +11,14 @@ public class Health : MonoBehaviour
     public UnityEvent OnDeath;
     public UnityEvent OnHealthChanged;
 
-    private void Awake()
+    public void ResetHealth()
     {
         currentHealth = maxHealth;
+    }
+
+    private void Awake()
+    {
+        ResetHealth();
     }
 
     public void TakeDamage(float amount)
@@ -39,7 +44,5 @@ public class Health : MonoBehaviour
     private void Die()
     {
         OnDeath?.Invoke();
-        // Логіка знищення або перезавантаження
-        //gameObject.SetActive(false);
     }
 }

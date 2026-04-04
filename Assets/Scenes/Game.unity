@@ -149,7 +149,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjectPool
   prefab: {fileID: 6689110358511074825, guid: a6b26d8aefe7ed64788e113281151b85, type: 3}
-  poolSize: 10
+  poolSize: 6
 --- !u!4 &119563921
 Transform:
   m_ObjectHideFlags: 0
@@ -195,9 +195,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DifficultyManager
   totalKills: 0
-  killsPerLevel: 5
+  killsPerLevel: 1
   baseAimTime: 4.5
-  minAimTime: 1.5
+  minAimTime: 1.75
   aimReductionPerLevel: 0.2
   baseHitChance: 0.1
   maxHitChance: 0.9
@@ -215,6 +215,58 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 21.43552, y: -1.34615, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &247105658
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 247105660}
+  - component: {fileID: 247105659}
+  m_Layer: 0
+  m_Name: EnemyPoolManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &247105659
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 247105658}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b9bf2ed404564944bccfe7a58236f25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Assets.Scripts.NewMonoBehaviour
+  globalSpawnProbability: 1
+  enemiesToPool:
+  - enemyName: PzIII
+    prefab: {fileID: 5127492525543696117, guid: 91878dc7bf7019147b585c21a92866f3, type: 3}
+    initialPoolSize: 10
+  - enemyName: Bunker
+    prefab: {fileID: 5127492525543696117, guid: 656d62d374ba0494cace51e42772e35a, type: 3}
+    initialPoolSize: 10
+--- !u!4 &247105660
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 247105658}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.76401, y: 0.61476, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1740,3 +1792,4 @@ SceneRoots:
   - {fileID: 991288952}
   - {fileID: 1774764587}
   - {fileID: 148741101}
+  - {fileID: 247105660}

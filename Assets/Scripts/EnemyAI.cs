@@ -25,6 +25,25 @@ public class EnemyAI : MonoBehaviour
         if (myHealth == null) myHealth = GetComponentInParent<Health>();
     }
 
+    public void ResetState()
+    {
+        localShotsFired = 0;
+        isCurrentlyShooting = false;
+        cachedDiscriminant = -1f;
+        dontFindDiscriminant = false;
+
+        if (myHealth != null)
+        {
+            myHealth.ResetHealth();
+        }
+
+        VisualDeathHandler deathHandler = GetComponent<VisualDeathHandler>();
+        if (deathHandler != null)
+        {
+            deathHandler.ResetVisuals();
+        }
+    }
+
     public void ExecutePerfectShot(TankController playerController)
     {
         if (isCurrentlyShooting) return; 

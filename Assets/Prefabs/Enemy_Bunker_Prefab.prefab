@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 1649579220787793559}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.37, y: 0, z: 0}
+  m_LocalPosition: {x: -0.4, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -80,9 +80,9 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -4256865373228642391, guid: 8570273db95e91d4bb9049d4e7f8f2eb, type: 3}
+  m_Sprite: {fileID: 1571189064209189454, guid: 3cfd888849e967449a6934e89370ef80, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -174,7 +174,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -8380491218068469806, guid: 4d7fedf13208dc449aec68dc2b1c2d34, type: 3}
+  m_Sprite: {fileID: 387461969081412583, guid: d183636ec58e87a4fb6c3173f81fe183, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -200,7 +200,7 @@ GameObject:
   - component: {fileID: 8031972322344257965}
   - component: {fileID: 7817234390064361356}
   m_Layer: 6
-  m_Name: Enemy_Pz_Logic
+  m_Name: Enemy_Bunker_Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -364,8 +364,8 @@ MonoBehaviour:
   firePoint: {fileID: 4066744998069205079}
   gunPivot: {fileID: 7447703699192111638}
   projectileSpeed: 12
-  damage: 1
-  projectileSize: 0.5
+  damage: 50
+  projectileSize: 0.75
 --- !u!114 &7817234390064361356
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -404,7 +404,7 @@ Transform:
   m_GameObject: {fileID: 6699842397318382684}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.29, y: 0.14, z: 0}
+  m_LocalPosition: {x: -0.2, y: -0.15, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -496,7 +496,7 @@ Transform:
   m_GameObject: {fileID: 7271866418231998021}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.5, y: 0, z: 0}
+  m_LocalPosition: {x: -0.75, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

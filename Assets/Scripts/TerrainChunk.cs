@@ -4,11 +4,6 @@ using UnityEngine;
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer), typeof(EdgeCollider2D))]
 public class TerrainChunk : MonoBehaviour
 {
-    [Header("Entity Spawning")]
-    public GameObject enemyPrefab;
-    [Range(0f, 1f)] public float spawnProbability = 0.4f;
-    public float spawnHeightOffset = 0.5f;
-
     [Header("Texture Mapping")]
     public float textureScale = 10f;
 
@@ -21,7 +16,6 @@ public class TerrainChunk : MonoBehaviour
     private Mesh mesh;
     private EdgeCollider2D edgeCollider;
 
-    // Клас-контейнер для передачі даних між потоками
     private class ChunkData
     {
         public Vector3[] vertices;
@@ -37,16 +31,22 @@ public class TerrainChunk : MonoBehaviour
         edgeCollider = GetComponent<EdgeCollider2D>();
     }
 
-    // Головний асинхронний метод
     public async void GenerateChunkAsync(float globalXOffset)
     {
-        // 1. ГОЛОВНИЙ ПОТІК: Очищення старих об'єктів (API Unity)
         for (int i = transform.childCount - 1; i >= 0; i--)
         {
-            Destroy(transform.GetChild(i).gameObject);
+            GameObject child = transform.GetChild(i).gameObject;
+
+            if (child.GetComponentInChildren<EnemyAI>(true) != null)
+            {
+                EnemyPoolManager.Instance.ReturnEnemy(child);
+            }
+            else
+            {
+                Destroy(child);
+            }
         }
 
-        // Копіюємо змінні, щоб безпечно передати їх у фоновий потік
         float currentSeed = ChunkManager.SessionSeed;
         float currentWidth = width;
         int currentRes = resolution;
@@ -54,12 +54,12 @@ public class TerrainChunk : MonoBehaviour
         float currentNScale = noiseScale;
         float currentTScale = textureScale;
 
-        // 2. ФОНОВИЙ ПОТІК: Запускаємо важкі розрахунки
         ChunkData data = await Task.Run(() =>
             CalculateChunkData(globalXOffset, currentSeed, currentWidth, currentRes, currentHMulti, currentNScale, currentTScale)
         );
 
-        // 3. ПОВЕРНЕННЯ В ГОЛОВНИЙ ПОТІК: Застосування даних до Unity-компонентів
+        if (this == null) return;
+
         mesh.Clear();
         mesh.vertices = data.vertices;
         mesh.triangles = data.triangles;
@@ -72,23 +72,20 @@ public class TerrainChunk : MonoBehaviour
         SpawnEnemy(data.colliderPoints);
     }
 
-    // Цей метод виконується у фоновому потоці. ТУТ НЕ МОЖНА ВИКЛИКАТИ UNITY API (Mesh, Transform тощо)
     private ChunkData CalculateChunkData(float globalXOffset, float seed, float w, int res, float hMulti, float nScale, float tScale)
     {
-        float flatZone = 20f;
-        float transitionZone = 20f;
+        float flatZone = 10f;
+        float transitionZone = 10f;
 
-        // РОБИМО ПЕРЕКРИТТЯ: додаємо 1 додатковий сегмент до генерації
         int overlapRes = res + 1;
-
         Vector3[] vertices = new Vector3[overlapRes + 1];
         Vector2[] colliderPoints = new Vector2[overlapRes + 1];
 
-        float step = w / res; // Увага: крок рахуємо за старим res, щоб ширина не зламалася!
+        float step = w / res;
 
         for (int i = 0; i <= overlapRes; i++)
         {
-            float localX = i * step; // Останній X буде виходити за межі чанка
+            float localX = i * step;
             float globalX = globalXOffset + localX;
 
             float rawY = Mathf.PerlinNoise(globalX * nScale, seed) * hMulti;
@@ -108,7 +105,6 @@ public class TerrainChunk : MonoBehaviour
             colliderPoints[i] = new Vector2(localX, finalY);
         }
 
-        // Оновлюємо розміри масивів під нову кількість вершин
         Vector3[] fullVertices = new Vector3[(overlapRes + 1) * 2];
         Vector2[] uvs = new Vector2[(overlapRes + 1) * 2];
         float bottomY = -10f;
@@ -123,7 +119,6 @@ public class TerrainChunk : MonoBehaviour
             uvs[i + overlapRes + 1] = new Vector2(globalX * tScale, bottomY * tScale);
         }
 
-        // Кількість трикутників теж збільшується
         int[] triangles = new int[overlapRes * 6];
         int vert = 0;
         int tris = 0;
@@ -139,31 +134,34 @@ public class TerrainChunk : MonoBehaviour
             tris += 6;
         }
 
-        return new ChunkData
-        {
-            vertices = fullVertices,
-            triangles = triangles,
-            uvs = uvs,
-            colliderPoints = colliderPoints
-        };
+        return new ChunkData { vertices = fullVertices, triangles = triangles, uvs = uvs, colliderPoints = colliderPoints };
     }
 
-    private void SpawnEnemy(Vector2[] surfacePoints)
+    private void SpawnEnemy(Vector2[] colliderPoints)
     {
-        float safeZoneLimit = 20f;
+        if (colliderPoints.Length > 0 && transform.position.x > 20f)
+        {
+            int spawnIndex = colliderPoints.Length / 2;
+            Vector2 spawnPosition = (Vector2)transform.position + colliderPoints[spawnIndex];
 
-        if (transform.position.x < safeZoneLimit) return;
-        if (enemyPrefab == null || Random.value > spawnProbability) return;
+            spawnPosition.y += 0.5f;
 
-        int safeMargin = 10;
-        if (surfacePoints.Length <= safeMargin * 2) return;
+            GameObject enemy = EnemyPoolManager.Instance.TryGetEnemy();
 
-        int randomIndex = Random.Range(safeMargin, surfacePoints.Length - safeMargin);
-        Vector2 spawnPoint = surfacePoints[randomIndex];
+            if (enemy != null)
+            {
+                enemy.transform.position = spawnPosition;
+                enemy.transform.rotation = Quaternion.identity;
+                enemy.transform.SetParent(this.transform);
 
-        Vector3 finalSpawnPosition = new Vector3(spawnPoint.x, spawnPoint.y + spawnHeightOffset, 0f);
+                EnemyAI ai = enemy.GetComponent<EnemyAI>();
+                if (ai != null)
+                {
+                    ai.ResetState();
+                }
 
-        GameObject enemyInstance = Instantiate(enemyPrefab, transform);
-        enemyInstance.transform.localPosition = finalSpawnPosition;
+                enemy.SetActive(true);
+            }
+        }
     }
 }
