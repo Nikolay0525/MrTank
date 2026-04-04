@@ -15,6 +15,9 @@ public class EnemyAI : MonoBehaviour
     private Health myHealth;
     private int localShotsFired = 0;
     private bool isCurrentlyShooting = false; // Запобіжник
+                                              
+    private float cachedDiscriminant = -1f;
+    private bool dontFindDiscriminant = false;
 
     private void Awake()
     {
@@ -24,7 +27,7 @@ public class EnemyAI : MonoBehaviour
 
     public void ExecutePerfectShot(TankController playerController)
     {
-        if (isCurrentlyShooting) return; // Якщо вже стріляє, ігноруємо новий виклик
+        if (isCurrentlyShooting) return; 
         StartCoroutine(ShotSequence(playerController));
     }
 
@@ -44,10 +47,12 @@ public class EnemyAI : MonoBehaviour
 
         float hitChance = DifficultyManager.Instance.GetEnemyHitChance(localShotsFired);
         float missOffset = 0f;
+        bool isIntentionalMiss = false;
 
         if (Random.value > hitChance)
         {
-            float radius = DifficultyManager.Instance.GetEnemyMissRadius();
+            isIntentionalMiss = true;
+            float radius = DifficultyManager.Instance.GetEnemyMissRadius(localShotsFired);
             float randomMiss = Random.Range(1.5f, radius);
             missOffset = Random.value > 0.5f ? randomMiss : -randomMiss;
         }
@@ -64,13 +69,17 @@ public class EnemyAI : MonoBehaviour
         float v = projectileSpeed;
         float g = Mathf.Abs(Physics2D.gravity.y);
 
-        float discriminant = Mathf.Pow(v, 4) - g * (g * x * x + 2 * y * v * v);
+        if (dontFindDiscriminant == false)
+        {
+            cachedDiscriminant = Mathf.Pow(v, 4) - g * (g * x * x + 2 * y * v * v);
+            dontFindDiscriminant = cachedDiscriminant < 0 ? false : true;
+        }
+
         bool isProjectileResolved = false;
 
-        if (discriminant >= 0)
+        if (cachedDiscriminant >= 0)
         {
-            // --- ЛОГІКА ПОСТРІЛУ (як ми робили раніше) ---
-            float angleRad = Mathf.Atan((v * v - Mathf.Sqrt(discriminant)) / (g * x));
+            float angleRad = Mathf.Atan((v * v - Mathf.Sqrt(cachedDiscriminant)) / (g * x));
             if (gunPivot != null) gunPivot.localRotation = Quaternion.Euler(0, 0, -(angleRad * Mathf.Rad2Deg));
 
             yield return new WaitForSeconds(0.4f); // Пауза для прицілювання
@@ -87,11 +96,20 @@ public class EnemyAI : MonoBehaviour
         }
         else
         {
-            // --- ЯКЩО МАТЕМАТИКА НЕ ДУМАЄ ---
-            Debug.LogWarning("Бот не може дострілити до цілі! Дискримінант < 0");
+            float fallbackAngleDegrees = 45f;
 
-            // Щоб гра не зависла, бот вистрілить просто "в той бік" під кутом 45 градусів
-            float fallbackAngle = 45f * Mathf.Deg2Rad;
+            if (isIntentionalMiss)
+            {
+                fallbackAngleDegrees += missOffset * 3f;
+            }
+            else
+            {
+                fallbackAngleDegrees += missOffset;
+            }
+
+            fallbackAngleDegrees = Mathf.Clamp(fallbackAngleDegrees, 15f, 75f);
+
+            float fallbackAngle = fallbackAngleDegrees * Mathf.Deg2Rad;
             if (gunPivot != null) gunPivot.localRotation = Quaternion.Euler(0, 0, -45f);
 
             yield return new WaitForSeconds(0.4f);
@@ -107,12 +125,11 @@ public class EnemyAI : MonoBehaviour
             else isProjectileResolved = true;
         }
 
-        // Чекаємо, поки снаряд кудись влучить
         yield return new WaitUntil(() => isProjectileResolved);
 
         yield return new WaitForSeconds(0.5f);
 
-        isCurrentlyShooting = false; // Звільняємо бота
+        isCurrentlyShooting = false; 
 
         if (playerController.currentState != TankController.TankState.Dead)
         {

@@ -364,7 +364,7 @@ MonoBehaviour:
   firePoint: {fileID: 4066744998069205079}
   gunPivot: {fileID: 7447703699192111638}
   projectileSpeed: 12
-  damage: 33
+  damage: 1
   projectileSize: 0.5
 --- !u!114 &7817234390064361356
 MonoBehaviour:

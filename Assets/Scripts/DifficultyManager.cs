@@ -7,7 +7,7 @@ public class DifficultyManager : MonoBehaviour
     [Header("Progression Stats")]
     public int totalKills = 0;
     [Tooltip("Скільки кілів потрібно для підняття одного рівня складності")]
-    public int killsPerLevel = 5;
+    public int killsPerLevel = 1;
 
     [Header("Player Settings")]
     public float baseAimTime = 5f;
@@ -31,21 +31,17 @@ public class DifficultyManager : MonoBehaviour
         } else Destroy(gameObject);
     }
 
-    // Метод для реєстрації вбивства
     public void AddKill()
     {
         totalKills++;
         PlayerPrefs.SetInt("TotalKills", totalKills);
-        // Можна також додавати візуальні ефекти чи сповіщення тут
     }
 
-    // Розрахунок поточного рівня (0, 1.5, 3.2 і т.д.)
     public float GetDifficultyLevel()
     {
         return (float)totalKills / killsPerLevel;
     }
 
-    // --- ФОРМУЛИ ---
 
     public float GetPlayerAimTime()
     {
@@ -58,16 +54,17 @@ public class DifficultyManager : MonoBehaviour
     {
         float level = GetDifficultyLevel();
         float globalBonus = level * hitChanceGainPerLevel;
-        // Додаємо локальну пристрілку (shotsFiredInDuel)
         float localBonus = shotsFiredInDuel * 0.1f; 
         
         return Mathf.Clamp(baseHitChance + globalBonus + localBonus, 0f, maxHitChance);
     }
 
-    public float GetEnemyMissRadius()
+    public float GetEnemyMissRadius(int shotsFiredInDuel)
     {
         float level = GetDifficultyLevel();
         float radius = initialMissRadius - (level * radiusReductionPerLevel);
-        return Mathf.Max(minMissRadius, radius);
+        float localRadiusReduction = shotsFiredInDuel * 0.5f;
+
+        return Mathf.Max(minMissRadius, radius - localRadiusReduction);
     }
 }
