@@ -61,15 +61,12 @@ public class UIManager : MonoBehaviour
     // Підключаємо до зеленої кнопки "Retry"
     public void OnClickRetry()
     {
-        // Перезавантажуємо сцену, танк знову опиниться в гаражі
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     // Підключаємо до червоної кнопки "Garage" на екрані смерті
     public void OnClickBackToGarage()
     {
-        // Оскільки гараж і старт - це один і той самий стан, 
-        // дія ідентична Retry, просто ми не починаємо рух
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

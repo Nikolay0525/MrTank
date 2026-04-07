@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -138,5 +139,17 @@ public class TankController : MonoBehaviour
 
     public void ResumeDriving() => SetState(TankState.Driving);
 
-    public void TriggerGameOver() => SetState(TankState.Dead);
+    public void TriggerGameOver()
+    {
+        SetState(TankState.Dead);
+
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.ShowGameOver();
+        }
+        else
+        {
+            Debug.LogError("UIManager.Instance не знайдено!");
+        }
+    }
 }
