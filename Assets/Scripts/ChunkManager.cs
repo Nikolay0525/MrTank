@@ -3,6 +3,7 @@
 public class ChunkManager : MonoBehaviour
 {
     public static float TotalDistanceTraveled { get; private set; }
+    public static float SessionSeed { get; private set; }
 
     [Header("Dependencies")]
     public ObjectPool chunkPool;
@@ -10,21 +11,17 @@ public class ChunkManager : MonoBehaviour
 
     [Header("Generation Parameters")]
     public float chunkWidth = 20f;
-    public int initialChunks = 3;
+    public int initialChunks = 5; 
     public float spawnDistance = 30f;
     public float verticalOffset = -1f;
 
-    // Математична координата для шуму Перліна (неперервно зростає)
     private float currentGlobalX = 0f;
-
-    // Фізичне посилання на останній створений сегмент
     private Transform lastSpawnedChunk;
 
-    public static float SessionSeed { get; private set; }
+    private bool isFirstChunk = true;
 
     private void Awake()
     {
-        // Генерація псевдовипадкового числа для зсуву в просторі шуму
         SessionSeed = Random.Range(0f, 100000f);
     }
 
@@ -40,7 +37,6 @@ public class ChunkManager : MonoBehaviour
     {
         if (lastSpawnedChunk != null)
         {
-            // Обчислення фізичної позиції правого краю останнього рухомого чанка
             float lastChunkRightEdge = lastSpawnedChunk.position.x + chunkWidth;
             float distanceToEdge = lastChunkRightEdge - cameraTransform.position.x;
 
@@ -55,16 +51,22 @@ public class ChunkManager : MonoBehaviour
     {
         GameObject chunkObj = chunkPool.GetPooledObject();
 
-        // Розрахунок фізичної позиції на сцені з прив'язкою до рухомого об'єкта
         float spawnX = 0f;
-        if (lastSpawnedChunk != null)
+
+        if (isFirstChunk)
+        {
+            spawnX = cameraTransform.position.x - chunkWidth;
+
+            currentGlobalX = spawnX;
+            isFirstChunk = false;
+        }
+        else if (lastSpawnedChunk != null)
         {
             spawnX = lastSpawnedChunk.position.x + chunkWidth;
         }
 
         chunkObj.transform.position = new Vector3(spawnX, verticalOffset, 0f);
 
-        // Передача неперервної математичної координати у функцію генерації сітки
         TerrainChunk chunkLogic = chunkObj.GetComponent<TerrainChunk>();
         if (chunkLogic != null)
         {
@@ -73,7 +75,6 @@ public class ChunkManager : MonoBehaviour
 
         chunkObj.SetActive(true);
 
-        // Оновлення посилань та лічильників для наступного циклу
         lastSpawnedChunk = chunkObj.transform;
         currentGlobalX += chunkWidth;
         TotalDistanceTraveled = currentGlobalX;

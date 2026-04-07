@@ -3,11 +3,11 @@ using UnityEngine.InputSystem;
 
 public class TankController : MonoBehaviour
 {
-    public enum TankState { Driving, Combat, Dead }
+    public enum TankState { Garage, Driving, Combat, Dead }
     public enum CombatPhase { None, PlayerAiming, ProjectileInFlight, EnemyTurn }
 
     [Header("State Configuration")]
-    public TankState currentState = TankState.Driving;
+    public TankState currentState = TankState.Garage;
     public CombatPhase currentPhase = CombatPhase.None;
 
     [Header("Environment Control")]
@@ -21,7 +21,7 @@ public class TankController : MonoBehaviour
     private EnemyAI currentTarget;
     private Health targetHealth;
 
-    private void Start() => SetState(TankState.Driving);
+    private void Start() => SetState(TankState.Garage);
 
     private void Update() => ProcessState();
 
@@ -64,6 +64,11 @@ public class TankController : MonoBehaviour
                 // Пасивне очікування завершення алгоритму штучного інтелекту.
                 break;
         }
+    }
+
+    public void StartBattleFromGarage()
+    {
+        SetState(TankState.Driving);
     }
 
     // Метод викликається тригером CombatZoneTrigger, який передає посилання на ворога
