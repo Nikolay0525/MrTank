@@ -1,18 +1,11 @@
-﻿using UnityEngine;
+﻿using System.Threading.Tasks;
+using UnityEngine;
 
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer), typeof(EdgeCollider2D))]
 public class TerrainChunk : MonoBehaviour
 {
-    [Header("Entity Spawning")]
-    [Tooltip("Посилання на префаб ворога (Pz.III)")]
-    public GameObject enemyPrefab;
-    [Tooltip("Ймовірність появи ворога на цьому чанку (від 0.0 до 1.0)")]
-    [Range(0f, 1f)] public float spawnProbability = 0.4f;
-    [Tooltip("Зміщення по осі Y для запобігання застряганню в текстурах")]
-    public float spawnHeightOffset = 0.5f;
-
     [Header("Texture Mapping")]
-    public float textureScale = 10f; // Регулює щільність тайлінгу текстури
+    public float textureScale = 10f;
 
     [Header("Generation Parameters")]
     public float width = 20f;
@@ -23,6 +16,14 @@ public class TerrainChunk : MonoBehaviour
     private Mesh mesh;
     private EdgeCollider2D edgeCollider;
 
+    private class ChunkData
+    {
+        public Vector3[] vertices;
+        public int[] triangles;
+        public Vector2[] uvs;
+        public Vector2[] colliderPoints;
+    }
+
     private void Awake()
     {
         mesh = new Mesh();
@@ -30,83 +31,73 @@ public class TerrainChunk : MonoBehaviour
         edgeCollider = GetComponent<EdgeCollider2D>();
     }
 
-    private void SpawnEnemy(Vector2[] surfacePoints)
+    public async void GenerateChunkAsync(float globalXOffset)
     {
-        float safeZoneLimit = 20f; // При ширині чанка 20: 20 * 3 = 60
-
-        // Перевірка: якщо початкова точка чанка в межах безпечної зони, спавн скасовується
-        if (transform.position.x < safeZoneLimit)
-        {
-            return;
-        }
-
-        if (enemyPrefab == null || Random.value > spawnProbability) return;
-
-        // Вибір випадкової координати на поверхні чанка.
-        // Відступи у 10 індексів з країв гарантують, що ворог не з'явиться на стику двох чанків.
-        int safeMargin = 10;
-        if (surfacePoints.Length <= safeMargin * 2) return; // Захист від помилки індексу
-
-        int randomIndex = Random.Range(safeMargin, surfacePoints.Length - safeMargin);
-        Vector2 spawnPoint = surfacePoints[randomIndex];
-
-        // Формування локальної позиції зі зміщенням по висоті
-        Vector3 finalSpawnPosition = new Vector3(spawnPoint.x, spawnPoint.y + spawnHeightOffset, 0f);
-
-        // Інстанціювання об'єкта.
-        // Передача 'transform' у якості другого параметра робить об'єкт дочірнім до поточного чанка.
-        GameObject enemyInstance = Instantiate(enemyPrefab, transform);
-
-        // Застосування локальних координат
-        enemyInstance.transform.localPosition = finalSpawnPosition;
-    }
-
-    public void GenerateChunk(float globalXOffset)
-    {
-        // Очищення старих об'єктів
         for (int i = transform.childCount - 1; i >= 0; i--)
         {
-            Destroy(transform.GetChild(i).gameObject);
+            GameObject child = transform.GetChild(i).gameObject;
+
+            if (child.GetComponentInChildren<EnemyAI>(true) != null)
+            {
+                EnemyPoolManager.Instance.ReturnEnemy(child);
+            }
+            else
+            {
+                Destroy(child);
+            }
         }
 
-        // Параметри: перший чанк (20f) — плаский, наступний — плавно переходить у шум
-        float flatZone = 20f;
-        float transitionZone = 20f;
-
-        Vector3[] vertices = new Vector3[resolution + 1];
-        Vector2[] colliderPoints = new Vector2[resolution + 1];
-        int[] triangles = new int[resolution * 6];
-        Vector2[] uvs = new Vector2[(resolution + 1) * 2];
-
-        float step = width / resolution;
         float currentSeed = ChunkManager.SessionSeed;
+        float currentWidth = width;
+        int currentRes = resolution;
+        float currentHMulti = heightMultiplier;
+        float currentNScale = noiseScale;
+        float currentTScale = textureScale;
 
-        for (int i = 0; i <= resolution; i++)
+        ChunkData data = await Task.Run(() =>
+            CalculateChunkData(globalXOffset, currentSeed, currentWidth, currentRes, currentHMulti, currentNScale, currentTScale)
+        );
+
+        if (this == null) return;
+
+        mesh.Clear();
+        mesh.vertices = data.vertices;
+        mesh.triangles = data.triangles;
+        mesh.uv = data.uvs;
+        mesh.RecalculateNormals();
+        mesh.RecalculateBounds();
+
+        edgeCollider.points = data.colliderPoints;
+
+        SpawnEnemy(data.colliderPoints);
+    }
+
+    private ChunkData CalculateChunkData(float globalXOffset, float seed, float w, int res, float hMulti, float nScale, float tScale)
+    {
+        float flatZone = 10f;
+        float transitionZone = 10f;
+
+        int overlapRes = res + 1;
+        Vector3[] vertices = new Vector3[overlapRes + 1];
+        Vector2[] colliderPoints = new Vector2[overlapRes + 1];
+
+        float step = w / res;
+
+        for (int i = 0; i <= overlapRes; i++)
         {
             float localX = i * step;
             float globalX = globalXOffset + localX;
 
-            // Базова висота шуму
-            float rawY = Mathf.PerlinNoise(globalX * noiseScale, currentSeed) * heightMultiplier;
-
+            float rawY = Mathf.PerlinNoise(globalX * nScale, seed) * hMulti;
             float weight = 0f;
 
-            if (globalX <= flatZone)
-            {
-                // Перші 20 метрів (перший чанк) — гарантовано нульова висота
-                weight = 0f;
-            }
+            if (globalX <= flatZone) weight = 0f;
             else if (globalX <= flatZone + transitionZone)
             {
-                // Плавна S-подібна крива замість "трикутника"
                 float t = (globalX - flatZone) / transitionZone;
                 weight = Mathf.SmoothStep(0f, 1f, t);
             }
-            else
-            {
-                // Далі йде повноцінний ландшафт
-                weight = 1f;
-            }
+            else weight = 1f;
 
             float finalY = rawY * weight;
 
@@ -114,45 +105,63 @@ public class TerrainChunk : MonoBehaviour
             colliderPoints[i] = new Vector2(localX, finalY);
         }
 
-        // Побудова геометрії (Вершини + UV)
-        Vector3[] fullVertices = new Vector3[(resolution + 1) * 2];
+        Vector3[] fullVertices = new Vector3[(overlapRes + 1) * 2];
+        Vector2[] uvs = new Vector2[(overlapRes + 1) * 2];
         float bottomY = -10f;
 
-        for (int i = 0; i <= resolution; i++)
+        for (int i = 0; i <= overlapRes; i++)
         {
             fullVertices[i] = vertices[i];
-            fullVertices[i + resolution + 1] = new Vector3(vertices[i].x, bottomY, 0f);
+            fullVertices[i + overlapRes + 1] = new Vector3(vertices[i].x, bottomY, 0f);
 
             float globalX = globalXOffset + vertices[i].x;
-            uvs[i] = new Vector2(globalX * textureScale, vertices[i].y * textureScale);
-            uvs[i + resolution + 1] = new Vector2(globalX * textureScale, bottomY * textureScale);
+            uvs[i] = new Vector2(globalX * tScale, vertices[i].y * tScale);
+            uvs[i + overlapRes + 1] = new Vector2(globalX * tScale, bottomY * tScale);
         }
 
-        // Тріангуляція
+        int[] triangles = new int[overlapRes * 6];
         int vert = 0;
         int tris = 0;
-        for (int i = 0; i < resolution; i++)
+        for (int i = 0; i < overlapRes; i++)
         {
             triangles[tris + 0] = vert + 0;
-            triangles[tris + 1] = vert + resolution + 1;
+            triangles[tris + 1] = vert + overlapRes + 1;
             triangles[tris + 2] = vert + 1;
             triangles[tris + 3] = vert + 1;
-            triangles[tris + 4] = vert + resolution + 1;
-            triangles[tris + 5] = vert + resolution + 2;
+            triangles[tris + 4] = vert + overlapRes + 1;
+            triangles[tris + 5] = vert + overlapRes + 2;
             vert++;
             tris += 6;
         }
 
-        // Оновлення Mesh
-        mesh.Clear();
-        mesh.vertices = fullVertices;
-        mesh.triangles = triangles;
-        mesh.uv = uvs;
-        mesh.RecalculateNormals();
-        mesh.RecalculateBounds();
+        return new ChunkData { vertices = fullVertices, triangles = triangles, uvs = uvs, colliderPoints = colliderPoints };
+    }
 
-        edgeCollider.points = colliderPoints;
+    private void SpawnEnemy(Vector2[] colliderPoints)
+    {
+        if (colliderPoints.Length > 0 && transform.position.x > 20f)
+        {
+            int spawnIndex = colliderPoints.Length / 2;
+            Vector2 spawnPosition = (Vector2)transform.position + colliderPoints[spawnIndex];
 
-        SpawnEnemy(colliderPoints);
+            spawnPosition.y += 0.5f;
+
+            GameObject enemy = EnemyPoolManager.Instance.TryGetEnemy();
+
+            if (enemy != null)
+            {
+                enemy.transform.position = spawnPosition;
+                enemy.transform.rotation = Quaternion.identity;
+                enemy.transform.SetParent(this.transform);
+
+                EnemyAI ai = enemy.GetComponent<EnemyAI>();
+                if (ai != null)
+                {
+                    ai.ResetState();
+                }
+
+                enemy.SetActive(true);
+            }
+        }
     }
 }

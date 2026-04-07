@@ -20,10 +20,6 @@ public class Projectile : MonoBehaviour
     public float explosionRadius = 2.5f;
     public LayerMask enemyLayer;
 
-    [Header("Orientation Settings")]
-    [Tooltip("Початковий напрямок стрільби (для орієнтації спрайту)")]
-    public ShootDirection initialDirection;
-
     private Rigidbody2D rb;
     private Action<bool> onResolutionCallback; // Змінна для зберігання делегата
     private bool isInitialized = false;
@@ -33,10 +29,14 @@ public class Projectile : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
-    public void Initialize(Vector2 initialVelocity, ShootDirection direction, Action<bool> callback = null)
+    // Додаємо нові аргументи: float damage та float sizeMultiplier
+    public void Initialize(Vector2 initialVelocity, float damage, float sizeMultiplier, Action<bool> callback = null)
     {
         rb.linearVelocity = initialVelocity;
-        initialDirection = direction;
+
+        damageAmount = damage;
+        transform.localScale = new Vector3(sizeMultiplier, sizeMultiplier, 1f);
+
         onResolutionCallback = callback;
         isInitialized = true;
     }
@@ -73,10 +73,19 @@ public class Projectile : MonoBehaviour
                 break;
         }
 
-        // Виклик делегата передає системі результат (true - влучання, false - промах)
         onResolutionCallback?.Invoke(isHit);
 
-        Destroy(gameObject);
+        gameObject.SetActive(false);
+    }
+
+    private void OnDisable()
+    {
+        isInitialized = false;
+        onResolutionCallback = null;
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector2.zero;
+        }
     }
 
     private bool ApplyDirectDamage(GameObject target)

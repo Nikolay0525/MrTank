@@ -9,17 +9,20 @@ public class AimingSystem : MonoBehaviour
     public Transform gunPivot;
 
     [Header("Ballistics")]
-    public float projectileSpeed = 15f;
-    public float minAngle = 15f;
-    public float maxAngle = 75f;
-    public float aimSpeed = 4f;
+    public float projectileSpeed = 12f;
+    public float minAngle = 0f;
+    public float maxAngle = 90f;
+    public float aimSpeed = 3f;
+
+    [Header("Ammunition Stats")]
+    public float damage = 15f;          // Слабший урон для звичайного ворога
+    public float projectileSize = 0.8f; // Трохи менший снаряд
 
     [Header("Trajectory Rendering")]
     public int linePoints = 120;
     public float timeStep = 0.05f;
 
     [Header("Spawning")]
-    public GameObject projectilePrefab;
     public Transform firePoint;
 
     private LineRenderer lineRenderer;
@@ -77,16 +80,20 @@ public class AimingSystem : MonoBehaviour
         float worldAngleRad = gunPivot.eulerAngles.z * Mathf.Deg2Rad;
         Vector2 shootVector = new Vector2(Mathf.Cos(worldAngleRad), Mathf.Sin(worldAngleRad)) * projectileSpeed;
 
-        GameObject projectileInstance = null;
+        GameObject projectileInstance = ProjectilePoolManager.Instance.GetProjectile();
 
-        if (projectilePrefab != null && firePoint != null)
+        if (projectileInstance != null && firePoint != null)
         {
-            projectileInstance = Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
+            // БЕРЕМО З ПУЛУ ЗАМІСТЬ Instantiate
+            projectileInstance.transform.position = firePoint.position;
+            projectileInstance.transform.rotation = firePoint.rotation;
+            projectileInstance.SetActive(true);
+
             Projectile projScript = projectileInstance.GetComponent<Projectile>();
 
             if (projScript != null)
             {
-                projScript.Initialize(shootVector, Projectile.ShootDirection.Right, onResolutionCallback);
+                projScript.Initialize(shootVector, damage, projectileSize, onResolutionCallback);
             }
         }
 

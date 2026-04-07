@@ -14,11 +14,6 @@ public class TankController : MonoBehaviour
     public float environmentSpeed = 5f;
     public AimingSystem aimingSystem;
 
-    [Header("Timer Equation Parameters")]
-    public float baseAimTime = 5f;
-    public float minAimTime = 2f;
-    public float timeReductionCoefficient = 0.001f;
-
     public static float CurrentGlobalSpeed { get; private set; }
 
     private float currentAimTimer;
@@ -86,7 +81,9 @@ public class TankController : MonoBehaviour
     public void StartPlayerTurn()
     {
         currentPhase = CombatPhase.PlayerAiming;
-        currentAimTimer = Mathf.Max(minAimTime, baseAimTime - (timeReductionCoefficient * ChunkManager.TotalDistanceTraveled));
+
+        currentAimTimer = DifficultyManager.Instance.GetPlayerAimTime();
+
         aimingSystem.StartAiming();
     }
 
@@ -103,27 +100,30 @@ public class TankController : MonoBehaviour
     {
         if (isHit)
         {
-            // Якщо снаряд повідомив про влучання у ворога
+            // Перевіряємо, чи ворог помер
             if (currentTarget == null || targetHealth == null || targetHealth.currentHealth <= 0)
             {
+                // ЦЕЙ МОМЕНТ: додаємо бал у складність
+                DifficultyManager.Instance.AddKill();
+
                 currentPhase = CombatPhase.None;
                 ResumeDriving();
             }
             else
             {
-                // Ворог отримав шкоду, але вижив (опціонально для майбутнього)
                 InitiateEnemyTurn();
             }
         }
         else
         {
-            // Якщо снаряд повідомив про промах (влучання в ландшафт або виліт за межі)
             InitiateEnemyTurn();
         }
     }
 
     private void InitiateEnemyTurn()
     {
+        if (currentPhase == CombatPhase.EnemyTurn) return;
+
         currentPhase = CombatPhase.EnemyTurn;
         if (currentTarget != null)
         {
