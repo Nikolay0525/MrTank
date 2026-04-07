@@ -14,6 +14,7 @@ public class TankController : MonoBehaviour
     [Header("Environment Control")]
     public float environmentSpeed = 5f;
     public AimingSystem aimingSystem;
+    public static bool shouldAutoStart = false;
 
     public static float CurrentGlobalSpeed { get; private set; }
 
@@ -22,7 +23,22 @@ public class TankController : MonoBehaviour
     private EnemyAI currentTarget;
     private Health targetHealth;
 
-    private void Start() => SetState(TankState.Garage);
+    private void Start()
+    {
+        if (shouldAutoStart)
+        {
+            SetState(TankState.Driving);
+
+            shouldAutoStart = false;
+
+            if (UIManager.Instance != null) UIManager.Instance.gameHUDPanel.SetActive(true);
+            if (UIManager.Instance != null) UIManager.Instance.garagePanel.SetActive(false);
+        }
+        else
+        {
+            SetState(TankState.Garage);
+        }
+    }
 
     private void Update() => ProcessState();
 

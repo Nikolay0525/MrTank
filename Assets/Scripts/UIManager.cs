@@ -61,6 +61,10 @@ public class UIManager : MonoBehaviour
     // Підключаємо до зеленої кнопки "Retry"
     public void OnClickRetry()
     {
+        // Записуємо в "пам'ять" танка, що наступного разу треба стартувати одразу
+        TankController.shouldAutoStart = true;
+
+        // Перезавантажуємо сцену
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
