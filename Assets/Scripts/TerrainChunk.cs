@@ -66,9 +66,20 @@ public class TerrainChunk : MonoBehaviour
         if (grassTopRenderer != null)
         {
             grassTopRenderer.positionCount = data.colliderPoints.Length;
+
+            grassTopRenderer.sortingLayerName = "Ground"; // Той самий шар, що й у землі
+            grassTopRenderer.sortingOrder = 1;            // Але цифра 1 (поверх землі!)
+
+            // Змінна для висоти трави (можеш винести її вгору скрипта як public float grassOffset)
+            float grassOffset = 0.25f; // Чим більше число, тим вище над землею буде трава
+
             for (int i = 0; i < data.colliderPoints.Length; i++)
             {
-                grassTopRenderer.SetPosition(i, new Vector3(data.colliderPoints[i].x, data.colliderPoints[i].y, -0.1f));
+                grassTopRenderer.SetPosition(i, new Vector3(
+                    data.colliderPoints[i].x,
+                    data.colliderPoints[i].y + grassOffset,
+                    0f
+                ));
             }
         }
 

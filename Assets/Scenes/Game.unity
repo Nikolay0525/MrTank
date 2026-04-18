@@ -2940,7 +2940,7 @@ MonoBehaviour:
   raycastDistance: 30
   groundLayer:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 64
   positionLerpSpeed: 120
   rotationLerpSpeed: 10
   tankHeightOffset: 0.4

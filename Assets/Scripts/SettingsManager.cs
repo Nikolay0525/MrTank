@@ -5,7 +5,7 @@ public class SettingsManager : MonoBehaviour
     public static SettingsManager Instance { get; private set; }
 
     [Header("Current Settings")]
-    public int currentFPS = 60;
+    public int currentFPS = 150;
     public bool isTrajectoryOptimized = false; 
 
     private void Awake()
@@ -26,7 +26,7 @@ public class SettingsManager : MonoBehaviour
 
     private void LoadSettings()
     {
-        currentFPS = PlayerPrefs.GetInt("TargetFPS", 60);
+        currentFPS = PlayerPrefs.GetInt("TargetFPS", currentFPS);
 
         isTrajectoryOptimized = PlayerPrefs.GetInt("OptimizedTrajectory", 0) == 1;
     }
