@@ -4,6 +4,9 @@ using UnityEngine;
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer), typeof(EdgeCollider2D))]
 public class TerrainChunk : MonoBehaviour
 {
+    [Header("Visuals")]
+    public LineRenderer grassTopRenderer;
+
     [Header("Texture Mapping")]
     public float textureScale = 10f;
 
@@ -57,6 +60,17 @@ public class TerrainChunk : MonoBehaviour
         ChunkData data = await Task.Run(() =>
             CalculateChunkData(globalXOffset, currentSeed, currentWidth, currentRes, currentHMulti, currentNScale, currentTScale)
         );
+
+        edgeCollider.points = data.colliderPoints;
+
+        if (grassTopRenderer != null)
+        {
+            grassTopRenderer.positionCount = data.colliderPoints.Length;
+            for (int i = 0; i < data.colliderPoints.Length; i++)
+            {
+                grassTopRenderer.SetPosition(i, new Vector3(data.colliderPoints[i].x, data.colliderPoints[i].y, -0.1f));
+            }
+        }
 
         if (this == null) return;
 

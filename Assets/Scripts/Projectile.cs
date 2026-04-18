@@ -21,7 +21,7 @@ public class Projectile : MonoBehaviour
     public LayerMask enemyLayer;
 
     private Rigidbody2D rb;
-    private Action<bool> onResolutionCallback; // Змінна для зберігання делегата
+    private Action<bool> onResolutionCallback;
     private bool isInitialized = false;
 
     private void Awake()
@@ -29,7 +29,6 @@ public class Projectile : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
-    // Додаємо нові аргументи: float damage та float sizeMultiplier
     public void Initialize(Vector2 initialVelocity, float damage, float sizeMultiplier, Action<bool> callback = null)
     {
         rb.linearVelocity = initialVelocity;
@@ -47,11 +46,9 @@ public class Projectile : MonoBehaviour
         {
             Vector2 v = rb.linearVelocity;
 
-            // Отримання абсолютного світового кута вектора швидкості
             float angleRad = Mathf.Atan2(v.y, v.x);
             float angleDeg = angleRad * Mathf.Rad2Deg;
 
-            // Застосування константи зміщення для спрайту, зорієнтованого вгору
             angleDeg -= 90f;
 
             transform.rotation = Quaternion.Euler(0, 0, angleDeg);
@@ -94,9 +91,9 @@ public class Projectile : MonoBehaviour
         if (health != null)
         {
             health.TakeDamage(damageAmount);
-            return true; // Реєстрація успішного влучання
+            return true; 
         }
-        return false; // Колізія з ландшафтом або іншим об'єктом
+        return false;
     }
 
     private bool ApplyAreaDamage(Vector2 impactPoint)

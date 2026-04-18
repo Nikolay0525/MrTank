@@ -15,8 +15,8 @@ public class AimingSystem : MonoBehaviour
     public float aimSpeed = 3f;
 
     [Header("Ammunition Stats")]
-    public float damage = 15f;          // Слабший урон для звичайного ворога
-    public float projectileSize = 0.8f; // Трохи менший снаряд
+    public float damage = 15f;          
+    public float projectileSize = 0.8f; 
 
     [Header("Trajectory Rendering")]
     public int linePoints = 120;
@@ -38,7 +38,6 @@ public class AimingSystem : MonoBehaviour
 
         if (gunPivot != null)
         {
-            // Фіксація початкового положення гармати
             defaultGunRotation = gunPivot.localRotation;
         }
     }
@@ -59,7 +58,6 @@ public class AimingSystem : MonoBehaviour
         lineRenderer.enabled = true;
     }
 
-    // Метод для примусового скасування прицілювання (наприклад, при вичерпанні таймера)
     public void CancelAiming()
     {
         isAiming = false;
@@ -76,7 +74,6 @@ public class AimingSystem : MonoBehaviour
         isAiming = false;
         lineRenderer.enabled = false;
 
-        // Отримуємо актуальний світовий кут у момент пострілу
         float worldAngleRad = gunPivot.eulerAngles.z * Mathf.Deg2Rad;
         Vector2 shootVector = new Vector2(Mathf.Cos(worldAngleRad), Mathf.Sin(worldAngleRad)) * projectileSpeed;
 
@@ -84,7 +81,6 @@ public class AimingSystem : MonoBehaviour
 
         if (projectileInstance != null && firePoint != null)
         {
-            // БЕРЕМО З ПУЛУ ЗАМІСТЬ Instantiate
             projectileInstance.transform.position = firePoint.position;
             projectileInstance.transform.rotation = firePoint.rotation;
             projectileInstance.SetActive(true);
@@ -121,17 +117,15 @@ public class AimingSystem : MonoBehaviour
 
     private void DrawTrajectory()
     {
-        // Отримуємо світовий кут дула в градусах, а потім переводимо в радіани
         float worldAngleRad = gunPivot.eulerAngles.z * Mathf.Deg2Rad;
 
-        Vector2 startPos = firePoint.position; // Використовуємо firePoint для точності
+        Vector2 startPos = firePoint.position; 
         Vector2 gravity = Physics2D.gravity;
 
         for (int i = 0; i < linePoints; i++)
         {
             float t = i * timeStep;
 
-            // Використовуємо світовий кут (worldAngleRad)
             Vector2 point = startPos + new Vector2(
                 projectileSpeed * Mathf.Cos(worldAngleRad) * t,
                 projectileSpeed * Mathf.Sin(worldAngleRad) * t + 0.5f * gravity.y * t * t

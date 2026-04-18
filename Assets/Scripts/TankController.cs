@@ -73,12 +73,9 @@ public class TankController : MonoBehaviour
                 break;
 
             case CombatPhase.ProjectileInFlight:
-                // Пасивне очікування.
-                // Перехід до наступної фази ініціюється виключно через делегат HandleShotResult.
                 break;
 
             case CombatPhase.EnemyTurn:
-                // Пасивне очікування завершення алгоритму штучного інтелекту.
                 break;
         }
     }
@@ -88,7 +85,6 @@ public class TankController : MonoBehaviour
         SetState(TankState.Driving);
     }
 
-    // Метод викликається тригером CombatZoneTrigger, який передає посилання на ворога
     public void EnterCombatState(EnemyAI enemy)
     {
         if (currentState == TankState.Driving)
@@ -111,21 +107,16 @@ public class TankController : MonoBehaviour
 
     private void ExecuteFire()
     {
-        // Передача методу HandleShotResult як зворотного виклику
         activeProjectile = aimingSystem.ExecuteShot(HandleShotResult);
         currentPhase = CombatPhase.ProjectileInFlight;
     }
 
-    // Новий метод, який відповідає сигнатурі Action<bool>
-    // Викликатиметься зсередини снаряда при знищенні/колізії
     private void HandleShotResult(bool isHit)
     {
         if (isHit)
         {
-            // Перевіряємо, чи ворог помер
             if (currentTarget == null || targetHealth == null || targetHealth.currentHealth <= 0)
             {
-                // ЦЕЙ МОМЕНТ: додаємо бал у складність
                 DifficultyManager.Instance.AddKill();
 
                 currentPhase = CombatPhase.None;

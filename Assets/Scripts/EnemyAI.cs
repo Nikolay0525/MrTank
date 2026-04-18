@@ -3,18 +3,18 @@ using System.Collections;
 
 public class EnemyAI : MonoBehaviour
 {
-    public ObjectPool projectilePool; // Наш спільний пул
+    public ObjectPool projectilePool; 
     public Transform firePoint;
     public Transform gunPivot;
 
     [Header("Ammunition Stats")]
     public float projectileSpeed = 20f;
-    public float damage = 15f;          // Слабший урон для звичайного ворога
-    public float projectileSize = 0.8f; // Трохи менший снаряд
+    public float damage = 15f; 
+    public float projectileSize = 0.8f; 
 
     private Health myHealth;
     private int localShotsFired = 0;
-    private bool isCurrentlyShooting = false; // Запобіжник
+    private bool isCurrentlyShooting = false; 
                                               
     private float cachedDiscriminant = -1f;
     private bool dontFindDiscriminant = false;
@@ -101,7 +101,7 @@ public class EnemyAI : MonoBehaviour
             float angleRad = Mathf.Atan((v * v - Mathf.Sqrt(cachedDiscriminant)) / (g * x));
             if (gunPivot != null) gunPivot.localRotation = Quaternion.Euler(0, 0, -(angleRad * Mathf.Rad2Deg));
 
-            yield return new WaitForSeconds(0.4f); // Пауза для прицілювання
+            yield return new WaitForSeconds(0.4f); 
 
             Vector2 velocity = new Vector2(-Mathf.Cos(angleRad), Mathf.Sin(angleRad)) * v;
             GameObject proj = ProjectilePoolManager.Instance.GetProjectile();

@@ -8,13 +8,10 @@ public class ScrollableObject : MonoBehaviour
 
     private void Update()
     {
-        // Вычисление вектора смещения на основе глобальной скорости конечного автомата
         float currentSpeed = TankController.CurrentGlobalSpeed;
 
-        // Применение трансформации позиции
         transform.Translate(Vector3.left * currentSpeed * Time.deltaTime);
 
-        // Проверка условия выхода за пределы области рендеринга камеры
         if (transform.position.x <= despawnX)
         {
             Deactivate();
@@ -23,7 +20,6 @@ public class ScrollableObject : MonoBehaviour
 
     private void Deactivate()
     {
-        // Деактивация объекта для последующего использования в Object Pool
         gameObject.SetActive(false);
     }
 }

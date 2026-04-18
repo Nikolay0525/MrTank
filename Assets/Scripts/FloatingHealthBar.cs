@@ -26,7 +26,6 @@ public class FloatingHealthBar : MonoBehaviour
         }
     }
 
-    // Метод викликається через UnityEvent з компонента Health
     public void OnHealthChanged()
     {
         UpdateVisibilityAndValue();
@@ -36,17 +35,15 @@ public class FloatingHealthBar : MonoBehaviour
     {
         if (targetHealth == null || healthSlider == null) return;
 
-        // Оновлення математичного значення
         healthSlider.value = targetHealth.currentHealth;
 
-        // Логіка видимості: приховування при повному здоров'ї або знищенні
         if (targetHealth.currentHealth >= targetHealth.maxHealth || targetHealth.currentHealth <= 0)
         {
-            canvasGroup.alpha = 0f; // Повна прозорість
+            canvasGroup.alpha = 0f; 
         }
         else
         {
-            canvasGroup.alpha = 1f; // Повна видимість
+            canvasGroup.alpha = 1f; 
         }
     }
 }

@@ -18,7 +18,6 @@ public class TankKinematics : MonoBehaviour
 
     private void Update()
     {
-        // Промінь випускаємо від кореня (Tank_logic)
         Vector2 rayOrigin = new Vector2(transform.position.x, transform.position.y + raycastHeightOffset);
         RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.down, raycastDistance, groundLayer);
 
@@ -30,12 +29,10 @@ public class TankKinematics : MonoBehaviour
 
     private void ApplyKinematics(RaycastHit2D hit)
     {
-        // 1. Позиціонування кореня (Tank_logic)
         float targetY = hit.point.y + tankHeightOffset;
         Vector3 targetPosition = new Vector3(transform.position.x, targetY, transform.position.z);
         transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * positionLerpSpeed);
 
-        // 2. Обертання ТІЛЬКИ корпусу (bodyVisual)
         if (bodyVisual != null)
         {
             float targetAngle = Mathf.Atan2(hit.normal.y, hit.normal.x) * Mathf.Rad2Deg - 90f;

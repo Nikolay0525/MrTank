@@ -3,10 +3,8 @@
 [RequireComponent(typeof(ObjectPool))]
 public class ProjectilePoolManager : MonoBehaviour
 {
-    // Одинак (Singleton) тільки для цього конкретного менеджера
     public static ProjectilePoolManager Instance { get; private set; }
 
-    // Посилання на базовий універсальний пул
     private ObjectPool pool;
 
     private void Awake()
@@ -22,7 +20,6 @@ public class ProjectilePoolManager : MonoBehaviour
         }
     }
 
-    // Публічний метод для зручного доступу
     public GameObject GetProjectile()
     {
         return pool.GetPooledObject();
