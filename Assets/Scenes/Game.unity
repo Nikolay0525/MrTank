@@ -490,6 +490,17 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 160, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &482869252 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 965842659875038414, guid: 183fab68086ac544797da31b58c00ccb, type: 3}
+  m_PrefabInstance: {fileID: 2053022984}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b743370ac3e4ec2a1668f5455a8ef8a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TMP_Dropdown
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -1290,6 +1301,17 @@ MonoBehaviour:
   enemyLayer:
     serializedVersion: 2
     m_Bits: 128
+--- !u!114 &1113362517 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8251696831279006260, guid: 183fab68086ac544797da31b58c00ccb, type: 3}
+  m_PrefabInstance: {fileID: 2053022984}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!114 &1323654072 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3186520317549748352, guid: 183fab68086ac544797da31b58c00ccb, type: 3}
@@ -1471,8 +1493,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14e833eec6e716840841c1fab7f19ad3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SettingsManager
+  fpsDropdown: {fileID: 482869252}
+  trajectorySlider: {fileID: 1758575848}
   currentFPS: 60
-  isTrajectoryOptimized: 0
+  trajectoryQuality: 0.1
 --- !u!4 &1571202745
 Transform:
   m_ObjectHideFlags: 0
@@ -1493,6 +1517,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 7970099760762778600, guid: 183fab68086ac544797da31b58c00ccb, type: 3}
   m_PrefabInstance: {fileID: 2053022984}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1758575848 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2479178138276145683, guid: 183fab68086ac544797da31b58c00ccb, type: 3}
+  m_PrefabInstance: {fileID: 2053022984}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Slider
 --- !u!1 &1774764585
 GameObject:
   m_ObjectHideFlags: 0
@@ -1680,8 +1715,7 @@ MonoBehaviour:
   damage: 15
   projectileSize: 0.8
   linePoints: 30
-  timeStep: 0.05
-  firePoint: {fileID: 0}
+  firePoint: {fileID: 1900322342}
 --- !u!120 &1900322344
 LineRenderer:
   serializedVersion: 3
@@ -1889,7 +1923,6 @@ MonoBehaviour:
   damage: 100
   projectileSize: 1
   linePoints: 60
-  timeStep: 0.1
   firePoint: {fileID: 1900322342}
 --- !u!120 &1959359291
 LineRenderer:
@@ -2194,7 +2227,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 3
   m_MaskInteraction: 0
   m_Sprite: {fileID: -2579507786909871165, guid: 8492e47899671d746bc147656b19ff3a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -2360,7 +2393,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1091111793730725281, guid: 183fab68086ac544797da31b58c00ccb, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1104367499736084484, guid: 183fab68086ac544797da31b58c00ccb, type: 3}
       propertyPath: m_fontAsset
@@ -2394,6 +2427,38 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2479178138276145683, guid: 183fab68086ac544797da31b58c00ccb, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2479178138276145683, guid: 183fab68086ac544797da31b58c00ccb, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2479178138276145683, guid: 183fab68086ac544797da31b58c00ccb, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1323654072}
+    - target: {fileID: 2479178138276145683, guid: 183fab68086ac544797da31b58c00ccb, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2479178138276145683, guid: 183fab68086ac544797da31b58c00ccb, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnSliderQualityChanged
+      objectReference: {fileID: 0}
+    - target: {fileID: 2479178138276145683, guid: 183fab68086ac544797da31b58c00ccb, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: UIManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2479178138276145683, guid: 183fab68086ac544797da31b58c00ccb, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 3186520317549748352, guid: 183fab68086ac544797da31b58c00ccb, type: 3}
+      propertyPath: TrajectoryQualityText
+      value: 
+      objectReference: {fileID: 1113362517}
     - target: {fileID: 4304976417724554851, guid: 183fab68086ac544797da31b58c00ccb, type: 3}
       propertyPath: m_SizeDelta.x
       value: 0
@@ -2565,7 +2630,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 3
+  m_SortingOrder: 2
   m_MaskInteraction: 0
   m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

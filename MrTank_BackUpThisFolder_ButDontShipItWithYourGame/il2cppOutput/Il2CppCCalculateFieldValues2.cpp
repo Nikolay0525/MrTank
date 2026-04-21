@@ -188,6 +188,7 @@ struct SpriteAsset_t1D3CF1D9DC350A4690CB09DE228A8B59F2F02313;
 struct StackOrderedAssemblyList_t57E870538D7E4DC7B2168FFB75368CE0C906AF97;
 struct String_t;
 struct SynchronizationContext_tCDB842BBE53B050802CBBB59C6E6DC45B5B06DC0;
+struct TMP_Dropdown_t73B37BFDA0D005451C7B750938AFB1748E5EA504;
 struct TankController_t15CFF8B7FA9CE7BCE1363DD50DAA54AFA5F320EA;
 struct Task_t751C4CC3ECD055BABA8A0B6A5DFBB4283DCA8572;
 struct TerrainChunk_tECD7F1862D0088632BE22C561C58F30EEE78C83E;
@@ -6397,7 +6398,6 @@ struct AimingSystem_t4B3BFAEE17D3167605D5177359F2A3B0D56B534A  : public MonoBeha
 	float ___damage;
 	float ___projectileSize;
 	int32_t ___linePoints;
-	float ___timeStep;
 	Transform_tB27202C6F4E36D225EE28A13E4D662BF99785DB1* ___firePoint;
 	LineRenderer_tEFEF960672DB69CB14B6D181FAE6292F0CF8B63D* ___lineRenderer;
 	float ___currentAngle;
@@ -6508,8 +6508,10 @@ struct ScrollableObject_t3E042DAC13C1C57AF751DEDD194398E9D957D9AD  : public Mono
 };
 struct SettingsManager_t4EE243AF21C0F2368EA2029BEAE2539757C3354B  : public MonoBehaviour_t532A11E69716D348D8AA7F854AFCBFCB8AD17F71
 {
+	TMP_Dropdown_t73B37BFDA0D005451C7B750938AFB1748E5EA504* ___fpsDropdown;
+	Slider_t87EA570E3D6556CABF57456C2F3873FFD86E652F* ___trajectorySlider;
 	int32_t ___currentFPS;
-	bool ___isTrajectoryOptimized;
+	float ___trajectoryQuality;
 };
 struct TankController_t15CFF8B7FA9CE7BCE1363DD50DAA54AFA5F320EA  : public MonoBehaviour_t532A11E69716D348D8AA7F854AFCBFCB8AD17F71
 {
@@ -6545,11 +6547,19 @@ struct TerrainChunk_tECD7F1862D0088632BE22C561C58F30EEE78C83E  : public MonoBeha
 };
 struct UIManager_t16825A2483574F37D7D47AB939A6FA639678B1F3  : public MonoBehaviour_t532A11E69716D348D8AA7F854AFCBFCB8AD17F71
 {
-	GameObject_t76FEDD663AB33C991A9C9A23129337651094216F* ___garagePanel;
-	GameObject_t76FEDD663AB33C991A9C9A23129337651094216F* ___gameHUDPanel;
-	GameObject_t76FEDD663AB33C991A9C9A23129337651094216F* ___gameOverPanel;
-	GameObject_t76FEDD663AB33C991A9C9A23129337651094216F* ___aboutUsPanel;
-	TextMeshProUGUI_t101091AF4B578BB534C92E9D1EEAF0611636D957* ___finalScoreText;
+	GameObject_t76FEDD663AB33C991A9C9A23129337651094216F* ___GaragePanel;
+	GameObject_t76FEDD663AB33C991A9C9A23129337651094216F* ___InGamePanel;
+	GameObject_t76FEDD663AB33C991A9C9A23129337651094216F* ___ScorePanel;
+	GameObject_t76FEDD663AB33C991A9C9A23129337651094216F* ___GameOverPanel;
+	GameObject_t76FEDD663AB33C991A9C9A23129337651094216F* ___GarageHelpPanel;
+	GameObject_t76FEDD663AB33C991A9C9A23129337651094216F* ___DrivingHelpPanel;
+	GameObject_t76FEDD663AB33C991A9C9A23129337651094216F* ___PausePanel;
+	GameObject_t76FEDD663AB33C991A9C9A23129337651094216F* ___SettingsGeneral;
+	GameObject_t76FEDD663AB33C991A9C9A23129337651094216F* ___SettingsAudio;
+	GameObject_t76FEDD663AB33C991A9C9A23129337651094216F* ___SettingsGraphics;
+	TextMeshProUGUI_t101091AF4B578BB534C92E9D1EEAF0611636D957* ___CurrentScoreText;
+	TextMeshProUGUI_t101091AF4B578BB534C92E9D1EEAF0611636D957* ___FinalScoreText;
+	TextMeshProUGUI_t101091AF4B578BB534C92E9D1EEAF0611636D957* ___TrajectoryQualityText;
 };
 struct ICurrentAssemblyLoadContext_tF382B3644CF7D70EAEF2C4812400C0AA851DF158_StaticFields
 {
@@ -8001,9 +8011,9 @@ IL2CPP_EXTERN_C const int32_t g_FieldOffsetTable6439[4] =
 IL2CPP_EXTERN_C const int32_t g_FieldOffsetTable6440[15] = 
 {
 	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,};
-IL2CPP_EXTERN_C const int32_t g_FieldOffsetTable6443[14] = 
+IL2CPP_EXTERN_C const int32_t g_FieldOffsetTable6443[13] = 
 {
-	static_cast<int32_t>(offsetof(AimingSystem_t4B3BFAEE17D3167605D5177359F2A3B0D56B534A, ___gunPivot)),static_cast<int32_t>(offsetof(AimingSystem_t4B3BFAEE17D3167605D5177359F2A3B0D56B534A, ___projectileSpeed)),static_cast<int32_t>(offsetof(AimingSystem_t4B3BFAEE17D3167605D5177359F2A3B0D56B534A, ___minAngle)),static_cast<int32_t>(offsetof(AimingSystem_t4B3BFAEE17D3167605D5177359F2A3B0D56B534A, ___maxAngle)),static_cast<int32_t>(offsetof(AimingSystem_t4B3BFAEE17D3167605D5177359F2A3B0D56B534A, ___aimSpeed)),static_cast<int32_t>(offsetof(AimingSystem_t4B3BFAEE17D3167605D5177359F2A3B0D56B534A, ___damage)),static_cast<int32_t>(offsetof(AimingSystem_t4B3BFAEE17D3167605D5177359F2A3B0D56B534A, ___projectileSize)),static_cast<int32_t>(offsetof(AimingSystem_t4B3BFAEE17D3167605D5177359F2A3B0D56B534A, ___linePoints)),static_cast<int32_t>(offsetof(AimingSystem_t4B3BFAEE17D3167605D5177359F2A3B0D56B534A, ___timeStep)),static_cast<int32_t>(offsetof(AimingSystem_t4B3BFAEE17D3167605D5177359F2A3B0D56B534A, ___firePoint)),static_cast<int32_t>(offsetof(AimingSystem_t4B3BFAEE17D3167605D5177359F2A3B0D56B534A, ___lineRenderer)),static_cast<int32_t>(offsetof(AimingSystem_t4B3BFAEE17D3167605D5177359F2A3B0D56B534A, ___currentAngle)),static_cast<int32_t>(offsetof(AimingSystem_t4B3BFAEE17D3167605D5177359F2A3B0D56B534A, ___isAiming)),static_cast<int32_t>(offsetof(AimingSystem_t4B3BFAEE17D3167605D5177359F2A3B0D56B534A, ___defaultGunRotation)),};
+	static_cast<int32_t>(offsetof(AimingSystem_t4B3BFAEE17D3167605D5177359F2A3B0D56B534A, ___gunPivot)),static_cast<int32_t>(offsetof(AimingSystem_t4B3BFAEE17D3167605D5177359F2A3B0D56B534A, ___projectileSpeed)),static_cast<int32_t>(offsetof(AimingSystem_t4B3BFAEE17D3167605D5177359F2A3B0D56B534A, ___minAngle)),static_cast<int32_t>(offsetof(AimingSystem_t4B3BFAEE17D3167605D5177359F2A3B0D56B534A, ___maxAngle)),static_cast<int32_t>(offsetof(AimingSystem_t4B3BFAEE17D3167605D5177359F2A3B0D56B534A, ___aimSpeed)),static_cast<int32_t>(offsetof(AimingSystem_t4B3BFAEE17D3167605D5177359F2A3B0D56B534A, ___damage)),static_cast<int32_t>(offsetof(AimingSystem_t4B3BFAEE17D3167605D5177359F2A3B0D56B534A, ___projectileSize)),static_cast<int32_t>(offsetof(AimingSystem_t4B3BFAEE17D3167605D5177359F2A3B0D56B534A, ___linePoints)),static_cast<int32_t>(offsetof(AimingSystem_t4B3BFAEE17D3167605D5177359F2A3B0D56B534A, ___firePoint)),static_cast<int32_t>(offsetof(AimingSystem_t4B3BFAEE17D3167605D5177359F2A3B0D56B534A, ___lineRenderer)),static_cast<int32_t>(offsetof(AimingSystem_t4B3BFAEE17D3167605D5177359F2A3B0D56B534A, ___currentAngle)),static_cast<int32_t>(offsetof(AimingSystem_t4B3BFAEE17D3167605D5177359F2A3B0D56B534A, ___isAiming)),static_cast<int32_t>(offsetof(AimingSystem_t4B3BFAEE17D3167605D5177359F2A3B0D56B534A, ___defaultGunRotation)),};
 IL2CPP_EXTERN_C const int32_t g_FieldOffsetTable6444[6] = 
 {
 	static_cast<int32_t>(offsetof(CameraController_tDC4FF0FA10418272A26E5E7539156F4F4A98E8C5, ___target)),static_cast<int32_t>(offsetof(CameraController_tDC4FF0FA10418272A26E5E7539156F4F4A98E8C5, ___verticalOffset)),static_cast<int32_t>(offsetof(CameraController_tDC4FF0FA10418272A26E5E7539156F4F4A98E8C5, ___smoothTime)),static_cast<int32_t>(offsetof(CameraController_tDC4FF0FA10418272A26E5E7539156F4F4A98E8C5, ___currentVelocity)),static_cast<int32_t>(offsetof(CameraController_tDC4FF0FA10418272A26E5E7539156F4F4A98E8C5, ___fixedX)),static_cast<int32_t>(offsetof(CameraController_tDC4FF0FA10418272A26E5E7539156F4F4A98E8C5, ___fixedZ)),};
@@ -8058,9 +8068,9 @@ IL2CPP_EXTERN_C const int32_t g_FieldOffsetTable6460[2] =
 IL2CPP_EXTERN_C const int32_t g_FieldOffsetTable6461[1] = 
 {
 	static_cast<int32_t>(offsetof(ScrollableObject_t3E042DAC13C1C57AF751DEDD194398E9D957D9AD, ___despawnX)),};
-IL2CPP_EXTERN_C const int32_t g_FieldOffsetTable6462[3] = 
+IL2CPP_EXTERN_C const int32_t g_FieldOffsetTable6462[5] = 
 {
-	static_cast<int32_t>(offsetof(SettingsManager_t4EE243AF21C0F2368EA2029BEAE2539757C3354B_StaticFields, ___U3CInstanceU3Ek__BackingField)),static_cast<int32_t>(offsetof(SettingsManager_t4EE243AF21C0F2368EA2029BEAE2539757C3354B, ___currentFPS)),static_cast<int32_t>(offsetof(SettingsManager_t4EE243AF21C0F2368EA2029BEAE2539757C3354B, ___isTrajectoryOptimized)),};
+	static_cast<int32_t>(offsetof(SettingsManager_t4EE243AF21C0F2368EA2029BEAE2539757C3354B_StaticFields, ___U3CInstanceU3Ek__BackingField)),static_cast<int32_t>(offsetof(SettingsManager_t4EE243AF21C0F2368EA2029BEAE2539757C3354B, ___fpsDropdown)),static_cast<int32_t>(offsetof(SettingsManager_t4EE243AF21C0F2368EA2029BEAE2539757C3354B, ___trajectorySlider)),static_cast<int32_t>(offsetof(SettingsManager_t4EE243AF21C0F2368EA2029BEAE2539757C3354B, ___currentFPS)),static_cast<int32_t>(offsetof(SettingsManager_t4EE243AF21C0F2368EA2029BEAE2539757C3354B, ___trajectoryQuality)),};
 IL2CPP_EXTERN_C const int32_t g_FieldOffsetTable6463[5] = 
 {
 	static_cast<int32_t>(sizeof(RuntimeObject)),0,0,0,0,};
@@ -8085,9 +8095,9 @@ IL2CPP_EXTERN_C const int32_t g_FieldOffsetTable6469[5] =
 IL2CPP_EXTERN_C const int32_t g_FieldOffsetTable6470[8] = 
 {
 	static_cast<int32_t>(offsetof(TerrainChunk_tECD7F1862D0088632BE22C561C58F30EEE78C83E, ___grassTopRenderer)),static_cast<int32_t>(offsetof(TerrainChunk_tECD7F1862D0088632BE22C561C58F30EEE78C83E, ___textureScale)),static_cast<int32_t>(offsetof(TerrainChunk_tECD7F1862D0088632BE22C561C58F30EEE78C83E, ___width)),static_cast<int32_t>(offsetof(TerrainChunk_tECD7F1862D0088632BE22C561C58F30EEE78C83E, ___heightMultiplier)),static_cast<int32_t>(offsetof(TerrainChunk_tECD7F1862D0088632BE22C561C58F30EEE78C83E, ___noiseScale)),static_cast<int32_t>(offsetof(TerrainChunk_tECD7F1862D0088632BE22C561C58F30EEE78C83E, ___resolution)),static_cast<int32_t>(offsetof(TerrainChunk_tECD7F1862D0088632BE22C561C58F30EEE78C83E, ___mesh)),static_cast<int32_t>(offsetof(TerrainChunk_tECD7F1862D0088632BE22C561C58F30EEE78C83E, ___edgeCollider)),};
-IL2CPP_EXTERN_C const int32_t g_FieldOffsetTable6471[6] = 
+IL2CPP_EXTERN_C const int32_t g_FieldOffsetTable6471[14] = 
 {
-	static_cast<int32_t>(offsetof(UIManager_t16825A2483574F37D7D47AB939A6FA639678B1F3_StaticFields, ___U3CInstanceU3Ek__BackingField)),static_cast<int32_t>(offsetof(UIManager_t16825A2483574F37D7D47AB939A6FA639678B1F3, ___garagePanel)),static_cast<int32_t>(offsetof(UIManager_t16825A2483574F37D7D47AB939A6FA639678B1F3, ___gameHUDPanel)),static_cast<int32_t>(offsetof(UIManager_t16825A2483574F37D7D47AB939A6FA639678B1F3, ___gameOverPanel)),static_cast<int32_t>(offsetof(UIManager_t16825A2483574F37D7D47AB939A6FA639678B1F3, ___aboutUsPanel)),static_cast<int32_t>(offsetof(UIManager_t16825A2483574F37D7D47AB939A6FA639678B1F3, ___finalScoreText)),};
+	static_cast<int32_t>(offsetof(UIManager_t16825A2483574F37D7D47AB939A6FA639678B1F3_StaticFields, ___U3CInstanceU3Ek__BackingField)),static_cast<int32_t>(offsetof(UIManager_t16825A2483574F37D7D47AB939A6FA639678B1F3, ___GaragePanel)),static_cast<int32_t>(offsetof(UIManager_t16825A2483574F37D7D47AB939A6FA639678B1F3, ___InGamePanel)),static_cast<int32_t>(offsetof(UIManager_t16825A2483574F37D7D47AB939A6FA639678B1F3, ___ScorePanel)),static_cast<int32_t>(offsetof(UIManager_t16825A2483574F37D7D47AB939A6FA639678B1F3, ___GameOverPanel)),static_cast<int32_t>(offsetof(UIManager_t16825A2483574F37D7D47AB939A6FA639678B1F3, ___GarageHelpPanel)),static_cast<int32_t>(offsetof(UIManager_t16825A2483574F37D7D47AB939A6FA639678B1F3, ___DrivingHelpPanel)),static_cast<int32_t>(offsetof(UIManager_t16825A2483574F37D7D47AB939A6FA639678B1F3, ___PausePanel)),static_cast<int32_t>(offsetof(UIManager_t16825A2483574F37D7D47AB939A6FA639678B1F3, ___SettingsGeneral)),static_cast<int32_t>(offsetof(UIManager_t16825A2483574F37D7D47AB939A6FA639678B1F3, ___SettingsAudio)),static_cast<int32_t>(offsetof(UIManager_t16825A2483574F37D7D47AB939A6FA639678B1F3, ___SettingsGraphics)),static_cast<int32_t>(offsetof(UIManager_t16825A2483574F37D7D47AB939A6FA639678B1F3, ___CurrentScoreText)),static_cast<int32_t>(offsetof(UIManager_t16825A2483574F37D7D47AB939A6FA639678B1F3, ___FinalScoreText)),static_cast<int32_t>(offsetof(UIManager_t16825A2483574F37D7D47AB939A6FA639678B1F3, ___TrajectoryQualityText)),};
 IL2CPP_EXTERN_C const int32_t g_FieldOffsetTable6473[5] = 
 {
 	static_cast<int32_t>(offsetof(MonoScriptData_t8F50E352855B96FFFC1D9CB07EACC90C99D73A3E, ___FilePathsData)) + static_cast<int32_t>(sizeof(RuntimeObject)),static_cast<int32_t>(offsetof(MonoScriptData_t8F50E352855B96FFFC1D9CB07EACC90C99D73A3E, ___TypesData)) + static_cast<int32_t>(sizeof(RuntimeObject)),static_cast<int32_t>(offsetof(MonoScriptData_t8F50E352855B96FFFC1D9CB07EACC90C99D73A3E, ___TotalTypes)) + static_cast<int32_t>(sizeof(RuntimeObject)),static_cast<int32_t>(offsetof(MonoScriptData_t8F50E352855B96FFFC1D9CB07EACC90C99D73A3E, ___TotalFiles)) + static_cast<int32_t>(sizeof(RuntimeObject)),static_cast<int32_t>(offsetof(MonoScriptData_t8F50E352855B96FFFC1D9CB07EACC90C99D73A3E, ___IsEditorOnly)) + static_cast<int32_t>(sizeof(RuntimeObject)),};

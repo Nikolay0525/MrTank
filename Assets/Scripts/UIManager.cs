@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
+using Unity.Mathematics;
 
 public class UIManager : MonoBehaviour
 {
@@ -24,6 +25,9 @@ public class UIManager : MonoBehaviour
     [Header("Game Over Text")]
     public TextMeshProUGUI FinalScoreText;
 
+    [Header("Trajectory Quality Text")]
+    public TextMeshProUGUI TrajectoryQualityText;
+
     private void Awake()
     {
         if (Instance == null) Instance = this;
@@ -33,6 +37,7 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         OnClickGarage();
+        OnSliderQualityChanged();
     }
 
     public void OnClickToBattle()
@@ -54,6 +59,11 @@ public class UIManager : MonoBehaviour
         if (tank != null)
         {
             tank.StartBattleFromGarage();
+        }
+
+        if(DifficultyManager.Instance != null)
+        {
+            CurrentScoreText.text = DifficultyManager.Instance.GetCurrentScore();
         }
     }
 
@@ -216,5 +226,15 @@ public class UIManager : MonoBehaviour
         SettingsGeneral.SetActive(false);
         SettingsAudio.SetActive(false);
         SettingsGraphics.SetActive(true);
+    }
+
+    public void OnSliderQualityChanged()
+    {
+        if(SettingsManager.Instance != null)
+        {
+            TrajectoryQualityText.text = SettingsManager.Instance.trajectoryQuality.ToString("F2");
+            return;
+        }
+        TrajectoryQualityText.text = "Can't get the value";
     }
 }

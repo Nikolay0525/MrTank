@@ -800,9 +800,10 @@ UnityEngine.PlayerConnectionInternal::PollInternal
 UnityEngine.PlayerConnectionInternal::RegisterInternal_Injected
 UnityEngine.PlayerConnectionInternal::SendMessage_Injected
 UnityEngine.PlayerConnectionInternal::UnregisterInternal_Injected
+UnityEngine.PlayerPrefs::TrySetFloat_Injected
 UnityEngine.PlayerPrefs::TrySetInt_Injected
 UnityEngine.PlayerPrefs::GetInt_Injected
-UnityEngine.PlayerPrefs::Save
+UnityEngine.PlayerPrefs::GetFloat_Injected
 UnityEngine.PropertyNameUtils::PropertyNameFromString_Injected
 UnityEngine.QualitySettings::get_activeColorSpace
 UnityEngine.Quaternion::Internal_AngleAxis_Injected
@@ -1072,6 +1073,7 @@ UnityEngine.Time::get_time
 UnityEngine.Time::get_unscaledDeltaTime
 UnityEngine.Time::get_unscaledTime
 UnityEngine.Time::get_timeAsRational_Injected
+UnityEngine.Time::set_timeScale
 UnityEngine.TouchScreenKeyboard::IsInPlaceEditingAllowed
 UnityEngine.TouchScreenKeyboard::get_active_Injected
 UnityEngine.TouchScreenKeyboard::get_canGetSelection_Injected

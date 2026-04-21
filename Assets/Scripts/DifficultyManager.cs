@@ -6,7 +6,7 @@ public class DifficultyManager : MonoBehaviour
 
     [Header("Progression Stats")]
     public int totalKills = 0;
-    [Tooltip("Скільки кілів потрібно для підняття одного рівня складності")]
+    [Tooltip("Kills per level")]
     public int killsPerLevel = 1;
 
     [Header("Player Settings")]
@@ -28,11 +28,6 @@ public class DifficultyManager : MonoBehaviour
         if (Instance == null) {
             Instance = this;
         } else Destroy(gameObject);
-
-        if (UIManager.Instance != null)
-        {
-            UIManager.Instance.CurrentScoreText.text = "Score: " + totalKills.ToString();
-        }
     }
 
     public void AddKill()
@@ -49,6 +44,10 @@ public class DifficultyManager : MonoBehaviour
         return (float)totalKills / killsPerLevel;
     }
 
+    public string GetCurrentScore()
+    {
+        return UIManager.Instance.CurrentScoreText.text = "Score: " + totalKills.ToString();
+    }
 
     public float GetPlayerAimTime()
     {

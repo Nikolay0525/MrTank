@@ -19,8 +19,7 @@ public class AimingSystem : MonoBehaviour
     public float projectileSize = 0.8f; 
 
     [Header("Trajectory Rendering")]
-    public int linePoints = 120;
-    public float timeStep = 0.05f;
+    public int linePoints = 60;
 
     [Header("Spawning")]
     public Transform firePoint;
@@ -121,6 +120,12 @@ public class AimingSystem : MonoBehaviour
 
         Vector2 startPos = firePoint.position; 
         Vector2 gravity = Physics2D.gravity;
+
+        float timeStep = 0.1f; // Default fallback value
+        if (SettingsManager.Instance != null)
+        {
+            timeStep = SettingsManager.Instance.trajectoryQuality;
+        }
 
         for (int i = 0; i < linePoints; i++)
         {
