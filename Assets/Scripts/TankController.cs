@@ -31,8 +31,8 @@ public class TankController : MonoBehaviour
 
             shouldAutoStart = false;
 
-            if (UIManager.Instance != null) UIManager.Instance.gameHUDPanel.SetActive(true);
-            if (UIManager.Instance != null) UIManager.Instance.garagePanel.SetActive(false);
+            if (UIManager.Instance != null) UIManager.Instance.InGamePanel.SetActive(true);
+            if (UIManager.Instance != null) UIManager.Instance.GaragePanel.SetActive(false);
         }
         else
         {

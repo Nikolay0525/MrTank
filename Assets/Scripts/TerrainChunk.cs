@@ -71,7 +71,7 @@ public class TerrainChunk : MonoBehaviour
             grassTopRenderer.sortingOrder = 1;            // Але цифра 1 (поверх землі!)
 
             // Змінна для висоти трави (можеш винести її вгору скрипта як public float grassOffset)
-            float grassOffset = 0.25f; // Чим більше число, тим вище над землею буде трава
+            float grassOffset = 0.15f; // Чим більше число, тим вище над землею буде трава
 
             for (int i = 0; i < data.colliderPoints.Length; i++)
             {

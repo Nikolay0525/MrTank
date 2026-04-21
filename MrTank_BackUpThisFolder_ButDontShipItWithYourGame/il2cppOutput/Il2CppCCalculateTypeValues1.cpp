@@ -1786,7 +1786,7 @@ struct U3CU3Ec__DisplayClass2_0_t0B5D4AB83F3F1D0E2CBD5B3D6B359B5EE27D2594  : pub
 {
 	String_t* ___boneHash;
 };
-struct U3CU3Ec__DisplayClass9_0_tBCD7D8E2C4CF2ED030DCCF3CD14E27208247AE3E  : public RuntimeObject
+struct U3CU3Ec__DisplayClass10_0_t08A746D18B64742C28D6DBEFAC24F180168F4399  : public RuntimeObject
 {
 	TerrainChunk_tECD7F1862D0088632BE22C561C58F30EEE78C83E* ___U3CU3E4__this;
 	float ___globalXOffset;
@@ -8496,7 +8496,7 @@ struct MatEntry_tF1DC29AF9CCFDBC456188F99166F26D1B6772EE2  : public RuntimeObjec
 	bool ___useAlphaClip;
 	int32_t ___colorMask;
 };
-struct U3CGenerateChunkAsyncU3Ed__9_tF773978C8721119CB8BE44E1792415DAA7EA0DB3 
+struct U3CGenerateChunkAsyncU3Ed__10_tD69481DAB2634E9C3CD8A64343BDF0D8B80A1CF4 
 {
 	int32_t ___U3CU3E1__state;
 	AsyncVoidMethodBuilder_t253E37B63E7E7B504878AE6563347C147F98EF2D ___U3CU3Et__builder;
@@ -11369,6 +11369,7 @@ struct TankKinematics_t23049A69D6B9D7A480208FD6A585A5AC55EB1460  : public MonoBe
 };
 struct TerrainChunk_tECD7F1862D0088632BE22C561C58F30EEE78C83E  : public MonoBehaviour_t532A11E69716D348D8AA7F854AFCBFCB8AD17F71
 {
+	LineRenderer_tEFEF960672DB69CB14B6D181FAE6292F0CF8B63D* ___grassTopRenderer;
 	float ___textureScale;
 	float ___width;
 	float ___heightMultiplier;
@@ -14885,9 +14886,9 @@ const Il2CppTypeDefinitionSizes g_typeDefinitionSize6466 = { sizeof(TankKinemati
 IL2CPP_EXTERN_C_CONST Il2CppTypeDefinitionSizes g_typeDefinitionSize6467;
 const Il2CppTypeDefinitionSizes g_typeDefinitionSize6467 = { sizeof(ChunkData_tAB395C3C806C89031975E0B2635BF55CBF54BEA8), -1, 0, 0 };
 IL2CPP_EXTERN_C_CONST Il2CppTypeDefinitionSizes g_typeDefinitionSize6468;
-const Il2CppTypeDefinitionSizes g_typeDefinitionSize6468 = { sizeof(U3CU3Ec__DisplayClass9_0_tBCD7D8E2C4CF2ED030DCCF3CD14E27208247AE3E), -1, 0, 0 };
+const Il2CppTypeDefinitionSizes g_typeDefinitionSize6468 = { sizeof(U3CU3Ec__DisplayClass10_0_t08A746D18B64742C28D6DBEFAC24F180168F4399), -1, 0, 0 };
 IL2CPP_EXTERN_C_CONST Il2CppTypeDefinitionSizes g_typeDefinitionSize6469;
-const Il2CppTypeDefinitionSizes g_typeDefinitionSize6469 = { sizeof(U3CGenerateChunkAsyncU3Ed__9_tF773978C8721119CB8BE44E1792415DAA7EA0DB3)+ sizeof(RuntimeObject), -1, 0, 0 };
+const Il2CppTypeDefinitionSizes g_typeDefinitionSize6469 = { sizeof(U3CGenerateChunkAsyncU3Ed__10_tD69481DAB2634E9C3CD8A64343BDF0D8B80A1CF4)+ sizeof(RuntimeObject), -1, 0, 0 };
 IL2CPP_EXTERN_C_CONST Il2CppTypeDefinitionSizes g_typeDefinitionSize6470;
 const Il2CppTypeDefinitionSizes g_typeDefinitionSize6470 = { sizeof(TerrainChunk_tECD7F1862D0088632BE22C561C58F30EEE78C83E), -1, 0, 0 };
 IL2CPP_EXTERN_C_CONST Il2CppTypeDefinitionSizes g_typeDefinitionSize6471;

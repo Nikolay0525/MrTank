@@ -28,11 +28,20 @@ public class DifficultyManager : MonoBehaviour
         if (Instance == null) {
             Instance = this;
         } else Destroy(gameObject);
+
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.CurrentScoreText.text = "Score: " + totalKills.ToString();
+        }
     }
 
     public void AddKill()
     {
         totalKills++;
+        if(UIManager.Instance != null)
+        {
+            UIManager.Instance.CurrentScoreText.text = "Score: " + totalKills.ToString();
+        }
     }
 
     public float GetDifficultyLevel()
