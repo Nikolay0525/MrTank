@@ -245,7 +245,7 @@ public class TerrainChunk : MonoBehaviour
 
                     float correctedY = currentPoint.y + (randomScaleY / 2f);
 
-                    Vector3 localPos = new Vector3(currentPoint.x, correctedY, -9f);
+                    Vector3 localPos = new Vector3(currentPoint.x, correctedY, 1f);
 
                     localPosLists[randomTreeType].Add(localPos);
                     scaleLists[randomTreeType].Add(scale);
