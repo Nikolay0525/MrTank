@@ -155,6 +155,13 @@ MonoBehaviour:
   heightMultiplier: 5
   noiseScale: 0.05
   resolution: 20
+  treeMesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+  treeMaterials:
+  - {fileID: 2100000, guid: 04cc3d536e699604b909983c33a0774d, type: 2}
+  - {fileID: 2100000, guid: be2485af62bbf504a9529bcd42f27394, type: 2}
+  treeDensity: 0.1
+  minTreeDistance: 2
+  maxSlopeAngle: 25
 --- !u!114 &7858635064554456804
 MonoBehaviour:
   m_ObjectHideFlags: 0
