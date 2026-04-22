@@ -90,6 +90,18 @@ public class UIManager : MonoBehaviour
 
     public void OnClickRetry()
     {
+        GaragePanel.SetActive(false);
+        InGamePanel.SetActive(true);
+        ScorePanel.SetActive(true);
+        GameOverPanel.SetActive(false);
+        GarageHelpPanel.SetActive(false);
+        DrivingHelpPanel.SetActive(false);
+        PausePanel.SetActive(false);
+
+        SettingsGeneral.SetActive(false);
+        SettingsAudio.SetActive(false);
+        SettingsGraphics.SetActive(false);
+
         TankController.shouldAutoStart = true;
 
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
