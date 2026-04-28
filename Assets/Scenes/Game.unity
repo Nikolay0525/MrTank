@@ -351,6 +351,52 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &258056900
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 258056902}
+  - component: {fileID: 258056901}
+  m_Layer: 0
+  m_Name: BackgroundHillsPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &258056901
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 258056900}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91514581e6ab48449a4b3ea1cf60cd26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectPool
+  prefab: {fileID: 6689110358511074825, guid: a6b26d8aefe7ed64788e113281151b85, type: 3}
+  poolSize: 6
+--- !u!4 &258056902
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 258056900}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &418226869
 GameObject:
   m_ObjectHideFlags: 0
@@ -1626,13 +1672,13 @@ MonoBehaviour:
   spawnInterval: 10
   spawnX: 30
   despawnX: -20
-  minY: 3
-  maxY: 7
+  minY: 4
+  maxY: 8
   zPosition: 5
   minSpeed: 0.4
   maxSpeed: 0.6
-  minScale: 2
-  maxScale: 4
+  minScale: 3
+  maxScale: 5
 --- !u!114 &1841243841
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1646,7 +1692,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjectPool
   prefab: {fileID: 6260251770952473285, guid: c80a758c047fd0f4785f8da40ed3b5d4, type: 3}
-  poolSize: 30
+  poolSize: 15
 --- !u!4 &1841243842
 Transform:
   m_ObjectHideFlags: 0
@@ -2723,6 +2769,7 @@ SceneRoots:
   m_Roots:
   - {fileID: 519420032}
   - {fileID: 119563921}
+  - {fileID: 258056902}
   - {fileID: 418226871}
   - {fileID: 1959359288}
   - {fileID: 991288952}
