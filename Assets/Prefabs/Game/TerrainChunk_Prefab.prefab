@@ -152,7 +152,7 @@ MonoBehaviour:
   grassTopRenderer: {fileID: -5150655255821769135}
   textureScale: 1
   width: 20
-  heightMultiplier: 5
+  heightMultiplier: 2
   noiseScale: 0.05
   resolution: 20
   treeMesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}

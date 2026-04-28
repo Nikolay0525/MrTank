@@ -21,8 +21,8 @@ public class TerrainChunk : MonoBehaviour
     private EdgeCollider2D edgeCollider;
 
     [Header("GPU Instanced Trees")]
-    public Mesh treeMesh;           // Сюди закинь стандартний Quad (з вікна проектів)
-    public Material[] treeMaterials;   // Матеріал дерева З УВІМКНЕНИМ GPU Instancing
+    public Mesh treeMesh;          
+    public Material[] treeMaterials;   
     [Range(0f, 1f)] public float treeDensity = 0.1f;
     public float minTreeDistance = 2f;
     public float maxSlopeAngle = 25f;
@@ -160,7 +160,14 @@ public class TerrainChunk : MonoBehaviour
             float localX = i * step;
             float globalX = globalXOffset + localX;
 
-            float rawY = Mathf.PerlinNoise(globalX * nScale, seed) * hMulti;
+            // Отримуємо стандартний шум від 0 до 1
+            float rawNoise = Mathf.PerlinNoise(globalX * nScale, seed);
+
+            // Зміщуємо його в діапазон від -1 до 1
+            float centeredNoise = (rawNoise * 2f) - 1f;
+
+            // Множимо на висоту
+            float rawY = centeredNoise * hMulti;
             float weight = 0f;
 
             if (globalX <= flatZone) weight = 0f;
