@@ -1,4 +1,4 @@
-Shader "Custom/InstancedSprite" {
+Shader "Custom/InstancedSpriteShader" {
     Properties {
         _MainTex ("Texture", 2D) = "white" {}
         _Color ("Tint", Color) = (1,1,1,1)

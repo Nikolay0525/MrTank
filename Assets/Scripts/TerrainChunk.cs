@@ -254,7 +254,7 @@ public class TerrainChunk : MonoBehaviour
                 {
                     int randomTreeType = prng.Next(0, typesCount);
 
-                    float randomScaleY = ((float)prng.NextDouble() * 0.5f + 2f)*treeSizeMul;
+                    float randomScaleY = ((float)prng.NextDouble() * 0.5f + 3f)*treeSizeMul;
                     float randomScaleX = randomScaleY;
                     Vector3 scale = new Vector3(randomScaleX, randomScaleY, 1f);
 
