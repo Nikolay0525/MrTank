@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1182551180986553414}
   - component: {fileID: 8168594382413777697}
   m_Layer: 6
-  m_Name: HillChunk_Prefab
+  m_Name: MountainChunk_Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -68,7 +68,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 50f982caaf9694948a733cff9037d370, type: 2}
+  - {fileID: 2100000, guid: aa188e647bacfb04487f65bd2901daf3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -104,10 +104,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1dbcdfc33ae632419f3f1f68759b2f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BackgroundChunk
-  textureScale: 3
+  textureScale: 6
   width: 20
-  heightMultiplier: 2
-  noiseScale: 0.05
+  heightMultiplier: 15
+  noiseScale: 0.1
   resolution: 20
 --- !u!114 &8168594382413777697
 MonoBehaviour:
@@ -122,4 +122,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScrollableObject
   despawnX: -30
-  speedMultiplier: 0.25
+  speedMultiplier: 0.125

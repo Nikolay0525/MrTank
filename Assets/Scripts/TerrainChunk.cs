@@ -1,10 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using UnityEditor;
 using UnityEngine;
 
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer), typeof(EdgeCollider2D))]
 public class TerrainChunk : MonoBehaviour
 {
+    [Header("Layer Settings")]
+    public bool isBackgroundMode = false;
+
     [Header("Visuals")]
     public LineRenderer grassTopRenderer;
 
@@ -21,6 +25,7 @@ public class TerrainChunk : MonoBehaviour
     private EdgeCollider2D edgeCollider;
 
     [Header("GPU Instanced Trees")]
+    public float treeSizeMul = 1.0f;
     public Mesh treeMesh;          
     public Material[] treeMaterials;   
     [Range(0f, 1f)] public float treeDensity = 0.1f;
@@ -106,28 +111,30 @@ public class TerrainChunk : MonoBehaviour
             CalculateChunkData(globalXOffset, currentSeed, currentWidth, currentRes, currentHMulti, currentNScale, currentTScale)
         );
 
-        edgeCollider.points = data.colliderPoints;
+        if (this == null) return;
 
-        if (grassTopRenderer != null)
+        if (!isBackgroundMode)
         {
-            grassTopRenderer.positionCount = data.colliderPoints.Length;
+            edgeCollider.points = data.colliderPoints;
 
-            grassTopRenderer.sortingLayerName = "Ground"; 
-            grassTopRenderer.sortingOrder = 10;           
-
-            float grassOffset = 0.15f; // the higher value the higher grass
-
-            for (int i = 0; i < data.colliderPoints.Length; i++)
+            if (grassTopRenderer != null)
             {
-                grassTopRenderer.SetPosition(i, new Vector3(
-                    data.colliderPoints[i].x,
-                    data.colliderPoints[i].y + grassOffset,
-                    0f
-                ));
+                grassTopRenderer.positionCount = data.colliderPoints.Length;
+                grassTopRenderer.sortingLayerName = "Ground";
+                grassTopRenderer.sortingOrder = 10;
+
+                float grassOffset = 0.15f;
+
+                for (int i = 0; i < data.colliderPoints.Length; i++)
+                {
+                    grassTopRenderer.SetPosition(i, new Vector3(
+                        data.colliderPoints[i].x,
+                        data.colliderPoints[i].y + grassOffset,
+                        0f
+                    ));
+                }
             }
         }
-
-        if (this == null) return;
 
         mesh.Clear();
         mesh.vertices = data.vertices;
@@ -136,12 +143,13 @@ public class TerrainChunk : MonoBehaviour
         mesh.RecalculateNormals();
         mesh.RecalculateBounds();
 
-        edgeCollider.points = data.colliderPoints;
-
         treeLocalPositionsPerType = data.localPositionsPerType;
         treeScalesPerType = data.scalesPerType;
-
-        SpawnEnemy(data.colliderPoints);
+        // Apply gameplay logic only if it's not a background
+        if (!isBackgroundMode)
+        {
+            SpawnEnemy(data.colliderPoints);
+        }
     }
 
     private ChunkData CalculateChunkData(float globalXOffset, float seed, float w, int res, float hMulti, float nScale, float tScale)
@@ -246,7 +254,7 @@ public class TerrainChunk : MonoBehaviour
                 {
                     int randomTreeType = prng.Next(0, typesCount);
 
-                    float randomScaleY = (float)prng.NextDouble() * 0.5f + 2f;
+                    float randomScaleY = ((float)prng.NextDouble() * 0.5f + 2f)*treeSizeMul;
                     float randomScaleX = randomScaleY;
                     Vector3 scale = new Vector3(randomScaleX, randomScaleY, 1f);
 

@@ -54,9 +54,6 @@ public class BackgroundChunk : MonoBehaviour
 
     private ChunkData CalculateChunkData(float globalXOffset, float seed, float w, int res, float hMulti, float nScale, float tScale)
     {
-        // Flat zone can be smaller or zero for background, but kept for consistency
-        float flatZone = 10f;
-        float transitionZone = 10f;
 
         int overlapRes = res + 1;
         Vector3[] vertices = new Vector3[overlapRes + 1];
@@ -68,25 +65,13 @@ public class BackgroundChunk : MonoBehaviour
             float localX = i * step;
             float globalX = globalXOffset + localX;
 
-            // Get standard noise from 0 to 1
             float rawNoise = Mathf.PerlinNoise(globalX * nScale, seed);
 
-            // Shift it to -1 to 1 range
             float centeredNoise = (rawNoise * 2f) - 1f;
 
-            // Multiply by height
             float rawY = centeredNoise * hMulti;
-            float weight = 0f;
+            float weight = 1f;
 
-            if (globalX <= flatZone) weight = 0f;
-            else if (globalX <= flatZone + transitionZone)
-            {
-                float t = (globalX - flatZone) / transitionZone;
-                weight = Mathf.SmoothStep(0f, 1f, t);
-            }
-            else weight = 1f;
-
-            // Add base height to lift the entire background layer
             float finalY = rawY * weight;
 
             vertices[i] = new Vector3(localX, finalY, 0f);
@@ -95,7 +80,6 @@ public class BackgroundChunk : MonoBehaviour
         Vector3[] fullVertices = new Vector3[(overlapRes + 1) * 2];
         Vector2[] uvs = new Vector2[(overlapRes + 1) * 2];
 
-        // Deepened the bottom to ensure no gaps at the bottom of the screen
         float bottomY = -20f;
 
         for (int i = 0; i <= overlapRes; i++)

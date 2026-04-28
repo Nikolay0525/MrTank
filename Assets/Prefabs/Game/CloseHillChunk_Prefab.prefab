@@ -14,9 +14,9 @@ GameObject:
   - component: {fileID: 6272018508504953810}
   - component: {fileID: 7724623598563589870}
   - component: {fileID: 7858635064554456804}
-  - component: {fileID: -5150655255821769135}
-  m_Layer: 6
-  m_Name: TerrainChunk_Prefab
+  - component: {fileID: 6809641382663947314}
+  m_Layer: 0
+  m_Name: CloseHillChunk_Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -70,7 +70,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 6a5158f5928849b4e89a0b732972f66a, type: 2}
+  - {fileID: 2100000, guid: c43a20b6370701947958866e8d862cb5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -149,17 +149,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dfc3ef59e28e8448aa0bdb68a41dbe5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TerrainChunk
-  grassTopRenderer: {fileID: -5150655255821769135}
-  textureScale: 1
+  isBackgroundMode: 1
+  grassTopRenderer: {fileID: 6809641382663947314}
+  textureScale: 3
   width: 20
   heightMultiplier: 2
   noiseScale: 0.05
   resolution: 20
+  treeSizeMul: 0.33
   treeMesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
   treeMaterials:
   - {fileID: 2100000, guid: 04cc3d536e699604b909983c33a0774d, type: 2}
   - {fileID: 2100000, guid: be2485af62bbf504a9529bcd42f27394, type: 2}
-  treeDensity: 0.1
+  treeDensity: 0.3
   minTreeDistance: 2
   maxSlopeAngle: 25
 --- !u!114 &7858635064554456804
@@ -175,8 +177,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScrollableObject
   despawnX: -30
-  speedMultiplier: 1
---- !u!120 &-5150655255821769135
+  speedMultiplier: 0.5
+--- !u!120 &6809641382663947314
 LineRenderer:
   serializedVersion: 3
   m_ObjectHideFlags: 0
@@ -185,9 +187,9 @@ LineRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6689110358511074825}
   m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_DynamicOccludee: 0
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
   m_MotionVectors: 0
   m_LightProbeUsage: 0
@@ -202,7 +204,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 83dee888af76dd8439a38f19985ff32e, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -230,7 +232,7 @@ LineRenderer:
   - {x: 0, y: 0, z: 1}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.75
+    widthMultiplier: 1
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -279,10 +281,10 @@ LineRenderer:
     numCornerVertices: 0
     numCapVertices: 0
     alignment: 0
-    textureMode: 1
-    textureScale: {x: 1.2, y: -1}
+    textureMode: 0
+    textureScale: {x: 1, y: 1}
     shadowBias: 0.5
     generateLightingData: 0
-  m_UseWorldSpace: 0
+  m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
