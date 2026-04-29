@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6426120445888404175}
   - component: {fileID: 1182551180986553414}
   - component: {fileID: 8168594382413777697}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: MountainChunk_Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}

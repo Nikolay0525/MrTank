@@ -16,9 +16,11 @@ public class Projectile : MonoBehaviour
     public DamageType damageType = DamageType.Direct;
     public float damageAmount = 25f;
 
+    [Header("Targeting")]
+    public LayerMask hittableLayers;
+
     [Header("Explosive Parameters (For AoE)")]
     public float explosionRadius = 2.5f;
-    public LayerMask enemyLayer;
 
     private Rigidbody2D rb;
     private Action<bool> onResolutionCallback;
@@ -57,6 +59,11 @@ public class Projectile : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if (((1 << collision.gameObject.layer) & hittableLayers) == 0)
+        {
+            return;
+        }
+
         bool isHit = false;
         isInitialized = false;
 
@@ -99,7 +106,7 @@ public class Projectile : MonoBehaviour
     private bool ApplyAreaDamage(Vector2 impactPoint)
     {
         bool hitAnyEnemy = false;
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(impactPoint, explosionRadius, enemyLayer);
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(impactPoint, explosionRadius, hittableLayers);
 
         foreach (Collider2D hitCollider in colliders)
         {

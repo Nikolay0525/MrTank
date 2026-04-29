@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 7724623598563589870}
   - component: {fileID: 7858635064554456804}
   - component: {fileID: -5150655255821769135}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: TerrainChunk_Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -149,12 +149,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dfc3ef59e28e8448aa0bdb68a41dbe5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TerrainChunk
+  isBackgroundMode: 0
   grassTopRenderer: {fileID: -5150655255821769135}
   textureScale: 1
   width: 20
   heightMultiplier: 2
   noiseScale: 0.05
   resolution: 20
+  treeSizeMul: 1
   treeMesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
   treeMaterials:
   - {fileID: 2100000, guid: 04cc3d536e699604b909983c33a0774d, type: 2}

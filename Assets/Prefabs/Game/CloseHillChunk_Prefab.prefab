@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 7724623598563589870}
   - component: {fileID: 7858635064554456804}
   - component: {fileID: 6809641382663947314}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: CloseHillChunk_Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
