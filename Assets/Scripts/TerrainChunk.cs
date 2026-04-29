@@ -21,6 +21,10 @@ public class TerrainChunk : MonoBehaviour
     public float noiseScale = 0.05f;
     public int resolution = 20;
 
+    [Header("Repair Station Settings")]
+    public GameObject repairStationPrefab;
+    [Range(0f, 1f)] public float repairStationSpawnChance = 0.2f;
+
     private Mesh mesh;
     private EdgeCollider2D edgeCollider;
 
@@ -94,6 +98,10 @@ public class TerrainChunk : MonoBehaviour
             {
                 EnemyPoolManager.Instance.ReturnEnemy(child);
             }
+            else if (child.GetComponentInChildren<RepairStation>(true) != null)
+            {
+                RepairStationPoolManager.Instance.ReturnRepairStation(child);
+            }
             else
             {
                 Destroy(child);
@@ -145,10 +153,10 @@ public class TerrainChunk : MonoBehaviour
 
         treeLocalPositionsPerType = data.localPositionsPerType;
         treeScalesPerType = data.scalesPerType;
-        // Apply gameplay logic only if it's not a background
         if (!isBackgroundMode)
         {
             SpawnEnemy(data.colliderPoints);
+            SpawnRepairStation(data.colliderPoints);
         }
     }
 
@@ -168,13 +176,10 @@ public class TerrainChunk : MonoBehaviour
             float localX = i * step;
             float globalX = globalXOffset + localX;
 
-            // Отримуємо стандартний шум від 0 до 1
             float rawNoise = Mathf.PerlinNoise(globalX * nScale, seed);
 
-            // Зміщуємо його в діапазон від -1 до 1
             float centeredNoise = (rawNoise * 2f) - 1f;
 
-            // Множимо на висоту
             float rawY = centeredNoise * hMulti;
             float weight = 0f;
 
@@ -315,6 +320,41 @@ public class TerrainChunk : MonoBehaviour
 
                 enemy.SetActive(true);
             }
+        }
+    }
+
+    private void SpawnRepairStation(Vector2[] colliderPoints)
+    {
+        if (colliderPoints.Length < 10 || transform.position.x < 20f)
+            return;
+
+        if (UnityEngine.Random.value > repairStationSpawnChance)
+            return;
+
+        int minIndex = 2;
+        int maxIndex = colliderPoints.Length - 3;
+        int spawnIndex = UnityEngine.Random.Range(minIndex, maxIndex);
+
+        int centerIndex = colliderPoints.Length / 2;
+
+        if (Mathf.Abs(spawnIndex - centerIndex) < 5)
+        {
+            spawnIndex = (spawnIndex < centerIndex) ? spawnIndex - 5 : spawnIndex + 5;
+            spawnIndex = Mathf.Clamp(spawnIndex, 0, colliderPoints.Length - 1);
+        }
+
+        Vector2 spawnPosition = (Vector2)transform.position + colliderPoints[spawnIndex];
+        spawnPosition.y += 0.5f;
+
+        GameObject station = RepairStationPoolManager.Instance.GetRepairStation();
+
+        if (station != null)
+        {
+            station.transform.position = spawnPosition;
+            station.transform.rotation = Quaternion.identity;
+
+            station.transform.SetParent(this.transform);
+            station.SetActive(true);
         }
     }
 }

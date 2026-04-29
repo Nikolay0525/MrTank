@@ -4,49 +4,48 @@ using UnityEngine.UI;
 public class CombatTimerUI : MonoBehaviour
 {
     [Header("UI References")]
-    public Image timerFillImage; 
-    public GameObject canvasObject; 
+    [SerializeField] private Image timerImage;
 
+    [Header("Settings")]
+    [SerializeField] private Vector3 offset = new Vector3(0, 2f, 0); // Offset above the tank
+
+    private Transform targetTransform;
     private float maxTime;
-    private float currentTime;
-    private bool isCounting = false;
 
-    private void Start()
+    public void ShowTimer(Transform target, float timeToAim)
     {
-        // Ховаємо таймер на старті гри
-        HideTimer();
+        targetTransform = target;
+        maxTime = timeToAim;
+
+        // Ensure the image is fully filled at the start
+        if (timerImage != null) timerImage.fillAmount = 1f;
+
+        gameObject.SetActive(true);
+        UpdatePosition();
     }
 
-    private void Update()
+    public void UpdateTimer(float currentTime)
     {
-        if (isCounting)
+        if (timerImage != null && maxTime > 0)
         {
-            currentTime -= Time.deltaTime;
-
-            timerFillImage.fillAmount = currentTime / maxTime;
-
-            if (currentTime <= 0)
-            {
-                HideTimer();
-            }
+            // Calculate fill amount from 0 to 1
+            timerImage.fillAmount = currentTime / maxTime;
         }
-    }
-
-    public void StartTimer(float duration)
-    {
-        maxTime = duration;
-        currentTime = duration;
-        timerFillImage.fillAmount = 1f;
-        canvasObject.SetActive(true);
-        isCounting = true;
+        UpdatePosition();
     }
 
     public void HideTimer()
     {
-        isCounting = false;
-        if (canvasObject != null)
+        targetTransform = null;
+        gameObject.SetActive(false);
+    }
+
+    private void UpdatePosition()
+    {
+        if (targetTransform != null)
         {
-            canvasObject.SetActive(false);
+            // Update position to follow the target with the specified offset
+            transform.position = targetTransform.position + offset;
         }
     }
 }

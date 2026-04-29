@@ -16,6 +16,9 @@ public class TankController : MonoBehaviour
     public AimingSystem aimingSystem;
     public static bool shouldAutoStart = false;
 
+    [Header("UI Integrations")]
+    public CombatTimerUI combatTimerUI;
+
     public static float CurrentGlobalSpeed { get; private set; }
 
     private float currentAimTimer;
@@ -57,16 +60,26 @@ public class TankController : MonoBehaviour
             case CombatPhase.PlayerAiming:
                 currentAimTimer -= Time.deltaTime;
 
+                // Update the visual UI timer
+                if (combatTimerUI != null)
+                {
+                    combatTimerUI.UpdateTimer(currentAimTimer);
+                }
+
                 bool isFired = false;
                 if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame) isFired = true;
                 else if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.wasPressedThisFrame) isFired = true;
 
                 if (isFired)
                 {
+                    // Hide timer when firing
+                    if (combatTimerUI != null) combatTimerUI.HideTimer();
                     ExecuteFire();
                 }
                 else if (currentAimTimer <= 0f)
                 {
+                    // Hide timer when time runs out
+                    if (combatTimerUI != null) combatTimerUI.HideTimer();
                     aimingSystem.CancelAiming();
                     InitiateEnemyTurn();
                 }
@@ -99,8 +112,13 @@ public class TankController : MonoBehaviour
     public void StartPlayerTurn()
     {
         currentPhase = CombatPhase.PlayerAiming;
-
         currentAimTimer = DifficultyManager.Instance.GetPlayerAimTime();
+
+        if (combatTimerUI != null && currentTarget != null)
+        {
+            // Pass the transform of the enemy and the total time
+            combatTimerUI.ShowTimer(currentTarget.transform, currentAimTimer);
+        }
 
         aimingSystem.StartAiming();
     }
