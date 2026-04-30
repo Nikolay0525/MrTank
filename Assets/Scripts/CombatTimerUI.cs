@@ -7,7 +7,7 @@ public class CombatTimerUI : MonoBehaviour
     [SerializeField] private Image timerImage;
 
     [Header("Settings")]
-    [SerializeField] private Vector3 offset = new Vector3(0, 2f, 0); // Offset above the tank
+    [SerializeField] private Vector3 offset = new Vector3(0, 2f, 0);
 
     private Transform targetTransform;
     private float maxTime;
@@ -17,7 +17,6 @@ public class CombatTimerUI : MonoBehaviour
         targetTransform = target;
         maxTime = timeToAim;
 
-        // Ensure the image is fully filled at the start
         if (timerImage != null) timerImage.fillAmount = 1f;
 
         gameObject.SetActive(true);
@@ -28,7 +27,6 @@ public class CombatTimerUI : MonoBehaviour
     {
         if (timerImage != null && maxTime > 0)
         {
-            // Calculate fill amount from 0 to 1
             timerImage.fillAmount = currentTime / maxTime;
         }
         UpdatePosition();
@@ -44,7 +42,6 @@ public class CombatTimerUI : MonoBehaviour
     {
         if (targetTransform != null)
         {
-            // Update position to follow the target with the specified offset
             transform.position = targetTransform.position + offset;
         }
     }

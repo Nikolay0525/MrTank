@@ -9,6 +9,12 @@ public class TerrainChunk : MonoBehaviour
     [Header("Layer Settings")]
     public bool isBackgroundMode = false;
 
+    [Header("Z-Axis Settings")]
+    public float grassZOffset = 0f;
+    public float treeZOffset = 1f;
+    public float enemyZOffset = 0f;
+    public float repairStationZOffset = 0f;
+
     [Header("Visuals")]
     public LineRenderer grassTopRenderer;
 
@@ -30,8 +36,8 @@ public class TerrainChunk : MonoBehaviour
 
     [Header("GPU Instanced Trees")]
     public float treeSizeMul = 1.0f;
-    public Mesh treeMesh;          
-    public Material[] treeMaterials;   
+    public Mesh treeMesh;
+    public Material[] treeMaterials;
     [Range(0f, 1f)] public float treeDensity = 0.1f;
     public float minTreeDistance = 2f;
     public float maxSlopeAngle = 25f;
@@ -115,8 +121,10 @@ public class TerrainChunk : MonoBehaviour
         float currentNScale = noiseScale;
         float currentTScale = textureScale;
 
+        float currentTreeZOffset = treeZOffset;
+
         ChunkData data = await Task.Run(() =>
-            CalculateChunkData(globalXOffset, currentSeed, currentWidth, currentRes, currentHMulti, currentNScale, currentTScale)
+            CalculateChunkData(globalXOffset, currentSeed, currentWidth, currentRes, currentHMulti, currentNScale, currentTScale, currentTreeZOffset)
         );
 
         if (this == null) return;
@@ -128,8 +136,6 @@ public class TerrainChunk : MonoBehaviour
             if (grassTopRenderer != null)
             {
                 grassTopRenderer.positionCount = data.colliderPoints.Length;
-                grassTopRenderer.sortingLayerName = "Ground";
-                grassTopRenderer.sortingOrder = 10;
 
                 float grassOffset = 0.15f;
 
@@ -138,7 +144,7 @@ public class TerrainChunk : MonoBehaviour
                     grassTopRenderer.SetPosition(i, new Vector3(
                         data.colliderPoints[i].x,
                         data.colliderPoints[i].y + grassOffset,
-                        0f
+                        grassZOffset
                     ));
                 }
             }
@@ -153,6 +159,7 @@ public class TerrainChunk : MonoBehaviour
 
         treeLocalPositionsPerType = data.localPositionsPerType;
         treeScalesPerType = data.scalesPerType;
+
         if (!isBackgroundMode)
         {
             SpawnEnemy(data.colliderPoints);
@@ -160,7 +167,7 @@ public class TerrainChunk : MonoBehaviour
         }
     }
 
-    private ChunkData CalculateChunkData(float globalXOffset, float seed, float w, int res, float hMulti, float nScale, float tScale)
+    private ChunkData CalculateChunkData(float globalXOffset, float seed, float w, int res, float hMulti, float nScale, float tScale, float currentTreeZOffset)
     {
         float flatZone = 10f;
         float transitionZone = 10f;
@@ -259,13 +266,13 @@ public class TerrainChunk : MonoBehaviour
                 {
                     int randomTreeType = prng.Next(0, typesCount);
 
-                    float randomScaleY = ((float)prng.NextDouble() * 0.5f + 3f)*treeSizeMul;
+                    float randomScaleY = ((float)prng.NextDouble() * 0.5f + 3f) * treeSizeMul;
                     float randomScaleX = randomScaleY;
                     Vector3 scale = new Vector3(randomScaleX, randomScaleY, 1f);
 
                     float correctedY = currentPoint.y + (randomScaleY / 2f);
 
-                    Vector3 localPos = new Vector3(currentPoint.x, correctedY, 1f);
+                    Vector3 localPos = new Vector3(currentPoint.x, correctedY, currentTreeZOffset);
 
                     localPosLists[randomTreeType].Add(localPos);
                     scaleLists[randomTreeType].Add(scale);
@@ -290,7 +297,7 @@ public class TerrainChunk : MonoBehaviour
             triangles = triangles,
             uvs = uvs,
             colliderPoints = colliderPoints,
-            localPositionsPerType = finalLocalPos, // Передаємо згруповані дані
+            localPositionsPerType = finalLocalPos,
             scalesPerType = finalScales
         };
     }
@@ -300,15 +307,19 @@ public class TerrainChunk : MonoBehaviour
         if (colliderPoints.Length > 0 && transform.position.x > 20f)
         {
             int spawnIndex = colliderPoints.Length / 2;
-            Vector2 spawnPosition = (Vector2)transform.position + colliderPoints[spawnIndex];
+            Vector2 localPoint = colliderPoints[spawnIndex];
 
-            spawnPosition.y += 0.5f;
+            Vector3 finalSpawnPosition = new Vector3(
+                transform.position.x + localPoint.x,
+                transform.position.y + localPoint.y + 0.5f,
+                transform.position.z + enemyZOffset
+            );
 
             GameObject enemy = EnemyPoolManager.Instance.TryGetEnemy();
 
             if (enemy != null)
             {
-                enemy.transform.position = spawnPosition;
+                enemy.transform.position = finalSpawnPosition;
                 enemy.transform.rotation = Quaternion.identity;
                 enemy.transform.SetParent(this.transform);
 
@@ -343,14 +354,19 @@ public class TerrainChunk : MonoBehaviour
             spawnIndex = Mathf.Clamp(spawnIndex, 0, colliderPoints.Length - 1);
         }
 
-        Vector2 spawnPosition = (Vector2)transform.position + colliderPoints[spawnIndex];
-        spawnPosition.y += 0.5f;
+        Vector2 localPoint = colliderPoints[spawnIndex];
+
+        Vector3 finalStationPosition = new Vector3(
+            transform.position.x + localPoint.x,
+            transform.position.y + localPoint.y + 0.5f,
+            transform.position.z + repairStationZOffset
+        );
 
         GameObject station = RepairStationPoolManager.Instance.GetRepairStation();
 
         if (station != null)
         {
-            station.transform.position = spawnPosition;
+            station.transform.position = finalStationPosition;
             station.transform.rotation = Quaternion.identity;
 
             station.transform.SetParent(this.transform);

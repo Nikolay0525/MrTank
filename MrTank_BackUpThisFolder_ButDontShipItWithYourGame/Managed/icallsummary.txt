@@ -490,6 +490,7 @@ UnityEngine.Gradient::Init
 UnityEngine.Gradient::Cleanup_Injected
 UnityEngine.Graphics::Internal_GetMaxDrawMeshInstanceCount
 UnityEngine.Graphics::ExecuteCommandBuffer_Injected
+UnityEngine.Graphics::Internal_DrawMeshInstanced_Injected
 UnityEngine.Graphics::Internal_SetNullRT
 UnityEngine.Graphics::Internal_SetRTSimple_Injected
 UnityEngine.GraphicsBuffer::InitBuffer
@@ -673,6 +674,7 @@ UnityEngine.Material::HasFloatImpl_Injected
 UnityEngine.Material::HasProperty_Injected
 UnityEngine.Material::IsKeywordEnabled_Injected
 UnityEngine.Material::SetPass_Injected
+UnityEngine.Material::get_enableInstancing_Injected
 UnityEngine.Material::ComputeCRC_Injected
 UnityEngine.Material::GetFirstPropertyNameIdByAttribute_Injected
 UnityEngine.Material::GetTextureImpl_Injected
@@ -855,7 +857,6 @@ UnityEngine.Renderer::set_localBounds_Injected
 UnityEngine.Renderer::set_receiveShadows_Injected
 UnityEngine.Renderer::set_shadowCastingMode_Injected
 UnityEngine.Renderer::set_sortingLayerID_Injected
-UnityEngine.Renderer::set_sortingLayerName_Injected
 UnityEngine.Renderer::set_sortingOrder_Injected
 UnityEngine.Rendering.CommandBuffer::InitBuffer
 UnityEngine.Rendering.CommandBuffer::Clear_Injected

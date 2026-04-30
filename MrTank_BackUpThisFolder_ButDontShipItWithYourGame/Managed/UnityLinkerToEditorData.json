@@ -187,6 +187,12 @@
             "icon": null
           },
           {
+            "name": "LightProbeProxyVolume",
+            "scenes": [],
+            "dependencyType": 0,
+            "icon": null
+          },
+          {
             "name": "LightProbes",
             "scenes": [],
             "dependencyType": 0,
@@ -230,7 +236,9 @@
           },
           {
             "name": "Mesh",
-            "scenes": [],
+            "scenes": [
+              "Assets/Scenes/Game.unity"
+            ],
             "dependencyType": 0,
             "icon": null
           },

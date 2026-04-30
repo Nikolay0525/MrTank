@@ -150,6 +150,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TerrainChunk
   isBackgroundMode: 0
+  grassZOffset: -5
+  treeZOffset: 10
+  enemyZOffset: 5
+  repairStationZOffset: 15
   grassTopRenderer: {fileID: -5150655255821769135}
   textureScale: 1
   width: 20
@@ -157,7 +161,7 @@ MonoBehaviour:
   noiseScale: 0.05
   resolution: 20
   repairStationPrefab: {fileID: 9148085346665096821, guid: 86f52a4ab5b89b14398c172b0a26b42c, type: 3}
-  repairStationSpawnChance: 1
+  repairStationSpawnChance: 0.2
   treeSizeMul: 1
   treeMesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
   treeMaterials:

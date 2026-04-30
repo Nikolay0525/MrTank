@@ -156,6 +156,8 @@ MonoBehaviour:
   heightMultiplier: 2
   noiseScale: 0.05
   resolution: 20
+  repairStationPrefab: {fileID: 0}
+  repairStationSpawnChance: 0.2
   treeSizeMul: 0.33
   treeMesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
   treeMaterials:
@@ -164,6 +166,7 @@ MonoBehaviour:
   treeDensity: 0.3
   minTreeDistance: 2
   maxSlopeAngle: 25
+  treeZOffset: 2
 --- !u!114 &7858635064554456804
 MonoBehaviour:
   m_ObjectHideFlags: 0
