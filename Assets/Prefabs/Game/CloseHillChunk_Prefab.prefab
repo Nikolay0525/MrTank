@@ -101,7 +101,7 @@ EdgeCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6689110358511074825}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
@@ -150,6 +150,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TerrainChunk
   isBackgroundMode: 1
+  grassZOffset: 0
+  treeZOffset: 2
+  enemyZOffset: 0
+  repairStationZOffset: 0
   grassTopRenderer: {fileID: 6809641382663947314}
   textureScale: 3
   width: 20
@@ -166,7 +170,6 @@ MonoBehaviour:
   treeDensity: 0.3
   minTreeDistance: 2
   maxSlopeAngle: 25
-  treeZOffset: 2
 --- !u!114 &7858635064554456804
 MonoBehaviour:
   m_ObjectHideFlags: 0

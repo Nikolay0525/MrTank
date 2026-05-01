@@ -4,23 +4,18 @@ namespace Assets.Scripts
 {
     public class VisualDeathHandler : MonoBehaviour
     {
-        [Header("Death Effects")]
-        public GameObject deathEffectPrefab;
+        [Header("Tank Effects (Attached)")]
+        public ParticleSystem fireEffect; 
 
-        public Vector3 effectOffset = new Vector3(0, -0.5f, 0);
-
-        private GameObject currentDeathEffect;
+        [Header("Ground Effects (Pooled)")]
+        public Vector3 groundEffectOffset = new Vector3(0, -0.5f, 0);
 
         public void HandleDeathVisuals()
         {
             SpriteRenderer[] allRenderers = GetComponentsInChildren<SpriteRenderer>(true);
-
             foreach (SpriteRenderer sr in allRenderers)
             {
-                if (sr != null)
-                {
-                    sr.color = Color.black;
-                }
+                if (sr != null) sr.color = Color.black;
             }
 
             Collider2D[] colliders = GetComponentsInChildren<Collider2D>(true);
@@ -29,22 +24,30 @@ namespace Assets.Scripts
                 col.enabled = false;
             }
 
-            if (deathEffectPrefab != null && currentDeathEffect == null)
+            if (fireEffect != null) fireEffect.Play();
+
+            if (DeathEffectPoolManager.Instance != null)
             {
-                currentDeathEffect = Instantiate(deathEffectPrefab, transform.position + effectOffset, Quaternion.identity);
-                currentDeathEffect.transform.SetParent(this.transform);
+                GameObject groundFx = DeathEffectPoolManager.Instance.GetDeathEffect();
+
+                if (groundFx != null)
+                {
+                    groundFx.transform.position = transform.position + groundEffectOffset;
+
+                    groundFx.transform.SetParent(transform.parent);
+
+                    groundFx.SetActive(true);
+                }
             }
         }
 
         public void ResetVisuals()
         {
+            // Відновлюємо танк для наступного спавну
             SpriteRenderer[] allRenderers = GetComponentsInChildren<SpriteRenderer>(true);
             foreach (SpriteRenderer sr in allRenderers)
             {
-                if (sr != null)
-                {
-                    sr.color = Color.white;
-                }
+                if (sr != null) sr.color = Color.white;
             }
 
             Collider2D[] colliders = GetComponentsInChildren<Collider2D>(true);
@@ -53,9 +56,10 @@ namespace Assets.Scripts
                 col.enabled = true;
             }
 
-            if (currentDeathEffect != null)
+            if (fireEffect != null)
             {
-                Destroy(currentDeathEffect);
+                fireEffect.Stop();
+                fireEffect.Clear();
             }
         }
     }

@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Assets.Scripts
 {
+    [RequireComponent(typeof(ParticleSystem))]
     public class ParticleReturn : MonoBehaviour
     {
         private ParticleSystem ps;
@@ -16,12 +17,17 @@ namespace Assets.Scripts
 
         private void Update()
         {
-            // Disable the game object when the particle system stops playing
-            if (ps != null && !ps.isPlaying)
+            if (ps != null && !ps.IsAlive(true))
             {
-                gameObject.SetActive(false);
+                if (DeathEffectPoolManager.Instance != null)
+                {
+                    DeathEffectPoolManager.Instance.ReturnDeathEffect(gameObject);
+                }
+                else
+                {
+                    gameObject.SetActive(false);
+                }
             }
         }
     }
-
 }

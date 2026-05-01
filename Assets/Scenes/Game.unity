@@ -148,7 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91514581e6ab48449a4b3ea1cf60cd26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjectPool
-  prefab: {fileID: 6689110358511074825, guid: a6b26d8aefe7ed64788e113281151b85, type: 3}
+  prefab: {fileID: 3311521260783982503, guid: 5553afc533837224da6081c92838ef22, type: 3}
   poolSize: 6
 --- !u!4 &119563921
 Transform:
@@ -1094,7 +1094,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 740578178}
-  - component: {fileID: 740578177}
+  - component: {fileID: 740578180}
+  - component: {fileID: 740578179}
   m_Layer: 0
   m_Name: RepairStationPoolManager
   m_TagString: Untagged
@@ -1102,20 +1103,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &740578177
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 740578176}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49ef1cc2f9cd0f14c9236683a3ad455b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RepairStationPoolManager
-  prefab: {fileID: 9148085346665096821, guid: 86f52a4ab5b89b14398c172b0a26b42c, type: 3}
-  poolSize: 10
 --- !u!4 &740578178
 Transform:
   m_ObjectHideFlags: 0
@@ -1131,6 +1118,32 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &740578179
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 740578176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49ef1cc2f9cd0f14c9236683a3ad455b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RepairStationPoolManager
+--- !u!114 &740578180
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 740578176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91514581e6ab48449a4b3ea1cf60cd26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectPool
+  prefab: {fileID: 9148085346665096821, guid: 86f52a4ab5b89b14398c172b0a26b42c, type: 3}
+  poolSize: 5
 --- !u!1 &821464857
 GameObject:
   m_ObjectHideFlags: 0
@@ -2001,7 +2014,7 @@ GameObject:
   - component: {fileID: 1822636224}
   - component: {fileID: 1822636223}
   m_Layer: 8
-  m_Name: CombatUI
+  m_Name: CombatTimer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2241,6 +2254,65 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1844827996}
   m_CullTransparentMesh: 1
+--- !u!1 &1869876765
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1869876768}
+  - component: {fileID: 1869876767}
+  - component: {fileID: 1869876766}
+  m_Layer: 0
+  m_Name: DeathEffectPoolManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1869876766
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1869876765}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afa25ac3c989525438257c29cb9dd15e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Assets.Scripts.DeathEffectPoolManager
+--- !u!114 &1869876767
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1869876765}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91514581e6ab48449a4b3ea1cf60cd26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Assets.Scripts.ObjectPool
+  prefab: {fileID: 1897246779213483236, guid: 930fb94d6c7af2e45924607e40c7f4cc, type: 3}
+  poolSize: 10
+--- !u!4 &1869876768
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1869876765}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 6.90107, y: 8.31795, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1900322341
 GameObject:
   m_ObjectHideFlags: 0
@@ -2549,6 +2621,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8378cc5507722b64caeb1419cf4dda3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VisualDeathHandler
+  fireEffect: {fileID: 0}
+  groundEffectOffset: {x: 0, y: -0.5, z: 0}
 --- !u!61 &1959359295
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3228,20 +3302,21 @@ SpriteRenderer:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 519420032}
   - {fileID: 119563921}
   - {fileID: 258056902}
   - {fileID: 1763395741}
   - {fileID: 2128819285}
+  - {fileID: 1774764587}
+  - {fileID: 1841243842}
+  - {fileID: 740578178}
+  - {fileID: 1869876768}
+  - {fileID: 247105660}
+  - {fileID: 519420032}
   - {fileID: 418226871}
   - {fileID: 1959359288}
   - {fileID: 991288952}
-  - {fileID: 1774764587}
   - {fileID: 148741101}
-  - {fileID: 247105660}
   - {fileID: 223463521}
   - {fileID: 1571202745}
   - {fileID: 2053022984}
-  - {fileID: 1841243842}
   - {fileID: 1822636226}
-  - {fileID: 740578178}

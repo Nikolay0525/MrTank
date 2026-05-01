@@ -19,6 +19,7 @@ namespace Assets.Scripts
 
         [Header("Visuals")]
         public LineRenderer grassTopRenderer;
+        public LineRenderer burntGrassRenderer;
 
         [Header("Texture Mapping")]
         public float textureScale = 10f;
@@ -110,6 +111,14 @@ namespace Assets.Scripts
                 {
                     RepairStationPoolManager.Instance.ReturnRepairStation(child);
                 }
+                else if (child.GetComponent<GrassMarkFX>() != null)
+                {
+                    DeathEffectPoolManager.Instance.ReturnDeathEffect(child);
+                }
+                else if (burntGrassRenderer != null && child == burntGrassRenderer.gameObject)
+                {
+                    continue;
+                }
                 else
                 {
                     Destroy(child);
@@ -135,19 +144,24 @@ namespace Assets.Scripts
             {
                 edgeCollider.points = data.colliderPoints;
 
-                if (grassTopRenderer != null)
+                if (grassTopRenderer != null && burntGrassRenderer != null)
                 {
                     grassTopRenderer.positionCount = data.colliderPoints.Length;
+                    burntGrassRenderer.positionCount = data.colliderPoints.Length;
 
                     float grassOffset = 0.15f;
 
                     for (int i = 0; i < data.colliderPoints.Length; i++)
                     {
-                        grassTopRenderer.SetPosition(i, new Vector3(
+                        Vector3 pos = new Vector3(
                             data.colliderPoints[i].x,
                             data.colliderPoints[i].y + grassOffset,
                             grassZOffset
-                        ));
+                        );
+
+                       grassTopRenderer.SetPosition(i, pos);
+
+                        burntGrassRenderer.SetPosition(i, new Vector3(pos.x, pos.y, grassZOffset - 0.01f));
                     }
                 }
             }
