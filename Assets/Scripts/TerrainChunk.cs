@@ -3,374 +3,377 @@ using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 
-[RequireComponent(typeof(MeshFilter), typeof(MeshRenderer), typeof(EdgeCollider2D))]
-public class TerrainChunk : MonoBehaviour
+namespace Assets.Scripts
 {
-    [Header("Layer Settings")]
-    public bool isBackgroundMode = false;
-
-    [Header("Z-Axis Settings")]
-    public float grassZOffset = 0f;
-    public float treeZOffset = 1f;
-    public float enemyZOffset = 0f;
-    public float repairStationZOffset = 0f;
-
-    [Header("Visuals")]
-    public LineRenderer grassTopRenderer;
-
-    [Header("Texture Mapping")]
-    public float textureScale = 10f;
-
-    [Header("Generation Parameters")]
-    public float width = 20f;
-    public float heightMultiplier = 5f;
-    public float noiseScale = 0.05f;
-    public int resolution = 20;
-
-    [Header("Repair Station Settings")]
-    public GameObject repairStationPrefab;
-    [Range(0f, 1f)] public float repairStationSpawnChance = 0.2f;
-
-    private Mesh mesh;
-    private EdgeCollider2D edgeCollider;
-
-    [Header("GPU Instanced Trees")]
-    public float treeSizeMul = 1.0f;
-    public Mesh treeMesh;
-    public Material[] treeMaterials;
-    [Range(0f, 1f)] public float treeDensity = 0.1f;
-    public float minTreeDistance = 2f;
-    public float maxSlopeAngle = 25f;
-
-    private Vector3[][] treeLocalPositionsPerType;
-    private Vector3[][] treeScalesPerType;
-    private Matrix4x4[][] treeMatricesPerType;
-
-    private class ChunkData
+    [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer), typeof(EdgeCollider2D))]
+    public class TerrainChunk : MonoBehaviour
     {
-        public Vector3[] vertices;
-        public int[] triangles;
-        public Vector2[] uvs;
-        public Vector2[] colliderPoints;
+        [Header("Layer Settings")]
+        public bool isBackgroundMode = false;
 
-        public Vector3[][] localPositionsPerType;
-        public Vector3[][] scalesPerType;
-    }
+        [Header("Z-Axis Settings")]
+        public float grassZOffset = 0f;
+        public float treeZOffset = 1f;
+        public float enemyZOffset = 0f;
+        public float repairStationZOffset = 0f;
 
-    private void Awake()
-    {
-        mesh = new Mesh();
-        GetComponent<MeshFilter>().mesh = mesh;
-        edgeCollider = GetComponent<EdgeCollider2D>();
-    }
+        [Header("Visuals")]
+        public LineRenderer grassTopRenderer;
 
-    private void Update()
-    {
-        if (treeLocalPositionsPerType == null || treeMaterials == null || treeMesh == null) return;
+        [Header("Texture Mapping")]
+        public float textureScale = 10f;
 
-        if (treeMatricesPerType == null || treeMatricesPerType.Length != treeMaterials.Length)
+        [Header("Generation Parameters")]
+        public float width = 20f;
+        public float heightMultiplier = 5f;
+        public float noiseScale = 0.05f;
+        public int resolution = 20;
+
+        [Header("Repair Station Settings")]
+        public GameObject repairStationPrefab;
+        [Range(0f, 1f)] public float repairStationSpawnChance = 0.2f;
+
+        private Mesh mesh;
+        private EdgeCollider2D edgeCollider;
+
+        [Header("GPU Instanced Trees")]
+        public float treeSizeMul = 1.0f;
+        public Mesh treeMesh;
+        public Material[] treeMaterials;
+        [Range(0f, 1f)] public float treeDensity = 0.1f;
+        public float minTreeDistance = 2f;
+        public float maxSlopeAngle = 25f;
+
+        private Vector3[][] treeLocalPositionsPerType;
+        private Vector3[][] treeScalesPerType;
+        private Matrix4x4[][] treeMatricesPerType;
+
+        private class ChunkData
         {
-            treeMatricesPerType = new Matrix4x4[treeMaterials.Length][];
+            public Vector3[] vertices;
+            public int[] triangles;
+            public Vector2[] uvs;
+            public Vector2[] colliderPoints;
+
+            public Vector3[][] localPositionsPerType;
+            public Vector3[][] scalesPerType;
         }
 
-        for (int typeIndex = 0; typeIndex < treeMaterials.Length; typeIndex++)
+        private void Awake()
         {
-            Vector3[] localPosArray = treeLocalPositionsPerType[typeIndex];
-
-            if (localPosArray == null || localPosArray.Length == 0) continue;
-
-            if (treeMatricesPerType[typeIndex] == null || treeMatricesPerType[typeIndex].Length != localPosArray.Length)
-            {
-                treeMatricesPerType[typeIndex] = new Matrix4x4[localPosArray.Length];
-            }
-
-            for (int i = 0; i < localPosArray.Length; i++)
-            {
-                Vector3 worldPos = transform.position + localPosArray[i];
-                treeMatricesPerType[typeIndex][i] = Matrix4x4.TRS(worldPos, Quaternion.identity, treeScalesPerType[typeIndex][i]);
-            }
-
-            Graphics.DrawMeshInstanced(treeMesh, 0, treeMaterials[typeIndex], treeMatricesPerType[typeIndex]);
-        }
-    }
-
-    public async void GenerateChunkAsync(float globalXOffset)
-    {
-        for (int i = transform.childCount - 1; i >= 0; i--)
-        {
-            GameObject child = transform.GetChild(i).gameObject;
-
-            if (child.GetComponentInChildren<EnemyAI>(true) != null)
-            {
-                EnemyPoolManager.Instance.ReturnEnemy(child);
-            }
-            else if (child.GetComponentInChildren<RepairStation>(true) != null)
-            {
-                RepairStationPoolManager.Instance.ReturnRepairStation(child);
-            }
-            else
-            {
-                Destroy(child);
-            }
+            mesh = new Mesh();
+            GetComponent<MeshFilter>().mesh = mesh;
+            edgeCollider = GetComponent<EdgeCollider2D>();
         }
 
-        float currentSeed = ChunkManager.SessionSeed;
-        float currentWidth = width;
-        int currentRes = resolution;
-        float currentHMulti = heightMultiplier;
-        float currentNScale = noiseScale;
-        float currentTScale = textureScale;
-
-        float currentTreeZOffset = treeZOffset;
-
-        ChunkData data = await Task.Run(() =>
-            CalculateChunkData(globalXOffset, currentSeed, currentWidth, currentRes, currentHMulti, currentNScale, currentTScale, currentTreeZOffset)
-        );
-
-        if (this == null) return;
-
-        if (!isBackgroundMode)
+        private void Update()
         {
-            edgeCollider.points = data.colliderPoints;
+            if (treeLocalPositionsPerType == null || treeMaterials == null || treeMesh == null) return;
 
-            if (grassTopRenderer != null)
+            if (treeMatricesPerType == null || treeMatricesPerType.Length != treeMaterials.Length)
             {
-                grassTopRenderer.positionCount = data.colliderPoints.Length;
+                treeMatricesPerType = new Matrix4x4[treeMaterials.Length][];
+            }
 
-                float grassOffset = 0.15f;
+            for (int typeIndex = 0; typeIndex < treeMaterials.Length; typeIndex++)
+            {
+                Vector3[] localPosArray = treeLocalPositionsPerType[typeIndex];
 
-                for (int i = 0; i < data.colliderPoints.Length; i++)
+                if (localPosArray == null || localPosArray.Length == 0) continue;
+
+                if (treeMatricesPerType[typeIndex] == null || treeMatricesPerType[typeIndex].Length != localPosArray.Length)
                 {
-                    grassTopRenderer.SetPosition(i, new Vector3(
-                        data.colliderPoints[i].x,
-                        data.colliderPoints[i].y + grassOffset,
-                        grassZOffset
-                    ));
+                    treeMatricesPerType[typeIndex] = new Matrix4x4[localPosArray.Length];
+                }
+
+                for (int i = 0; i < localPosArray.Length; i++)
+                {
+                    Vector3 worldPos = transform.position + localPosArray[i];
+                    treeMatricesPerType[typeIndex][i] = Matrix4x4.TRS(worldPos, Quaternion.identity, treeScalesPerType[typeIndex][i]);
+                }
+
+                Graphics.DrawMeshInstanced(treeMesh, 0, treeMaterials[typeIndex], treeMatricesPerType[typeIndex]);
+            }
+        }
+
+        public async void GenerateChunkAsync(float globalXOffset)
+        {
+            for (int i = transform.childCount - 1; i >= 0; i--)
+            {
+                GameObject child = transform.GetChild(i).gameObject;
+
+                if (child.GetComponentInChildren<EnemyAI>(true) != null)
+                {
+                    EnemyPoolManager.Instance.ReturnEnemy(child);
+                }
+                else if (child.GetComponentInChildren<RepairStation>(true) != null)
+                {
+                    RepairStationPoolManager.Instance.ReturnRepairStation(child);
+                }
+                else
+                {
+                    Destroy(child);
                 }
             }
-        }
 
-        mesh.Clear();
-        mesh.vertices = data.vertices;
-        mesh.triangles = data.triangles;
-        mesh.uv = data.uvs;
-        mesh.RecalculateNormals();
-        mesh.RecalculateBounds();
+            float currentSeed = ChunkManager.SessionSeed;
+            float currentWidth = width;
+            int currentRes = resolution;
+            float currentHMulti = heightMultiplier;
+            float currentNScale = noiseScale;
+            float currentTScale = textureScale;
 
-        treeLocalPositionsPerType = data.localPositionsPerType;
-        treeScalesPerType = data.scalesPerType;
+            float currentTreeZOffset = treeZOffset;
 
-        if (!isBackgroundMode)
-        {
-            SpawnEnemy(data.colliderPoints);
-            SpawnRepairStation(data.colliderPoints);
-        }
-    }
-
-    private ChunkData CalculateChunkData(float globalXOffset, float seed, float w, int res, float hMulti, float nScale, float tScale, float currentTreeZOffset)
-    {
-        float flatZone = 10f;
-        float transitionZone = 10f;
-
-        int overlapRes = res + 1;
-        Vector3[] vertices = new Vector3[overlapRes + 1];
-        Vector2[] colliderPoints = new Vector2[overlapRes + 1];
-
-        float step = w / res;
-
-        for (int i = 0; i <= overlapRes; i++)
-        {
-            float localX = i * step;
-            float globalX = globalXOffset + localX;
-
-            float rawNoise = Mathf.PerlinNoise(globalX * nScale, seed);
-
-            float centeredNoise = (rawNoise * 2f) - 1f;
-
-            float rawY = centeredNoise * hMulti;
-            float weight = 0f;
-
-            if (globalX <= flatZone) weight = 0f;
-            else if (globalX <= flatZone + transitionZone)
-            {
-                float t = (globalX - flatZone) / transitionZone;
-                weight = Mathf.SmoothStep(0f, 1f, t);
-            }
-            else weight = 1f;
-
-            float finalY = rawY * weight;
-
-            vertices[i] = new Vector3(localX, finalY, 0f);
-            colliderPoints[i] = new Vector2(localX, finalY);
-        }
-
-        Vector3[] fullVertices = new Vector3[(overlapRes + 1) * 2];
-        Vector2[] uvs = new Vector2[(overlapRes + 1) * 2];
-        float bottomY = -10f;
-
-        for (int i = 0; i <= overlapRes; i++)
-        {
-            fullVertices[i] = vertices[i];
-            fullVertices[i + overlapRes + 1] = new Vector3(vertices[i].x, bottomY, 0f);
-
-            float globalX = globalXOffset + vertices[i].x;
-            uvs[i] = new Vector2(globalX * tScale, vertices[i].y * tScale);
-            uvs[i + overlapRes + 1] = new Vector2(globalX * tScale, bottomY * tScale);
-        }
-
-        int[] triangles = new int[overlapRes * 6];
-        int vert = 0;
-        int tris = 0;
-        for (int i = 0; i < overlapRes; i++)
-        {
-            triangles[tris + 0] = vert + 0;
-            triangles[tris + 1] = vert + overlapRes + 1;
-            triangles[tris + 2] = vert + 1;
-            triangles[tris + 3] = vert + 1;
-            triangles[tris + 4] = vert + overlapRes + 1;
-            triangles[tris + 5] = vert + overlapRes + 2;
-            vert++;
-            tris += 6;
-        }
-
-        int typesCount = treeMaterials != null ? treeMaterials.Length : 0;
-
-        List<Vector3>[] localPosLists = new List<Vector3>[typesCount];
-        List<Vector3>[] scaleLists = new List<Vector3>[typesCount];
-
-        for (int i = 0; i < typesCount; i++)
-        {
-            localPosLists[i] = new List<Vector3>();
-            scaleLists[i] = new List<Vector3>();
-        }
-
-        System.Random prng = new System.Random((int)(globalXOffset * 1000f + seed));
-        float lastTreeX = -9999f;
-
-        for (int i = 1; i < colliderPoints.Length - 1; i++)
-        {
-            Vector2 currentPoint = colliderPoints[i];
-
-            if (currentPoint.x - lastTreeX < minTreeDistance) continue;
-
-            if (typesCount > 0 && prng.NextDouble() <= treeDensity)
-            {
-                Vector2 nextPoint = colliderPoints[i + 1];
-                Vector2 prevPoint = colliderPoints[i - 1];
-                Vector2 surfaceDirection = (nextPoint - prevPoint).normalized;
-
-                float slopeAngle = Vector2.Angle(Vector2.right, surfaceDirection);
-                if (slopeAngle > 90f) slopeAngle = 180f - slopeAngle;
-
-                if (slopeAngle <= maxSlopeAngle)
-                {
-                    int randomTreeType = prng.Next(0, typesCount);
-
-                    float randomScaleY = ((float)prng.NextDouble() * 0.5f + 3f) * treeSizeMul;
-                    float randomScaleX = randomScaleY;
-                    Vector3 scale = new Vector3(randomScaleX, randomScaleY, 1f);
-
-                    float correctedY = currentPoint.y + (randomScaleY / 2f);
-
-                    Vector3 localPos = new Vector3(currentPoint.x, correctedY, currentTreeZOffset);
-
-                    localPosLists[randomTreeType].Add(localPos);
-                    scaleLists[randomTreeType].Add(scale);
-
-                    lastTreeX = currentPoint.x;
-                }
-            }
-        }
-
-        Vector3[][] finalLocalPos = new Vector3[typesCount][];
-        Vector3[][] finalScales = new Vector3[typesCount][];
-
-        for (int i = 0; i < typesCount; i++)
-        {
-            finalLocalPos[i] = localPosLists[i].ToArray();
-            finalScales[i] = scaleLists[i].ToArray();
-        }
-
-        return new ChunkData
-        {
-            vertices = fullVertices,
-            triangles = triangles,
-            uvs = uvs,
-            colliderPoints = colliderPoints,
-            localPositionsPerType = finalLocalPos,
-            scalesPerType = finalScales
-        };
-    }
-
-    private void SpawnEnemy(Vector2[] colliderPoints)
-    {
-        if (colliderPoints.Length > 0 && transform.position.x > 20f)
-        {
-            int spawnIndex = colliderPoints.Length / 2;
-            Vector2 localPoint = colliderPoints[spawnIndex];
-
-            Vector3 finalSpawnPosition = new Vector3(
-                transform.position.x + localPoint.x,
-                transform.position.y + localPoint.y + 0.5f,
-                transform.position.z + enemyZOffset
+            ChunkData data = await Task.Run(() =>
+                CalculateChunkData(globalXOffset, currentSeed, currentWidth, currentRes, currentHMulti, currentNScale, currentTScale, currentTreeZOffset)
             );
 
-            GameObject enemy = EnemyPoolManager.Instance.TryGetEnemy();
+            if (this == null) return;
 
-            if (enemy != null)
+            if (!isBackgroundMode)
             {
-                enemy.transform.position = finalSpawnPosition;
-                enemy.transform.rotation = Quaternion.identity;
-                enemy.transform.SetParent(this.transform);
+                edgeCollider.points = data.colliderPoints;
 
-                EnemyAI ai = enemy.GetComponent<EnemyAI>();
-                if (ai != null)
+                if (grassTopRenderer != null)
                 {
-                    ai.ResetState();
-                }
+                    grassTopRenderer.positionCount = data.colliderPoints.Length;
 
-                enemy.SetActive(true);
+                    float grassOffset = 0.15f;
+
+                    for (int i = 0; i < data.colliderPoints.Length; i++)
+                    {
+                        grassTopRenderer.SetPosition(i, new Vector3(
+                            data.colliderPoints[i].x,
+                            data.colliderPoints[i].y + grassOffset,
+                            grassZOffset
+                        ));
+                    }
+                }
+            }
+
+            mesh.Clear();
+            mesh.vertices = data.vertices;
+            mesh.triangles = data.triangles;
+            mesh.uv = data.uvs;
+            mesh.RecalculateNormals();
+            mesh.RecalculateBounds();
+
+            treeLocalPositionsPerType = data.localPositionsPerType;
+            treeScalesPerType = data.scalesPerType;
+
+            if (!isBackgroundMode)
+            {
+                SpawnEnemy(data.colliderPoints);
+                SpawnRepairStation(data.colliderPoints);
             }
         }
-    }
 
-    private void SpawnRepairStation(Vector2[] colliderPoints)
-    {
-        if (colliderPoints.Length < 10 || transform.position.x < 20f)
-            return;
-
-        if (UnityEngine.Random.value > repairStationSpawnChance)
-            return;
-
-        int minIndex = 2;
-        int maxIndex = colliderPoints.Length - 3;
-        int spawnIndex = UnityEngine.Random.Range(minIndex, maxIndex);
-
-        int centerIndex = colliderPoints.Length / 2;
-
-        if (Mathf.Abs(spawnIndex - centerIndex) < 5)
+        private ChunkData CalculateChunkData(float globalXOffset, float seed, float w, int res, float hMulti, float nScale, float tScale, float currentTreeZOffset)
         {
-            spawnIndex = (spawnIndex < centerIndex) ? spawnIndex - 5 : spawnIndex + 5;
-            spawnIndex = Mathf.Clamp(spawnIndex, 0, colliderPoints.Length - 1);
+            float flatZone = 10f;
+            float transitionZone = 10f;
+
+            int overlapRes = res + 1;
+            Vector3[] vertices = new Vector3[overlapRes + 1];
+            Vector2[] colliderPoints = new Vector2[overlapRes + 1];
+
+            float step = w / res;
+
+            for (int i = 0; i <= overlapRes; i++)
+            {
+                float localX = i * step;
+                float globalX = globalXOffset + localX;
+
+                float rawNoise = Mathf.PerlinNoise(globalX * nScale, seed);
+
+                float centeredNoise = (rawNoise * 2f) - 1f;
+
+                float rawY = centeredNoise * hMulti;
+                float weight = 0f;
+
+                if (globalX <= flatZone) weight = 0f;
+                else if (globalX <= flatZone + transitionZone)
+                {
+                    float t = (globalX - flatZone) / transitionZone;
+                    weight = Mathf.SmoothStep(0f, 1f, t);
+                }
+                else weight = 1f;
+
+                float finalY = rawY * weight;
+
+                vertices[i] = new Vector3(localX, finalY, 0f);
+                colliderPoints[i] = new Vector2(localX, finalY);
+            }
+
+            Vector3[] fullVertices = new Vector3[(overlapRes + 1) * 2];
+            Vector2[] uvs = new Vector2[(overlapRes + 1) * 2];
+            float bottomY = -10f;
+
+            for (int i = 0; i <= overlapRes; i++)
+            {
+                fullVertices[i] = vertices[i];
+                fullVertices[i + overlapRes + 1] = new Vector3(vertices[i].x, bottomY, 0f);
+
+                float globalX = globalXOffset + vertices[i].x;
+                uvs[i] = new Vector2(globalX * tScale, vertices[i].y * tScale);
+                uvs[i + overlapRes + 1] = new Vector2(globalX * tScale, bottomY * tScale);
+            }
+
+            int[] triangles = new int[overlapRes * 6];
+            int vert = 0;
+            int tris = 0;
+            for (int i = 0; i < overlapRes; i++)
+            {
+                triangles[tris + 0] = vert + 0;
+                triangles[tris + 1] = vert + overlapRes + 1;
+                triangles[tris + 2] = vert + 1;
+                triangles[tris + 3] = vert + 1;
+                triangles[tris + 4] = vert + overlapRes + 1;
+                triangles[tris + 5] = vert + overlapRes + 2;
+                vert++;
+                tris += 6;
+            }
+
+            int typesCount = treeMaterials != null ? treeMaterials.Length : 0;
+
+            List<Vector3>[] localPosLists = new List<Vector3>[typesCount];
+            List<Vector3>[] scaleLists = new List<Vector3>[typesCount];
+
+            for (int i = 0; i < typesCount; i++)
+            {
+                localPosLists[i] = new List<Vector3>();
+                scaleLists[i] = new List<Vector3>();
+            }
+
+            System.Random prng = new System.Random((int)(globalXOffset * 1000f + seed));
+            float lastTreeX = -9999f;
+
+            for (int i = 1; i < colliderPoints.Length - 1; i++)
+            {
+                Vector2 currentPoint = colliderPoints[i];
+
+                if (currentPoint.x - lastTreeX < minTreeDistance) continue;
+
+                if (typesCount > 0 && prng.NextDouble() <= treeDensity)
+                {
+                    Vector2 nextPoint = colliderPoints[i + 1];
+                    Vector2 prevPoint = colliderPoints[i - 1];
+                    Vector2 surfaceDirection = (nextPoint - prevPoint).normalized;
+
+                    float slopeAngle = Vector2.Angle(Vector2.right, surfaceDirection);
+                    if (slopeAngle > 90f) slopeAngle = 180f - slopeAngle;
+
+                    if (slopeAngle <= maxSlopeAngle)
+                    {
+                        int randomTreeType = prng.Next(0, typesCount);
+
+                        float randomScaleY = ((float)prng.NextDouble() * 0.5f + 3f) * treeSizeMul;
+                        float randomScaleX = randomScaleY;
+                        Vector3 scale = new Vector3(randomScaleX, randomScaleY, 1f);
+
+                        float correctedY = currentPoint.y + (randomScaleY / 2f);
+
+                        Vector3 localPos = new Vector3(currentPoint.x, correctedY, currentTreeZOffset);
+
+                        localPosLists[randomTreeType].Add(localPos);
+                        scaleLists[randomTreeType].Add(scale);
+
+                        lastTreeX = currentPoint.x;
+                    }
+                }
+            }
+
+            Vector3[][] finalLocalPos = new Vector3[typesCount][];
+            Vector3[][] finalScales = new Vector3[typesCount][];
+
+            for (int i = 0; i < typesCount; i++)
+            {
+                finalLocalPos[i] = localPosLists[i].ToArray();
+                finalScales[i] = scaleLists[i].ToArray();
+            }
+
+            return new ChunkData
+            {
+                vertices = fullVertices,
+                triangles = triangles,
+                uvs = uvs,
+                colliderPoints = colliderPoints,
+                localPositionsPerType = finalLocalPos,
+                scalesPerType = finalScales
+            };
         }
 
-        Vector2 localPoint = colliderPoints[spawnIndex];
-
-        Vector3 finalStationPosition = new Vector3(
-            transform.position.x + localPoint.x,
-            transform.position.y + localPoint.y + 0.5f,
-            transform.position.z + repairStationZOffset
-        );
-
-        GameObject station = RepairStationPoolManager.Instance.GetRepairStation();
-
-        if (station != null)
+        private void SpawnEnemy(Vector2[] colliderPoints)
         {
-            station.transform.position = finalStationPosition;
-            station.transform.rotation = Quaternion.identity;
+            if (colliderPoints.Length > 0 && transform.position.x > 20f)
+            {
+                int spawnIndex = colliderPoints.Length / 2;
+                Vector2 localPoint = colliderPoints[spawnIndex];
 
-            station.transform.SetParent(this.transform);
-            station.SetActive(true);
+                Vector3 finalSpawnPosition = new Vector3(
+                    transform.position.x + localPoint.x,
+                    transform.position.y + localPoint.y + 0.5f,
+                    transform.position.z + enemyZOffset
+                );
+
+                GameObject enemy = EnemyPoolManager.Instance.TryGetEnemy();
+
+                if (enemy != null)
+                {
+                    enemy.transform.position = finalSpawnPosition;
+                    enemy.transform.rotation = Quaternion.identity;
+                    enemy.transform.SetParent(this.transform);
+
+                    EnemyAI ai = enemy.GetComponent<EnemyAI>();
+                    if (ai != null)
+                    {
+                        ai.ResetState();
+                    }
+
+                    enemy.SetActive(true);
+                }
+            }
+        }
+
+        private void SpawnRepairStation(Vector2[] colliderPoints)
+        {
+            if (colliderPoints.Length < 10 || transform.position.x < 20f)
+                return;
+
+            if (UnityEngine.Random.value > repairStationSpawnChance)
+                return;
+
+            int minIndex = 2;
+            int maxIndex = colliderPoints.Length - 3;
+            int spawnIndex = UnityEngine.Random.Range(minIndex, maxIndex);
+
+            int centerIndex = colliderPoints.Length / 2;
+
+            if (Mathf.Abs(spawnIndex - centerIndex) < 5)
+            {
+                spawnIndex = (spawnIndex < centerIndex) ? spawnIndex - 5 : spawnIndex + 5;
+                spawnIndex = Mathf.Clamp(spawnIndex, 0, colliderPoints.Length - 1);
+            }
+
+            Vector2 localPoint = colliderPoints[spawnIndex];
+
+            Vector3 finalStationPosition = new Vector3(
+                transform.position.x + localPoint.x,
+                transform.position.y + localPoint.y + 0.5f,
+                transform.position.z + repairStationZOffset
+            );
+
+            GameObject station = RepairStationPoolManager.Instance.GetRepairStation();
+
+            if (station != null)
+            {
+                station.transform.position = finalStationPosition;
+                station.transform.rotation = Quaternion.identity;
+
+                station.transform.SetParent(this.transform);
+                station.SetActive(true);
+            }
         }
     }
 }

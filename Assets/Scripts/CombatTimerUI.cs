@@ -1,48 +1,51 @@
 using UnityEngine;
-using UnityEngine.UI; 
+using UnityEngine.UI;
 
-public class CombatTimerUI : MonoBehaviour
+namespace Assets.Scripts
 {
-    [Header("UI References")]
-    [SerializeField] private Image timerImage;
-
-    [Header("Settings")]
-    [SerializeField] private Vector3 offset = new Vector3(0, 2f, 0);
-
-    private Transform targetTransform;
-    private float maxTime;
-
-    public void ShowTimer(Transform target, float timeToAim)
+    public class CombatTimerUI : MonoBehaviour
     {
-        targetTransform = target;
-        maxTime = timeToAim;
+        [Header("UI References")]
+        [SerializeField] private Image timerImage;
 
-        if (timerImage != null) timerImage.fillAmount = 1f;
+        [Header("Settings")]
+        [SerializeField] private Vector3 offset = new Vector3(0, 2f, 0);
 
-        gameObject.SetActive(true);
-        UpdatePosition();
-    }
+        private Transform targetTransform;
+        private float maxTime;
 
-    public void UpdateTimer(float currentTime)
-    {
-        if (timerImage != null && maxTime > 0)
+        public void ShowTimer(Transform target, float timeToAim)
         {
-            timerImage.fillAmount = currentTime / maxTime;
+            targetTransform = target;
+            maxTime = timeToAim;
+
+            if (timerImage != null) timerImage.fillAmount = 1f;
+
+            gameObject.SetActive(true);
+            UpdatePosition();
         }
-        UpdatePosition();
-    }
 
-    public void HideTimer()
-    {
-        targetTransform = null;
-        gameObject.SetActive(false);
-    }
-
-    private void UpdatePosition()
-    {
-        if (targetTransform != null)
+        public void UpdateTimer(float currentTime)
         {
-            transform.position = targetTransform.position + offset;
+            if (timerImage != null && maxTime > 0)
+            {
+                timerImage.fillAmount = currentTime / maxTime;
+            }
+            UpdatePosition();
+        }
+
+        public void HideTimer()
+        {
+            targetTransform = null;
+            gameObject.SetActive(false);
+        }
+
+        private void UpdatePosition()
+        {
+            if (targetTransform != null)
+            {
+                transform.position = targetTransform.position + offset;
+            }
         }
     }
 }

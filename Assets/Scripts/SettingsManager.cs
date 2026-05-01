@@ -2,92 +2,95 @@
 using UnityEngine.UI;
 using TMPro;
 
-public class SettingsManager : MonoBehaviour
+namespace Assets.Scripts
 {
-    public static SettingsManager Instance { get; private set; }
-
-    [Header("UI References")]
-    public TMP_Dropdown fpsDropdown; 
-    public Slider trajectorySlider;
-
-    [Header("Current Settings")]
-    public int currentFPS = 60;
-    public float trajectoryQuality = 0.1f;
-
-    private void Awake()
+    public class SettingsManager : MonoBehaviour
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            LoadSettings();
-        }
-        else Destroy(gameObject);
-    }
+        public static SettingsManager Instance { get; private set; }
 
-    private void Start()
-    {
-        if (fpsDropdown != null)
-        {
-            if (currentFPS == 60) fpsDropdown.value = 0;
-            else if (currentFPS == 120) fpsDropdown.value = 1;
-            else if (currentFPS == 240) fpsDropdown.value = 2;
-            else fpsDropdown.value = 1;
+        [Header("UI References")]
+        public TMP_Dropdown fpsDropdown;
+        public Slider trajectorySlider;
 
-            fpsDropdown.onValueChanged.AddListener(SetFPSFromDropdown);
+        [Header("Current Settings")]
+        public int currentFPS = 60;
+        public float trajectoryQuality = 0.1f;
+
+        private void Awake()
+        {
+            if (Instance == null)
+            {
+                Instance = this;
+                LoadSettings();
+            }
+            else Destroy(gameObject);
         }
 
-        if (trajectorySlider != null)
+        private void Start()
         {
-            trajectorySlider.value = trajectoryQuality;
-            trajectorySlider.onValueChanged.AddListener(SetTrajectoryQuality);
+            if (fpsDropdown != null)
+            {
+                if (currentFPS == 60) fpsDropdown.value = 0;
+                else if (currentFPS == 120) fpsDropdown.value = 1;
+                else if (currentFPS == 240) fpsDropdown.value = 2;
+                else fpsDropdown.value = 1;
+
+                fpsDropdown.onValueChanged.AddListener(SetFPSFromDropdown);
+            }
+
+            if (trajectorySlider != null)
+            {
+                trajectorySlider.value = trajectoryQuality;
+                trajectorySlider.onValueChanged.AddListener(SetTrajectoryQuality);
+            }
+
+            ApplyGlobalSettings();
+        }
+        public void SetFPSFromDropdown(int index)
+        {
+            switch (index)
+            {
+                case 0: currentFPS = 60; break;
+                case 1: currentFPS = 120; break;
+                case 2: currentFPS = 240; break;
+            }
+
+            Application.targetFrameRate = currentFPS;
+            PlayerPrefs.SetInt("Settings_FPS", currentFPS);
         }
 
-        ApplyGlobalSettings();
-    }
-    public void SetFPSFromDropdown(int index)
-    {
-        switch (index)
+        public void SetTrajectoryQuality(float value)
         {
-            case 0: currentFPS = 60; break;
-            case 1: currentFPS = 120; break;
-            case 2: currentFPS = 240; break;
+            float min = trajectorySlider.minValue;
+            float max = trajectorySlider.maxValue;
+
+            float deadZone = (max - min) * 0.05f;
+
+            if (value >= max - deadZone)
+            {
+                value = max;
+            }
+            else if (value <= min + deadZone)
+            {
+                value = min;
+            }
+
+            trajectoryQuality = value;
+
+            trajectorySlider.SetValueWithoutNotify(value);
+
+            PlayerPrefs.SetFloat("Settings_Trajectory", trajectoryQuality);
         }
 
-        Application.targetFrameRate = currentFPS; 
-        PlayerPrefs.SetInt("Settings_FPS", currentFPS); 
-    }
-
-    public void SetTrajectoryQuality(float value)
-    {
-        float min = trajectorySlider.minValue;
-        float max = trajectorySlider.maxValue;
-
-        float deadZone = (max - min) * 0.05f;
-
-        if (value >= max - deadZone)
+        private void LoadSettings()
         {
-            value = max; 
-        }
-        else if (value <= min + deadZone)
-        {
-            value = min; 
+            currentFPS = PlayerPrefs.GetInt("Settings_FPS", 60);
+            trajectoryQuality = PlayerPrefs.GetFloat("Settings_Trajectory", 0.1f);
         }
 
-        trajectoryQuality = value;
-
-        trajectorySlider.SetValueWithoutNotify(value);
-
-        PlayerPrefs.SetFloat("Settings_Trajectory", trajectoryQuality);
-    }
-
-    private void LoadSettings()
-    {
-        currentFPS = PlayerPrefs.GetInt("Settings_FPS", 60);
-        trajectoryQuality = PlayerPrefs.GetFloat("Settings_Trajectory", 0.1f);
-    }
-
-    private void ApplyGlobalSettings()
-    {
-        Application.targetFrameRate = currentFPS;
+        private void ApplyGlobalSettings()
+        {
+            Application.targetFrameRate = currentFPS;
+        }
     }
 }

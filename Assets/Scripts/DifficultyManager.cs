@@ -1,76 +1,81 @@
 ﻿using UnityEngine;
 
-public class DifficultyManager : MonoBehaviour
+namespace Assets.Scripts
 {
-    public static DifficultyManager Instance { get; private set; }
-
-    [Header("Progression Stats")]
-    public int totalKills = 0;
-    [Tooltip("Kills per level")]
-    public int killsPerLevel = 1;
-
-    [Header("Player Settings")]
-    public float baseAimTime = 5f;
-    public float minAimTime = 1.5f;
-    public float aimReductionPerLevel = 0.2f;
-
-    [Header("Enemy Settings")]
-    public float baseHitChance = 0.15f;
-    public float maxHitChance = 0.9f;
-    public float hitChanceGainPerLevel = 0.07f;
-    
-    public float initialMissRadius = 7f;
-    public float minMissRadius = 1.5f;
-    public float radiusReductionPerLevel = 0.6f;
-
-    private void Awake()
+    public class DifficultyManager : MonoBehaviour
     {
-        if (Instance == null) {
-            Instance = this;
-        } else Destroy(gameObject);
-    }
+        public static DifficultyManager Instance { get; private set; }
 
-    public void AddKill()
-    {
-        totalKills++;
-        if(UIManager.Instance != null)
+        [Header("Progression Stats")]
+        public int totalKills = 0;
+        [Tooltip("Kills per level")]
+        public int killsPerLevel = 1;
+
+        [Header("Player Settings")]
+        public float baseAimTime = 5f;
+        public float minAimTime = 1.5f;
+        public float aimReductionPerLevel = 0.2f;
+
+        [Header("Enemy Settings")]
+        public float baseHitChance = 0.15f;
+        public float maxHitChance = 0.9f;
+        public float hitChanceGainPerLevel = 0.07f;
+
+        public float initialMissRadius = 7f;
+        public float minMissRadius = 1.5f;
+        public float radiusReductionPerLevel = 0.6f;
+
+        private void Awake()
         {
-            UIManager.Instance.CurrentScoreText.text = "Score: " + totalKills.ToString();
+            if (Instance == null)
+            {
+                Instance = this;
+            }
+            else Destroy(gameObject);
         }
-    }
 
-    public float GetDifficultyLevel()
-    {
-        return (float)totalKills / killsPerLevel;
-    }
+        public void AddKill()
+        {
+            totalKills++;
+            if (UIManager.Instance != null)
+            {
+                UIManager.Instance.CurrentScoreText.text = "Score: " + totalKills.ToString();
+            }
+        }
 
-    public string GetCurrentScore()
-    {
-        return UIManager.Instance.CurrentScoreText.text = "Score: " + totalKills.ToString();
-    }
+        public float GetDifficultyLevel()
+        {
+            return (float)totalKills / killsPerLevel;
+        }
 
-    public float GetPlayerAimTime()
-    {
-        float level = GetDifficultyLevel();
-        float time = baseAimTime - (level * aimReductionPerLevel);
-        return Mathf.Max(minAimTime, time);
-    }
+        public string GetCurrentScore()
+        {
+            return UIManager.Instance.CurrentScoreText.text = "Score: " + totalKills.ToString();
+        }
 
-    public float GetEnemyHitChance(int shotsFiredInDuel)
-    {
-        float level = GetDifficultyLevel();
-        float globalBonus = level * hitChanceGainPerLevel;
-        float localBonus = shotsFiredInDuel * 0.1f; 
-        
-        return Mathf.Clamp(baseHitChance + globalBonus + localBonus, 0f, maxHitChance);
-    }
+        public float GetPlayerAimTime()
+        {
+            float level = GetDifficultyLevel();
+            float time = baseAimTime - (level * aimReductionPerLevel);
+            return Mathf.Max(minAimTime, time);
+        }
 
-    public float GetEnemyMissRadius(int shotsFiredInDuel)
-    {
-        float level = GetDifficultyLevel();
-        float radius = initialMissRadius - (level * radiusReductionPerLevel);
-        float localRadiusReduction = shotsFiredInDuel * 0.5f;
+        public float GetEnemyHitChance(int shotsFiredInDuel)
+        {
+            float level = GetDifficultyLevel();
+            float globalBonus = level * hitChanceGainPerLevel;
+            float localBonus = shotsFiredInDuel * 0.1f;
 
-        return Mathf.Max(minMissRadius, radius - localRadiusReduction);
+            return Mathf.Clamp(baseHitChance + globalBonus + localBonus, 0f, maxHitChance);
+        }
+
+        public float GetEnemyMissRadius(int shotsFiredInDuel)
+        {
+            float level = GetDifficultyLevel();
+            float radius = initialMissRadius - (level * radiusReductionPerLevel);
+            float localRadiusReduction = shotsFiredInDuel * 0.5f;
+
+            return Mathf.Max(minMissRadius, radius - localRadiusReduction);
+        }
     }
 }

@@ -1,41 +1,62 @@
 ﻿using UnityEngine;
 
-public class VisualDeathHandler : MonoBehaviour
+namespace Assets.Scripts
 {
-    public void HandleDeathVisuals()
+    public class VisualDeathHandler : MonoBehaviour
     {
-        SpriteRenderer[] allRenderers = GetComponentsInChildren<SpriteRenderer>(true);
+        [Header("Death Effects")]
+        public GameObject deathEffectPrefab;
 
-        foreach (SpriteRenderer sr in allRenderers)
+        public Vector3 effectOffset = new Vector3(0, -0.5f, 0);
+
+        private GameObject currentDeathEffect;
+
+        public void HandleDeathVisuals()
         {
-            if (sr != null)
+            SpriteRenderer[] allRenderers = GetComponentsInChildren<SpriteRenderer>(true);
+
+            foreach (SpriteRenderer sr in allRenderers)
             {
-                sr.color = Color.black;
+                if (sr != null)
+                {
+                    sr.color = Color.black;
+                }
+            }
+
+            Collider2D[] colliders = GetComponentsInChildren<Collider2D>(true);
+            foreach (Collider2D col in colliders)
+            {
+                col.enabled = false;
+            }
+
+            if (deathEffectPrefab != null && currentDeathEffect == null)
+            {
+                currentDeathEffect = Instantiate(deathEffectPrefab, transform.position + effectOffset, Quaternion.identity);
+                currentDeathEffect.transform.SetParent(this.transform);
             }
         }
 
-        Collider2D[] colliders = GetComponentsInChildren<Collider2D>(true);
-        foreach (Collider2D col in colliders)
+        public void ResetVisuals()
         {
-            col.enabled = false;
-        }
-    }
-
-    public void ResetVisuals()
-    {
-        SpriteRenderer[] allRenderers = GetComponentsInChildren<SpriteRenderer>(true);
-        foreach (SpriteRenderer sr in allRenderers)
-        {
-            if (sr != null)
+            SpriteRenderer[] allRenderers = GetComponentsInChildren<SpriteRenderer>(true);
+            foreach (SpriteRenderer sr in allRenderers)
             {
-                sr.color = Color.white;
+                if (sr != null)
+                {
+                    sr.color = Color.white;
+                }
             }
-        }
 
-        Collider2D[] colliders = GetComponentsInChildren<Collider2D>(true);
-        foreach (Collider2D col in colliders)
-        {
-            col.enabled = true; 
+            Collider2D[] colliders = GetComponentsInChildren<Collider2D>(true);
+            foreach (Collider2D col in colliders)
+            {
+                col.enabled = true;
+            }
+
+            if (currentDeathEffect != null)
+            {
+                Destroy(currentDeathEffect);
+            }
         }
     }
 }

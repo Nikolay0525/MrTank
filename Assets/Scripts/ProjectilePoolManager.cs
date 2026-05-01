@@ -1,27 +1,31 @@
 ﻿using UnityEngine;
 
-[RequireComponent(typeof(ObjectPool))]
-public class ProjectilePoolManager : MonoBehaviour
+namespace Assets.Scripts
 {
-    public static ProjectilePoolManager Instance { get; private set; }
 
-    private ObjectPool pool;
-
-    private void Awake()
+    [RequireComponent(typeof(ObjectPool))]
+    public class ProjectilePoolManager : MonoBehaviour
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            pool = GetComponent<ObjectPool>();
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
+        public static ProjectilePoolManager Instance { get; private set; }
 
-    public GameObject GetProjectile()
-    {
-        return pool.GetPooledObject();
+        private ObjectPool pool;
+
+        private void Awake()
+        {
+            if (Instance == null)
+            {
+                Instance = this;
+                pool = GetComponent<ObjectPool>();
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+        }
+
+        public GameObject GetProjectile()
+        {
+            return pool.GetPooledObject();
+        }
     }
 }

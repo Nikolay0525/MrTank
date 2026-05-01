@@ -1,27 +1,30 @@
 ﻿using UnityEngine;
 
-public class ScrollableObject : MonoBehaviour
+namespace Assets.Scripts
 {
-    [Header("Configuration")]
-    [Tooltip("Global X coordinate at which the object is deactivated")]
-    public float despawnX = -30f;
-
-    public float speedMultiplier = 1f;
-
-    private void Update()
+    public class ScrollableObject : MonoBehaviour
     {
-        float currentSpeed = TankController.CurrentGlobalSpeed * speedMultiplier;
+        [Header("Configuration")]
+        [Tooltip("Global X coordinate at which the object is deactivated")]
+        public float despawnX = -30f;
 
-        transform.Translate(Vector3.left * currentSpeed * Time.deltaTime);
+        public float speedMultiplier = 1f;
 
-        if (transform.position.x <= despawnX)
+        private void Update()
         {
-            Deactivate();
-        }
-    }
+            float currentSpeed = TankController.CurrentGlobalSpeed * speedMultiplier;
 
-    private void Deactivate()
-    {
-        gameObject.SetActive(false);
+            transform.Translate(Vector3.left * currentSpeed * Time.deltaTime);
+
+            if (transform.position.x <= despawnX)
+            {
+                Deactivate();
+            }
+        }
+
+        private void Deactivate()
+        {
+            gameObject.SetActive(false);
+        }
     }
 }

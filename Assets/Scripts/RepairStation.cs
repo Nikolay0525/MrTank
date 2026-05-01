@@ -1,20 +1,23 @@
 ﻿using UnityEngine;
 
-public class RepairStation : MonoBehaviour
+namespace Assets.Scripts
 {
-    public float healAmount = 100f;
-    public LayerMask playerLayer;
-
-    private void OnTriggerEnter2D(Collider2D other)
+    public class RepairStation : MonoBehaviour
     {
-        if (((1 << other.gameObject.layer) & playerLayer) != 0)
-        {
-            Health playerHealth = other.GetComponentInParent<Health>();
-            if (playerHealth != null)
-            {
-                playerHealth.Heal(healAmount);
+        public float healAmount = 100f;
+        public LayerMask playerLayer;
 
-                //gameObject.SetActive(false);
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            if (((1 << other.gameObject.layer) & playerLayer) != 0)
+            {
+                Health playerHealth = other.GetComponentInParent<Health>();
+                if (playerHealth != null)
+                {
+                    playerHealth.Heal(healAmount);
+
+                    //gameObject.SetActive(false);
+                }
             }
         }
     }

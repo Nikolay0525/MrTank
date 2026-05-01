@@ -1,142 +1,145 @@
 ﻿using System;
 using UnityEngine;
 
-[RequireComponent(typeof(LineRenderer))]
-public class AimingSystem : MonoBehaviour
+namespace Assets.Scripts
 {
-    [Header("Dependencies")]
-    [Tooltip("Посилання на точку обертання гармати")]
-    public Transform gunPivot;
-
-    [Header("Ballistics")]
-    public float projectileSpeed = 12f;
-    public float minAngle = 0f;
-    public float maxAngle = 90f;
-    public float aimSpeed = 3f;
-
-    [Header("Ammunition Stats")]
-    public float damage = 15f;          
-    public float projectileSize = 0.8f; 
-
-    [Header("Trajectory Rendering")]
-    public int linePoints = 60;
-
-    [Header("Spawning")]
-    public Transform firePoint;
-
-    private LineRenderer lineRenderer;
-    private float currentAngle;
-    private bool isAiming = false;
-    private Quaternion defaultGunRotation;
-
-    private void Awake()
+    [RequireComponent(typeof(LineRenderer))]
+    public class AimingSystem : MonoBehaviour
     {
-        lineRenderer = GetComponent<LineRenderer>();
-        lineRenderer.positionCount = linePoints;
-        lineRenderer.enabled = false;
+        [Header("Dependencies")]
+        [Tooltip("Посилання на точку обертання гармати")]
+        public Transform gunPivot;
 
-        if (gunPivot != null)
+        [Header("Ballistics")]
+        public float projectileSpeed = 12f;
+        public float minAngle = 0f;
+        public float maxAngle = 90f;
+        public float aimSpeed = 3f;
+
+        [Header("Ammunition Stats")]
+        public float damage = 15f;
+        public float projectileSize = 0.8f;
+
+        [Header("Trajectory Rendering")]
+        public int linePoints = 60;
+
+        [Header("Spawning")]
+        public Transform firePoint;
+
+        private LineRenderer lineRenderer;
+        private float currentAngle;
+        private bool isAiming = false;
+        private Quaternion defaultGunRotation;
+
+        private void Awake()
         {
-            defaultGunRotation = gunPivot.localRotation;
-        }
-    }
+            lineRenderer = GetComponent<LineRenderer>();
+            lineRenderer.positionCount = linePoints;
+            lineRenderer.enabled = false;
 
-    private void Update()
-    {
-        if (isAiming)
-        {
-            OscillateAngle();
-            DrawTrajectory();
-            RotateGun();
-        }
-    }
-
-    public void StartAiming()
-    {
-        isAiming = true;
-        lineRenderer.enabled = true;
-    }
-
-    public void CancelAiming()
-    {
-        isAiming = false;
-        lineRenderer.enabled = false;
-
-        if (gunPivot != null)
-        {
-            gunPivot.localRotation = defaultGunRotation;
-        }
-    }
-
-    public GameObject ExecuteShot(Action<bool> onResolutionCallback = null)
-    {
-        isAiming = false;
-        lineRenderer.enabled = false;
-
-        float worldAngleRad = gunPivot.eulerAngles.z * Mathf.Deg2Rad;
-        Vector2 shootVector = new Vector2(Mathf.Cos(worldAngleRad), Mathf.Sin(worldAngleRad)) * projectileSpeed;
-
-        GameObject projectileInstance = ProjectilePoolManager.Instance.GetProjectile();
-
-        if (projectileInstance != null && firePoint != null)
-        {
-            projectileInstance.transform.position = firePoint.position;
-            projectileInstance.transform.rotation = firePoint.rotation;
-            projectileInstance.SetActive(true);
-
-            Projectile projScript = projectileInstance.GetComponent<Projectile>();
-
-            if (projScript != null)
+            if (gunPivot != null)
             {
-                projScript.Initialize(shootVector, damage, projectileSize, onResolutionCallback);
+                defaultGunRotation = gunPivot.localRotation;
             }
         }
 
-        if (gunPivot != null)
+        private void Update()
         {
-            gunPivot.localRotation = defaultGunRotation;
+            if (isAiming)
+            {
+                OscillateAngle();
+                DrawTrajectory();
+                RotateGun();
+            }
         }
 
-        return projectileInstance;
-    }
-
-    private void OscillateAngle()
-    {
-        float t = (Mathf.Sin(Time.time * aimSpeed) + 1f) / 2f;
-        currentAngle = Mathf.Lerp(minAngle, maxAngle, t);
-    }
-
-    private void RotateGun()
-    {
-        if (gunPivot != null)
+        public void StartAiming()
         {
-            gunPivot.localRotation = Quaternion.Euler(0f, 0f, currentAngle);
-        }
-    }
-
-    private void DrawTrajectory()
-    {
-        float worldAngleRad = gunPivot.eulerAngles.z * Mathf.Deg2Rad;
-
-        Vector2 startPos = firePoint.position; 
-        Vector2 gravity = Physics2D.gravity;
-
-        float timeStep = 0.1f; // Default fallback value
-        if (SettingsManager.Instance != null)
-        {
-            timeStep = SettingsManager.Instance.trajectoryQuality;
+            isAiming = true;
+            lineRenderer.enabled = true;
         }
 
-        for (int i = 0; i < linePoints; i++)
+        public void CancelAiming()
         {
-            float t = i * timeStep;
+            isAiming = false;
+            lineRenderer.enabled = false;
 
-            Vector2 point = startPos + new Vector2(
-                projectileSpeed * Mathf.Cos(worldAngleRad) * t,
-                projectileSpeed * Mathf.Sin(worldAngleRad) * t + 0.5f * gravity.y * t * t
-            );
+            if (gunPivot != null)
+            {
+                gunPivot.localRotation = defaultGunRotation;
+            }
+        }
 
-            lineRenderer.SetPosition(i, point);
+        public GameObject ExecuteShot(Action<bool> onResolutionCallback = null)
+        {
+            isAiming = false;
+            lineRenderer.enabled = false;
+
+            float worldAngleRad = gunPivot.eulerAngles.z * Mathf.Deg2Rad;
+            Vector2 shootVector = new Vector2(Mathf.Cos(worldAngleRad), Mathf.Sin(worldAngleRad)) * projectileSpeed;
+
+            GameObject projectileInstance = ProjectilePoolManager.Instance.GetProjectile();
+
+            if (projectileInstance != null && firePoint != null)
+            {
+                projectileInstance.transform.position = firePoint.position;
+                projectileInstance.transform.rotation = firePoint.rotation;
+                projectileInstance.SetActive(true);
+
+                Projectile projScript = projectileInstance.GetComponent<Projectile>();
+
+                if (projScript != null)
+                {
+                    projScript.Initialize(shootVector, damage, projectileSize, onResolutionCallback);
+                }
+            }
+
+            if (gunPivot != null)
+            {
+                gunPivot.localRotation = defaultGunRotation;
+            }
+
+            return projectileInstance;
+        }
+
+        private void OscillateAngle()
+        {
+            float t = (Mathf.Sin(Time.time * aimSpeed) + 1f) / 2f;
+            currentAngle = Mathf.Lerp(minAngle, maxAngle, t);
+        }
+
+        private void RotateGun()
+        {
+            if (gunPivot != null)
+            {
+                gunPivot.localRotation = Quaternion.Euler(0f, 0f, currentAngle);
+            }
+        }
+
+        private void DrawTrajectory()
+        {
+            float worldAngleRad = gunPivot.eulerAngles.z * Mathf.Deg2Rad;
+
+            Vector2 startPos = firePoint.position;
+            Vector2 gravity = Physics2D.gravity;
+
+            float timeStep = 0.1f; // Default fallback value
+            if (SettingsManager.Instance != null)
+            {
+                timeStep = SettingsManager.Instance.trajectoryQuality;
+            }
+
+            for (int i = 0; i < linePoints; i++)
+            {
+                float t = i * timeStep;
+
+                Vector2 point = startPos + new Vector2(
+                    projectileSpeed * Mathf.Cos(worldAngleRad) * t,
+                    projectileSpeed * Mathf.Sin(worldAngleRad) * t + 0.5f * gravity.y * t * t
+                );
+
+                lineRenderer.SetPosition(i, point);
+            }
         }
     }
 }

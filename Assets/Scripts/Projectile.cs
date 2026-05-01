@@ -1,122 +1,125 @@
 ﻿using UnityEngine;
 using System;
 
-public enum DamageType
+namespace Assets.Scripts
 {
-    Direct,
-    AreaOfEffect
-}
-
-[RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
-public class Projectile : MonoBehaviour
-{
-    public enum ShootDirection { Right, Left }
-
-    [Header("Damage Configuration")]
-    public DamageType damageType = DamageType.Direct;
-    public float damageAmount = 25f;
-
-    [Header("Targeting")]
-    public LayerMask hittableLayers;
-
-    [Header("Explosive Parameters (For AoE)")]
-    public float explosionRadius = 2.5f;
-
-    private Rigidbody2D rb;
-    private Action<bool> onResolutionCallback;
-    private bool isInitialized = false;
-
-    private void Awake()
+    public enum DamageType
     {
-        rb = GetComponent<Rigidbody2D>();
+        Direct,
+        AreaOfEffect
     }
 
-    public void Initialize(Vector2 initialVelocity, float damage, float sizeMultiplier, Action<bool> callback = null)
+    [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
+    public class Projectile : MonoBehaviour
     {
-        rb.linearVelocity = initialVelocity;
+        public enum ShootDirection { Right, Left }
 
-        damageAmount = damage;
-        transform.localScale = new Vector3(sizeMultiplier, sizeMultiplier, 1f);
+        [Header("Damage Configuration")]
+        public DamageType damageType = DamageType.Direct;
+        public float damageAmount = 25f;
 
-        onResolutionCallback = callback;
-        isInitialized = true;
-    }
+        [Header("Targeting")]
+        public LayerMask hittableLayers;
 
-    private void FixedUpdate()
-    {
-        if (isInitialized && rb != null && rb.linearVelocity.sqrMagnitude > 0.1f)
+        [Header("Explosive Parameters (For AoE)")]
+        public float explosionRadius = 2.5f;
+
+        private Rigidbody2D rb;
+        private Action<bool> onResolutionCallback;
+        private bool isInitialized = false;
+
+        private void Awake()
         {
-            Vector2 v = rb.linearVelocity;
-
-            float angleRad = Mathf.Atan2(v.y, v.x);
-            float angleDeg = angleRad * Mathf.Rad2Deg;
-
-            angleDeg -= 90f;
-
-            transform.rotation = Quaternion.Euler(0, 0, angleDeg);
-        }
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (((1 << collision.gameObject.layer) & hittableLayers) == 0)
-        {
-            return;
+            rb = GetComponent<Rigidbody2D>();
         }
 
-        bool isHit = false;
-        isInitialized = false;
-
-        switch (damageType)
+        public void Initialize(Vector2 initialVelocity, float damage, float sizeMultiplier, Action<bool> callback = null)
         {
-            case DamageType.Direct:
-                isHit = ApplyDirectDamage(collision.gameObject);
-                break;
-            case DamageType.AreaOfEffect:
-                isHit = ApplyAreaDamage(collision.contacts[0].point);
-                break;
+            rb.linearVelocity = initialVelocity;
+
+            damageAmount = damage;
+            transform.localScale = new Vector3(sizeMultiplier, sizeMultiplier, 1f);
+
+            onResolutionCallback = callback;
+            isInitialized = true;
         }
 
-        onResolutionCallback?.Invoke(isHit);
-
-        gameObject.SetActive(false);
-    }
-
-    private void OnDisable()
-    {
-        isInitialized = false;
-        onResolutionCallback = null;
-        if (rb != null)
+        private void FixedUpdate()
         {
-            rb.linearVelocity = Vector2.zero;
+            if (isInitialized && rb != null && rb.linearVelocity.sqrMagnitude > 0.1f)
+            {
+                Vector2 v = rb.linearVelocity;
+
+                float angleRad = Mathf.Atan2(v.y, v.x);
+                float angleDeg = angleRad * Mathf.Rad2Deg;
+
+                angleDeg -= 90f;
+
+                transform.rotation = Quaternion.Euler(0, 0, angleDeg);
+            }
         }
-    }
 
-    private bool ApplyDirectDamage(GameObject target)
-    {
-        Health health = target.GetComponentInParent<Health>();
-        if (health != null)
+        private void OnCollisionEnter2D(Collision2D collision)
         {
-            health.TakeDamage(damageAmount);
-            return true; 
+            if (((1 << collision.gameObject.layer) & hittableLayers) == 0)
+            {
+                return;
+            }
+
+            bool isHit = false;
+            isInitialized = false;
+
+            switch (damageType)
+            {
+                case DamageType.Direct:
+                    isHit = ApplyDirectDamage(collision.gameObject);
+                    break;
+                case DamageType.AreaOfEffect:
+                    isHit = ApplyAreaDamage(collision.contacts[0].point);
+                    break;
+            }
+
+            onResolutionCallback?.Invoke(isHit);
+
+            gameObject.SetActive(false);
         }
-        return false;
-    }
 
-    private bool ApplyAreaDamage(Vector2 impactPoint)
-    {
-        bool hitAnyEnemy = false;
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(impactPoint, explosionRadius, hittableLayers);
-
-        foreach (Collider2D hitCollider in colliders)
+        private void OnDisable()
         {
-            Health health = hitCollider.GetComponent<Health>();
+            isInitialized = false;
+            onResolutionCallback = null;
+            if (rb != null)
+            {
+                rb.linearVelocity = Vector2.zero;
+            }
+        }
+
+        private bool ApplyDirectDamage(GameObject target)
+        {
+            Health health = target.GetComponentInParent<Health>();
             if (health != null)
             {
                 health.TakeDamage(damageAmount);
-                hitAnyEnemy = true;
+                return true;
             }
+            return false;
         }
-        return hitAnyEnemy;
+
+        private bool ApplyAreaDamage(Vector2 impactPoint)
+        {
+            bool hitAnyEnemy = false;
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(impactPoint, explosionRadius, hittableLayers);
+
+            foreach (Collider2D hitCollider in colliders)
+            {
+                Health health = hitCollider.GetComponent<Health>();
+                if (health != null)
+                {
+                    health.TakeDamage(damageAmount);
+                    hitAnyEnemy = true;
+                }
+            }
+            return hitAnyEnemy;
+        }
     }
 }

@@ -1,48 +1,51 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
 
-public class Health : MonoBehaviour
+namespace Assets.Scripts
 {
-    [Header("Settings")]
-    public float maxHealth = 100f;
-    public float currentHealth;
-
-    [Header("Events")]
-    public UnityEvent OnDeath;
-    public UnityEvent OnHealthChanged;
-
-    public void ResetHealth()
+    public class Health : MonoBehaviour
     {
-        currentHealth = maxHealth;
-    }
+        [Header("Settings")]
+        public float maxHealth = 100f;
+        public float currentHealth;
 
-    private void Awake()
-    {
-        ResetHealth();
-    }
+        [Header("Events")]
+        public UnityEvent OnDeath;
+        public UnityEvent OnHealthChanged;
 
-    public void TakeDamage(float amount)
-    {
-        currentHealth -= amount;
-        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
-
-        OnHealthChanged?.Invoke();
-
-        if (currentHealth <= 0)
+        public void ResetHealth()
         {
-            Die();
+            currentHealth = maxHealth;
         }
-    }
 
-    public void Heal(float amount)
-    {
-        currentHealth += amount;
-        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
-        OnHealthChanged?.Invoke();
-    }
+        private void Awake()
+        {
+            ResetHealth();
+        }
 
-    private void Die()
-    {
-        OnDeath?.Invoke();
+        public void TakeDamage(float amount)
+        {
+            currentHealth -= amount;
+            currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+
+            OnHealthChanged?.Invoke();
+
+            if (currentHealth <= 0)
+            {
+                Die();
+            }
+        }
+
+        public void Heal(float amount)
+        {
+            currentHealth += amount;
+            currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+            OnHealthChanged?.Invoke();
+        }
+
+        private void Die()
+        {
+            OnDeath?.Invoke();
+        }
     }
 }
