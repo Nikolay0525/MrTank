@@ -37,10 +37,7 @@ namespace Assets.Scripts
             lineRenderer.positionCount = linePoints;
             lineRenderer.enabled = false;
 
-            if (gunPivot != null)
-            {
-                defaultGunRotation = gunPivot.localRotation;
-            }
+            ResetGunRotation();
         }
 
         private void Update()
@@ -68,6 +65,8 @@ namespace Assets.Scripts
             {
                 gunPivot.localRotation = defaultGunRotation;
             }
+
+            ResetGunRotation();
         }
 
         public GameObject ExecuteShot(Action<bool> onResolutionCallback = null)
@@ -94,12 +93,15 @@ namespace Assets.Scripts
                 }
             }
 
+            return projectileInstance;
+        }
+
+        public void ResetGunRotation()
+        {
             if (gunPivot != null)
             {
                 gunPivot.localRotation = defaultGunRotation;
             }
-
-            return projectileInstance;
         }
 
         private void OscillateAngle()

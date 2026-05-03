@@ -122,4 +122,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScrollableObject
   despawnX: -30
-  speedMultiplier: 0.125
+  speedMultiplier: 0.075

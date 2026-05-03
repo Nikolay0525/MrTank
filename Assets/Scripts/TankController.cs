@@ -21,6 +21,12 @@ namespace Assets.Scripts
         [Header("UI Integrations")]
         public CombatTimerUI combatTimerUI;
 
+
+        [Header("Visual Effects")]
+        public Animator fireEffectAnimator;
+        public GameObject gunshotObj;
+        public string fireAnimationName = "Gunshot";
+
         public static float CurrentGlobalSpeed { get; private set; }
 
         private float currentAimTimer;
@@ -62,7 +68,6 @@ namespace Assets.Scripts
                 case CombatPhase.PlayerAiming:
                     currentAimTimer -= Time.deltaTime;
 
-                    // Update the visual UI timer
                     if (combatTimerUI != null)
                     {
                         combatTimerUI.UpdateTimer(currentAimTimer);
@@ -74,13 +79,11 @@ namespace Assets.Scripts
 
                     if (isFired)
                     {
-                        // Hide timer when firing
                         if (combatTimerUI != null) combatTimerUI.HideTimer();
                         ExecuteFire();
                     }
                     else if (currentAimTimer <= 0f)
                     {
-                        // Hide timer when time runs out
                         if (combatTimerUI != null) combatTimerUI.HideTimer();
                         aimingSystem.CancelAiming();
                         InitiateEnemyTurn();
@@ -118,7 +121,6 @@ namespace Assets.Scripts
 
             if (combatTimerUI != null && currentTarget != null)
             {
-                // Pass the transform of the enemy and the total time
                 combatTimerUI.ShowTimer(currentTarget.transform, currentAimTimer);
             }
 
@@ -127,6 +129,12 @@ namespace Assets.Scripts
 
         private void ExecuteFire()
         {
+            if (fireEffectAnimator != null)
+            {
+                gunshotObj.SetActive(true);
+                fireEffectAnimator.Play(fireAnimationName, 0, 0f);
+            }
+
             activeProjectile = aimingSystem.ExecuteShot(HandleShotResult);
             currentPhase = CombatPhase.ProjectileInFlight;
         }
@@ -164,7 +172,14 @@ namespace Assets.Scripts
             }
         }
 
-        public void ResumeDriving() => SetState(TankState.Driving);
+        public void ResumeDriving()
+        {
+            SetState(TankState.Driving);
+            if (aimingSystem != null)
+            {
+                aimingSystem.ResetGunRotation();
+            }
+        }
 
         public void TriggerGameOver()
         {

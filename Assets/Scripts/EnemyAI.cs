@@ -14,6 +14,11 @@ namespace Assets.Scripts
         public float damage = 15f;
         public float projectileSize = 0.8f;
 
+        [Header("Visual Effects")]
+        public Animator fireEffectAnimator;
+        public GameObject gunshotObj;
+        public string fireAnimationName = "Gunshot";
+
         private Health myHealth;
         private int localShotsFired = 0;
         private bool isCurrentlyShooting = false;
@@ -106,6 +111,13 @@ namespace Assets.Scripts
                 yield return new WaitForSeconds(0.4f);
 
                 Vector2 velocity = new Vector2(-Mathf.Cos(angleRad), Mathf.Sin(angleRad)) * v;
+
+                if (fireEffectAnimator != null)
+                {
+                    gunshotObj.SetActive(true);
+                    fireEffectAnimator.Play(fireAnimationName, 0, 0f);
+                }
+
                 GameObject proj = ProjectilePoolManager.Instance.GetProjectile();
                 proj.transform.position = firePoint.position;
                 proj.SetActive(true);
@@ -136,6 +148,13 @@ namespace Assets.Scripts
                 yield return new WaitForSeconds(0.4f);
 
                 Vector2 velocity = new Vector2(-Mathf.Cos(fallbackAngle), Mathf.Sin(fallbackAngle)) * v;
+
+                if (fireEffectAnimator != null)
+                {
+                    gunshotObj.SetActive(true);
+                    fireEffectAnimator.Play(fireAnimationName, 0, 0f);
+                }
+
                 GameObject proj = ProjectilePoolManager.Instance.GetProjectile();
                 proj.transform.position = firePoint.position;
                 proj.SetActive(true);
