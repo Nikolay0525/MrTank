@@ -200,10 +200,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DifficultyManager
   totalKills: 0
+  EnemiesPassedSinceLastStation: 999
   killsPerLevel: 1
   baseAimTime: 4
   minAimTime: 2
-  aimReductionPerLevel: 0.2
+  aimReductionPerLevel: 0.1
   baseHitChance: 0.1
   maxHitChance: 0.9
   hitChanceGainPerLevel: 0.07
@@ -619,7 +620,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 3
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -644,7 +645,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6, y: 0, z: -10}
+  m_LocalPosition: {x: 0, y: 2.5, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -665,6 +666,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CameraController
   target: {fileID: 1959359288}
   verticalOffset: 2
+  activeX: 6
+  activeZ: -10
+  garagePosition: {x: 0, y: 2, z: -10}
+  cam: {fileID: 519420031}
+  garageSize: 3
+  activeSize: 5
+  tankController: {fileID: 1959359287}
   smoothTime: 0.3
 --- !u!1 &584150188
 GameObject:
@@ -6392,7 +6400,7 @@ Transform:
   m_GameObject: {fileID: 991288950}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 12, y: 0, z: 0}
+  m_LocalPosition: {x: 14, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6412,7 +6420,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Assets.Scripts.NewMonoBehaviour
   enemyLayer:
     serializedVersion: 2
-    m_Bits: 768
+    m_Bits: 512
 --- !u!114 &1113362517 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8251696831279006260, guid: 183fab68086ac544797da31b58c00ccb, type: 3}
@@ -7065,10 +7073,10 @@ MonoBehaviour:
   despawnX: -20
   minY: 4
   maxY: 8
-  zPosition: 5
+  zPosition: 10
   minSpeed: 0.4
   maxSpeed: 0.6
-  minScale: 1
+  minScale: 2
   maxScale: 5
 --- !u!114 &1841243841
 MonoBehaviour:
@@ -7284,7 +7292,7 @@ GameObject:
   - component: {fileID: 1959359296}
   m_Layer: 11
   m_Name: Tank_Logic
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7305,6 +7313,8 @@ MonoBehaviour:
   currentPhase: 0
   environmentSpeed: 5
   aimingSystem: {fileID: 1959359290}
+  accelerationRate: 5
+  decelerationRate: 5
   combatTimerUI: {fileID: 2027000034}
   fireEffectAnimator: {fileID: 768318273}
   gunshotObj: {fileID: 46467741}
@@ -7364,7 +7374,7 @@ MonoBehaviour:
   projectileSpeed: 12
   minAngle: 0
   maxAngle: 90
-  aimSpeed: 1.5
+  aimSpeed: 1.25
   damage: 100
   projectileSize: 1
   linePoints: 60
@@ -7619,7 +7629,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8378cc5507722b64caeb1419cf4dda3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Assets.Scripts.VisualDeathHandler
-  baseExplosionSize: 1
+  baseExplosionSize: 1.5
   baseStainSize: {x: 3, y: 6, z: 1}
   fireEffect: {fileID: 0}
   stainChildName: Mask

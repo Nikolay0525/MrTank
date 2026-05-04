@@ -14,9 +14,15 @@ namespace Assets.Scripts
         public CombatPhase currentPhase = CombatPhase.None;
 
         [Header("Environment Control")]
-        public float environmentSpeed = 5f;
+        public float environmentSpeed = 4f;
         public AimingSystem aimingSystem;
         public static bool shouldAutoStart = false;
+
+        [Header("Movement Dynamics")]
+        public float accelerationRate = 2.5f;
+        public float decelerationRate = 5f; // Braking is usually faster than accelerating
+
+        private float targetGlobalSpeed = 0f;
 
         [Header("UI Integrations")]
         public CombatTimerUI combatTimerUI;
@@ -34,7 +40,7 @@ namespace Assets.Scripts
         private EnemyAI currentTarget;
         private Health targetHealth;
 
-        private void Start()
+        private void Awake()
         {
             if (shouldAutoStart)
             {
@@ -51,12 +57,33 @@ namespace Assets.Scripts
             }
         }
 
-        private void Update() => ProcessState();
+        private void Update()
+        {
+            ProcessState();
+            UpdateGlobalSpeed();
+        }
+
+        private void UpdateGlobalSpeed()
+        {
+            if (Mathf.Approximately(CurrentGlobalSpeed, targetGlobalSpeed))
+                return;
+
+            float currentRate = (targetGlobalSpeed > CurrentGlobalSpeed) ? accelerationRate : decelerationRate;
+
+            CurrentGlobalSpeed = Mathf.MoveTowards(CurrentGlobalSpeed, targetGlobalSpeed, currentRate * Time.deltaTime);
+        }
 
         private void SetState(TankState newState)
         {
             currentState = newState;
-            CurrentGlobalSpeed = (currentState == TankState.Driving) ? environmentSpeed : 0f;
+
+            targetGlobalSpeed = (currentState == TankState.Driving) ? environmentSpeed : 0f;
+
+            if (currentState == TankState.Garage)
+            {
+                CurrentGlobalSpeed = 0f;
+                targetGlobalSpeed = 0f;
+            }
         }
 
         private void ProcessState()
@@ -146,7 +173,7 @@ namespace Assets.Scripts
                 if (currentTarget == null || targetHealth == null || targetHealth.currentHealth <= 0)
                 {
                     DifficultyManager.Instance.AddKill();
-
+                    DifficultyManager.Instance.EnemiesPassedSinceLastStation++;
                     currentPhase = CombatPhase.None;
                     ResumeDriving();
                 }

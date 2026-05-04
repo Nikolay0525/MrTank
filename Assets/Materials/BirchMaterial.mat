@@ -81,9 +81,9 @@ Material:
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _TreeHeight: 2
+    - _TreeHeight: 3
     - _UVSec: 0
-    - _WindSpeed: 2
+    - _WindSpeed: 1
     - _WindStrength: 1
     - _ZWrite: 1
     m_Colors:

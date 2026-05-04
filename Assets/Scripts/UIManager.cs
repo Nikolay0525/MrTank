@@ -38,8 +38,25 @@ namespace Assets.Scripts
 
         private void Start()
         {
-            OnClickGarage();
             OnSliderQualityChanged();
+
+            TankController tank = FindObjectOfType<TankController>();
+
+            if (tank != null && tank.currentState == TankController.TankState.Driving)
+            {
+                GaragePanel.SetActive(false);
+                InGamePanel.SetActive(true);
+                ScorePanel.SetActive(true);
+
+                if (DifficultyManager.Instance != null)
+                {
+                    CurrentScoreText.text = DifficultyManager.Instance.GetCurrentScore();
+                }
+            }
+            else
+            {
+                OnClickGarage();
+            }
         }
 
         public void OnClickToBattle()

@@ -163,7 +163,7 @@ MonoBehaviour:
   noiseScale: 0.05
   resolution: 20
   repairStationPrefab: {fileID: 9148085346665096821, guid: 86f52a4ab5b89b14398c172b0a26b42c, type: 3}
-  repairStationSpawnChance: 0.2
+  repairStationSpawnChance: 1
   treeSizeMul: 1
   treeMesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
   treeMaterials:

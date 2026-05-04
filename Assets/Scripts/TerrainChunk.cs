@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
@@ -8,6 +9,7 @@ namespace Assets.Scripts
     [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer), typeof(EdgeCollider2D))]
     public class TerrainChunk : MonoBehaviour
     {
+
         [Header("Layer Settings")]
         public bool isBackgroundMode = false;
 
@@ -282,7 +284,7 @@ namespace Assets.Scripts
                     {
                         int randomTreeType = prng.Next(0, typesCount);
 
-                        float randomScaleY = ((float)prng.NextDouble() * 0.5f + 3f) * treeSizeMul;
+                        float randomScaleY = ((float)prng.NextDouble() * 1f + 3f) * treeSizeMul;
                         float randomScaleX = randomScaleY;
                         Vector3 scale = new Vector3(randomScaleX, randomScaleY, 1f);
 
@@ -352,29 +354,73 @@ namespace Assets.Scripts
 
         private void SpawnRepairStation(Vector2[] colliderPoints)
         {
-            if (colliderPoints.Length < 10 || transform.position.x < 20f)
+            GameObject playerTank = GameObject.FindGameObjectWithTag("Player");
+
+            Health health = playerTank.GetComponentInParent<Health>(); 
+
+            if (health.currentHealth >= 100f || DifficultyManager.Instance.EnemiesPassedSinceLastStation < 3)
+            {
                 return;
+            }
 
             if (UnityEngine.Random.value > repairStationSpawnChance)
                 return;
 
-            int minIndex = 2;
-            int maxIndex = colliderPoints.Length - 3;
-            int spawnIndex = UnityEngine.Random.Range(minIndex, maxIndex);
+            if (colliderPoints.Length < 10 || transform.position.x < 20f)
+                return;
 
+            List<Vector2> validSpawnPoints = new List<Vector2>();
             int centerIndex = colliderPoints.Length / 2;
+            float safeDistanceFromTrees = minTreeDistance * 1.5f; 
 
-            if (Mathf.Abs(spawnIndex - centerIndex) < 5)
+            for (int i = 1; i < colliderPoints.Length - 1; i++)
             {
-                spawnIndex = (spawnIndex < centerIndex) ? spawnIndex - 5 : spawnIndex + 5;
-                spawnIndex = Mathf.Clamp(spawnIndex, 0, colliderPoints.Length - 1);
+                if (Mathf.Abs(i - centerIndex) < 5) continue;
+
+                Vector2 currentPoint = colliderPoints[i];
+                Vector2 nextPoint = colliderPoints[i + 1];
+                Vector2 prevPoint = colliderPoints[i - 1];
+
+                Vector2 surfaceDirection = (nextPoint - prevPoint).normalized;
+                float slopeAngle = Vector2.Angle(Vector2.right, surfaceDirection);
+                if (slopeAngle > 90f) slopeAngle = 180f - slopeAngle;
+
+                if (slopeAngle > maxSlopeAngle/2) continue;
+
+                bool isOccupied = false;
+                if (treeLocalPositionsPerType != null)
+                {
+                    for (int type = 0; type < treeLocalPositionsPerType.Length; type++)
+                    {
+                        if (treeLocalPositionsPerType[type] == null) continue;
+
+                        for (int t = 0; t < treeLocalPositionsPerType[type].Length; t++)
+                        {
+                            Vector3 treePos = treeLocalPositionsPerType[type][t];
+
+                            if (Mathf.Abs(currentPoint.x - treePos.x) < safeDistanceFromTrees)
+                            {
+                                isOccupied = true;
+                                break;
+                            }
+                        }
+                        if (isOccupied) break;
+                    }
+                }
+
+                if (!isOccupied)
+                {
+                    validSpawnPoints.Add(currentPoint);
+                }
             }
 
-            Vector2 localPoint = colliderPoints[spawnIndex];
+            if (validSpawnPoints.Count == 0) return;
+
+            Vector2 spawnPoint = validSpawnPoints[UnityEngine.Random.Range(0, validSpawnPoints.Count)];
 
             Vector3 finalStationPosition = new Vector3(
-                transform.position.x + localPoint.x,
-                transform.position.y + localPoint.y + 0.5f,
+                transform.position.x + spawnPoint.x,
+                transform.position.y + spawnPoint.y + 0.75f,
                 transform.position.z + repairStationZOffset
             );
 
@@ -387,6 +433,8 @@ namespace Assets.Scripts
 
                 station.transform.SetParent(this.transform);
                 station.SetActive(true);
+
+                DifficultyManager.Instance.ResetStationCounter(); 
             }
         }
     }
