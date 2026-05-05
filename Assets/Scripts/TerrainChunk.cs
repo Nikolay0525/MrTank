@@ -1,21 +1,48 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 
 namespace Assets.Scripts
 {
+    [System.Serializable]
+    public class InstancedScenerySettings
+    {
+        public string name = "New Scenery";
+        public Mesh mesh;
+        public Material[] materials;
+
+        [Range(0f, 1f)] public float density = 0.1f;
+        public float minScale = 2.0f;
+        public float maxScale = 4.0f;
+
+        [Header("Spacing Rules")]
+        public float minDistanceSameType = 2f;
+        public float minDistanceOtherTypes = 1f;
+
+        public float maxSlopeAngle = 25f;
+        public float zOffset = 1f;
+    }
+
+    public struct SceneryGenData
+    {
+        public int materialsCount;
+        public float density;
+        public float minScale;
+        public float maxScale;
+        public float minDistanceSameType;
+        public float minDistanceOtherTypes;
+        public float maxSlopeAngle;
+        public float zOffset;
+    }
+
     [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer), typeof(EdgeCollider2D))]
     public class TerrainChunk : MonoBehaviour
     {
-
         [Header("Layer Settings")]
         public bool isBackgroundMode = false;
 
         [Header("Z-Axis Settings")]
         public float grassZOffset = 0f;
-        public float treeZOffset = 1f;
         public float enemyZOffset = 0f;
         public float repairStationZOffset = 0f;
 
@@ -39,17 +66,12 @@ namespace Assets.Scripts
         private Mesh mesh;
         private EdgeCollider2D edgeCollider;
 
-        [Header("GPU Instanced Trees")]
-        public float treeSizeMul = 1.0f;
-        public Mesh treeMesh;
-        public Material[] treeMaterials;
-        [Range(0f, 1f)] public float treeDensity = 0.1f;
-        public float minTreeDistance = 2f;
-        public float maxSlopeAngle = 25f;
+        [Header("GPU Instanced Scenery (Trees, Rocks, etc.)")]
+        public InstancedScenerySettings[] scenerySettings;
 
-        private Vector3[][] treeLocalPositionsPerType;
-        private Vector3[][] treeScalesPerType;
-        private Matrix4x4[][] treeMatricesPerType;
+        private Vector3[][][] sceneryLocalPositions;
+        private Vector3[][][] sceneryScales;
+        private Matrix4x4[][][] sceneryMatrices;
 
         private class ChunkData
         {
@@ -58,8 +80,8 @@ namespace Assets.Scripts
             public Vector2[] uvs;
             public Vector2[] colliderPoints;
 
-            public Vector3[][] localPositionsPerType;
-            public Vector3[][] scalesPerType;
+            public Vector3[][][] localPositions;
+            public Vector3[][][] scales;
         }
 
         private void Awake()
@@ -71,31 +93,42 @@ namespace Assets.Scripts
 
         private void Update()
         {
-            if (treeLocalPositionsPerType == null || treeMaterials == null || treeMesh == null) return;
+            if (sceneryLocalPositions == null || scenerySettings == null || scenerySettings.Length == 0) return;
 
-            if (treeMatricesPerType == null || treeMatricesPerType.Length != treeMaterials.Length)
+            if (sceneryMatrices == null || sceneryMatrices.Length != scenerySettings.Length)
             {
-                treeMatricesPerType = new Matrix4x4[treeMaterials.Length][];
+                sceneryMatrices = new Matrix4x4[scenerySettings.Length][][];
             }
 
-            for (int typeIndex = 0; typeIndex < treeMaterials.Length; typeIndex++)
+            for (int s = 0; s < scenerySettings.Length; s++)
             {
-                Vector3[] localPosArray = treeLocalPositionsPerType[typeIndex];
+                InstancedScenerySettings settings = scenerySettings[s];
+                if (settings.mesh == null || settings.materials == null || settings.materials.Length == 0) continue;
 
-                if (localPosArray == null || localPosArray.Length == 0) continue;
-
-                if (treeMatricesPerType[typeIndex] == null || treeMatricesPerType[typeIndex].Length != localPosArray.Length)
+                if (sceneryMatrices[s] == null || sceneryMatrices[s].Length != settings.materials.Length)
                 {
-                    treeMatricesPerType[typeIndex] = new Matrix4x4[localPosArray.Length];
+                    sceneryMatrices[s] = new Matrix4x4[settings.materials.Length][];
                 }
 
-                for (int i = 0; i < localPosArray.Length; i++)
+                for (int m = 0; m < settings.materials.Length; m++)
                 {
-                    Vector3 worldPos = transform.position + localPosArray[i];
-                    treeMatricesPerType[typeIndex][i] = Matrix4x4.TRS(worldPos, Quaternion.identity, treeScalesPerType[typeIndex][i]);
-                }
+                    Vector3[] localPosArray = sceneryLocalPositions[s][m];
 
-                Graphics.DrawMeshInstanced(treeMesh, 0, treeMaterials[typeIndex], treeMatricesPerType[typeIndex]);
+                    if (localPosArray == null || localPosArray.Length == 0) continue;
+
+                    if (sceneryMatrices[s][m] == null || sceneryMatrices[s][m].Length != localPosArray.Length)
+                    {
+                        sceneryMatrices[s][m] = new Matrix4x4[localPosArray.Length];
+                    }
+
+                    for (int i = 0; i < localPosArray.Length; i++)
+                    {
+                        Vector3 worldPos = transform.position + localPosArray[i];
+                        sceneryMatrices[s][m][i] = Matrix4x4.TRS(worldPos, Quaternion.identity, sceneryScales[s][m][i]);
+                    }
+
+                    Graphics.DrawMeshInstanced(settings.mesh, 0, settings.materials[m], sceneryMatrices[s][m]);
+                }
             }
         }
 
@@ -134,10 +167,24 @@ namespace Assets.Scripts
             float currentNScale = noiseScale;
             float currentTScale = textureScale;
 
-            float currentTreeZOffset = treeZOffset;
+            SceneryGenData[] genData = new SceneryGenData[scenerySettings != null ? scenerySettings.Length : 0];
+            for (int i = 0; i < genData.Length; i++)
+            {
+                genData[i] = new SceneryGenData
+                {
+                    materialsCount = scenerySettings[i].materials != null ? scenerySettings[i].materials.Length : 0,
+                    density = scenerySettings[i].density,
+                    minScale = scenerySettings[i].minScale,
+                    maxScale = scenerySettings[i].maxScale,
+                    minDistanceSameType = scenerySettings[i].minDistanceSameType,
+                    minDistanceOtherTypes = scenerySettings[i].minDistanceOtherTypes,
+                    maxSlopeAngle = scenerySettings[i].maxSlopeAngle,
+                    zOffset = scenerySettings[i].zOffset
+                };
+            }
 
             ChunkData data = await Task.Run(() =>
-                CalculateChunkData(globalXOffset, currentSeed, currentWidth, currentRes, currentHMulti, currentNScale, currentTScale, currentTreeZOffset)
+                CalculateChunkData(globalXOffset, currentSeed, currentWidth, currentRes, currentHMulti, currentNScale, currentTScale, genData)
             );
 
             if (this == null) return;
@@ -161,8 +208,7 @@ namespace Assets.Scripts
                             grassZOffset
                         );
 
-                       grassTopRenderer.SetPosition(i, pos);
-
+                        grassTopRenderer.SetPosition(i, pos);
                         burntGrassRenderer.SetPosition(i, new Vector3(pos.x, pos.y, grassZOffset - 0.01f));
                     }
                 }
@@ -175,8 +221,8 @@ namespace Assets.Scripts
             mesh.RecalculateNormals();
             mesh.RecalculateBounds();
 
-            treeLocalPositionsPerType = data.localPositionsPerType;
-            treeScalesPerType = data.scalesPerType;
+            sceneryLocalPositions = data.localPositions;
+            sceneryScales = data.scales;
 
             if (!isBackgroundMode)
             {
@@ -185,7 +231,7 @@ namespace Assets.Scripts
             }
         }
 
-        private ChunkData CalculateChunkData(float globalXOffset, float seed, float w, int res, float hMulti, float nScale, float tScale, float currentTreeZOffset)
+        private ChunkData CalculateChunkData(float globalXOffset, float seed, float w, int res, float hMulti, float nScale, float tScale, SceneryGenData[] sceneryGenData)
         {
             float flatZone = 10f;
             float transitionZone = 10f;
@@ -202,7 +248,6 @@ namespace Assets.Scripts
                 float globalX = globalXOffset + localX;
 
                 float rawNoise = Mathf.PerlinNoise(globalX * nScale, seed);
-
                 float centeredNoise = (rawNoise * 2f) - 1f;
 
                 float rawY = centeredNoise * hMulti;
@@ -251,62 +296,91 @@ namespace Assets.Scripts
                 tris += 6;
             }
 
-            int typesCount = treeMaterials != null ? treeMaterials.Length : 0;
+            int sceneryCount = sceneryGenData.Length;
+            List<Vector3>[][] localPosLists = new List<Vector3>[sceneryCount][];
+            List<Vector3>[][] scaleLists = new List<Vector3>[sceneryCount][];
 
-            List<Vector3>[] localPosLists = new List<Vector3>[typesCount];
-            List<Vector3>[] scaleLists = new List<Vector3>[typesCount];
+            float[] lastSceneryX = new float[sceneryCount];
 
-            for (int i = 0; i < typesCount; i++)
+            float lastAnyX = -9999f;
+            int lastAnyType = -1;
+
+            for (int s = 0; s < sceneryCount; s++)
             {
-                localPosLists[i] = new List<Vector3>();
-                scaleLists[i] = new List<Vector3>();
+                int matCount = sceneryGenData[s].materialsCount;
+                localPosLists[s] = new List<Vector3>[matCount];
+                scaleLists[s] = new List<Vector3>[matCount];
+
+                for (int m = 0; m < matCount; m++)
+                {
+                    localPosLists[s][m] = new List<Vector3>();
+                    scaleLists[s][m] = new List<Vector3>();
+                }
+                lastSceneryX[s] = -9999f;
             }
 
             System.Random prng = new System.Random((int)(globalXOffset * 1000f + seed));
-            float lastTreeX = -9999f;
 
             for (int i = 1; i < colliderPoints.Length - 1; i++)
             {
                 Vector2 currentPoint = colliderPoints[i];
+                Vector2 nextPoint = colliderPoints[i + 1];
+                Vector2 prevPoint = colliderPoints[i - 1];
+                Vector2 surfaceDirection = (nextPoint - prevPoint).normalized;
 
-                if (currentPoint.x - lastTreeX < minTreeDistance) continue;
+                float slopeAngle = Vector2.Angle(Vector2.right, surfaceDirection);
+                if (slopeAngle > 90f) slopeAngle = 180f - slopeAngle;
 
-                if (typesCount > 0 && prng.NextDouble() <= treeDensity)
+                for (int s = 0; s < sceneryCount; s++)
                 {
-                    Vector2 nextPoint = colliderPoints[i + 1];
-                    Vector2 prevPoint = colliderPoints[i - 1];
-                    Vector2 surfaceDirection = (nextPoint - prevPoint).normalized;
+                    SceneryGenData sData = sceneryGenData[s];
 
-                    float slopeAngle = Vector2.Angle(Vector2.right, surfaceDirection);
-                    if (slopeAngle > 90f) slopeAngle = 180f - slopeAngle;
+                    if (sData.materialsCount == 0) continue;
 
-                    if (slopeAngle <= maxSlopeAngle)
+                    if (currentPoint.x - lastSceneryX[s] < sData.minDistanceSameType) continue;
+
+                    if (lastAnyType != -1 && lastAnyType != s)
                     {
-                        int randomTreeType = prng.Next(0, typesCount);
+                        if (currentPoint.x - lastAnyX < sData.minDistanceOtherTypes) continue;
+                    }
 
-                        float randomScaleY = ((float)prng.NextDouble() * 1f + 3f) * treeSizeMul;
+                    if (prng.NextDouble() <= sData.density && slopeAngle <= sData.maxSlopeAngle)
+                    {
+                        int randomMaterial = prng.Next(0, sData.materialsCount);
+
+                        float randomScaleY = (float)(prng.NextDouble() * (sData.maxScale - sData.minScale) + sData.minScale);
                         float randomScaleX = randomScaleY;
                         Vector3 scale = new Vector3(randomScaleX, randomScaleY, 1f);
 
                         float correctedY = currentPoint.y + (randomScaleY / 2f);
+                        Vector3 localPos = new Vector3(currentPoint.x, correctedY, sData.zOffset);
 
-                        Vector3 localPos = new Vector3(currentPoint.x, correctedY, currentTreeZOffset);
+                        localPosLists[s][randomMaterial].Add(localPos);
+                        scaleLists[s][randomMaterial].Add(scale);
 
-                        localPosLists[randomTreeType].Add(localPos);
-                        scaleLists[randomTreeType].Add(scale);
+                        lastSceneryX[s] = currentPoint.x;
+                        lastAnyX = currentPoint.x;
+                        lastAnyType = s;
 
-                        lastTreeX = currentPoint.x;
+                        break;
                     }
                 }
             }
 
-            Vector3[][] finalLocalPos = new Vector3[typesCount][];
-            Vector3[][] finalScales = new Vector3[typesCount][];
+            Vector3[][][] finalLocalPos = new Vector3[sceneryCount][][];
+            Vector3[][][] finalScales = new Vector3[sceneryCount][][];
 
-            for (int i = 0; i < typesCount; i++)
+            for (int s = 0; s < sceneryCount; s++)
             {
-                finalLocalPos[i] = localPosLists[i].ToArray();
-                finalScales[i] = scaleLists[i].ToArray();
+                int matCount = sceneryGenData[s].materialsCount;
+                finalLocalPos[s] = new Vector3[matCount][];
+                finalScales[s] = new Vector3[matCount][];
+
+                for (int m = 0; m < matCount; m++)
+                {
+                    finalLocalPos[s][m] = localPosLists[s][m].ToArray();
+                    finalScales[s][m] = scaleLists[s][m].ToArray();
+                }
             }
 
             return new ChunkData
@@ -315,8 +389,8 @@ namespace Assets.Scripts
                 triangles = triangles,
                 uvs = uvs,
                 colliderPoints = colliderPoints,
-                localPositionsPerType = finalLocalPos,
-                scalesPerType = finalScales
+                localPositions = finalLocalPos,
+                scales = finalScales
             };
         }
 
@@ -355,8 +429,7 @@ namespace Assets.Scripts
         private void SpawnRepairStation(Vector2[] colliderPoints)
         {
             GameObject playerTank = GameObject.FindGameObjectWithTag("Player");
-
-            Health health = playerTank.GetComponentInParent<Health>(); 
+            Health health = playerTank.GetComponentInParent<Health>();
 
             if (health.currentHealth >= 100f || DifficultyManager.Instance.EnemiesPassedSinceLastStation < 3)
             {
@@ -371,7 +444,8 @@ namespace Assets.Scripts
 
             List<Vector2> validSpawnPoints = new List<Vector2>();
             int centerIndex = colliderPoints.Length / 2;
-            float safeDistanceFromTrees = minTreeDistance * 1.5f; 
+
+            float safeDistance = 3f;
 
             for (int i = 1; i < colliderPoints.Length - 1; i++)
             {
@@ -385,24 +459,29 @@ namespace Assets.Scripts
                 float slopeAngle = Vector2.Angle(Vector2.right, surfaceDirection);
                 if (slopeAngle > 90f) slopeAngle = 180f - slopeAngle;
 
-                if (slopeAngle > maxSlopeAngle/2) continue;
+                if (slopeAngle > 12.5f) continue;
 
                 bool isOccupied = false;
-                if (treeLocalPositionsPerType != null)
+
+                if (sceneryLocalPositions != null)
                 {
-                    for (int type = 0; type < treeLocalPositionsPerType.Length; type++)
+                    for (int s = 0; s < sceneryLocalPositions.Length; s++)
                     {
-                        if (treeLocalPositionsPerType[type] == null) continue;
-
-                        for (int t = 0; t < treeLocalPositionsPerType[type].Length; t++)
+                        for (int m = 0; m < sceneryLocalPositions[s].Length; m++)
                         {
-                            Vector3 treePos = treeLocalPositionsPerType[type][t];
+                            if (sceneryLocalPositions[s][m] == null) continue;
 
-                            if (Mathf.Abs(currentPoint.x - treePos.x) < safeDistanceFromTrees)
+                            for (int t = 0; t < sceneryLocalPositions[s][m].Length; t++)
                             {
-                                isOccupied = true;
-                                break;
+                                Vector3 objPos = sceneryLocalPositions[s][m][t];
+
+                                if (Mathf.Abs(currentPoint.x - objPos.x) < safeDistance)
+                                {
+                                    isOccupied = true;
+                                    break;
+                                }
                             }
+                            if (isOccupied) break;
                         }
                         if (isOccupied) break;
                     }
@@ -434,7 +513,7 @@ namespace Assets.Scripts
                 station.transform.SetParent(this.transform);
                 station.SetActive(true);
 
-                DifficultyManager.Instance.ResetStationCounter(); 
+                DifficultyManager.Instance.ResetStationCounter();
             }
         }
     }

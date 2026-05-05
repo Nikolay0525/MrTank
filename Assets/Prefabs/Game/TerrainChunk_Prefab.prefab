@@ -152,7 +152,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TerrainChunk
   isBackgroundMode: 0
   grassZOffset: -5
-  treeZOffset: 10
   enemyZOffset: 5
   repairStationZOffset: 15
   grassTopRenderer: {fileID: 7416177845048196820}
@@ -164,14 +163,67 @@ MonoBehaviour:
   resolution: 20
   repairStationPrefab: {fileID: 9148085346665096821, guid: 86f52a4ab5b89b14398c172b0a26b42c, type: 3}
   repairStationSpawnChance: 1
-  treeSizeMul: 1
-  treeMesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
-  treeMaterials:
-  - {fileID: 2100000, guid: 04cc3d536e699604b909983c33a0774d, type: 2}
-  - {fileID: 2100000, guid: be2485af62bbf504a9529bcd42f27394, type: 2}
-  treeDensity: 0.1
-  minTreeDistance: 2
-  maxSlopeAngle: 25
+  scenerySettings:
+  - name: Trees
+    mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+    materials:
+    - {fileID: 2100000, guid: 04cc3d536e699604b909983c33a0774d, type: 2}
+    - {fileID: 2100000, guid: be2485af62bbf504a9529bcd42f27394, type: 2}
+    - {fileID: 2100000, guid: b2e07bf5acb470049a8ef3b4e4a700b6, type: 2}
+    density: 0.1
+    minScale: 2
+    maxScale: 4
+    minDistanceSameType: 2
+    minDistanceOtherTypes: 1
+    maxSlopeAngle: 30
+    zOffset: 10
+  - name: Bushes
+    mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+    materials:
+    - {fileID: 2100000, guid: cd983c08a4cd9384da6eac741dc7e0b9, type: 2}
+    - {fileID: 2100000, guid: 01c7c880935a4c042aff93c07306dc64, type: 2}
+    - {fileID: 2100000, guid: 248ca367b3533904ab7da12a4b217a3e, type: 2}
+    density: 0.1
+    minScale: 0.66
+    maxScale: 1
+    minDistanceSameType: 2
+    minDistanceOtherTypes: 1
+    maxSlopeAngle: 30
+    zOffset: 10
+  - name: Stumps
+    mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+    materials:
+    - {fileID: 2100000, guid: 006167395ebe52a49b85c3740cb77770, type: 2}
+    - {fileID: 2100000, guid: 770cbf63283570140aeb13d5403ed887, type: 2}
+    density: 0.025
+    minScale: 0.66
+    maxScale: 1
+    minDistanceSameType: 2
+    minDistanceOtherTypes: 1
+    maxSlopeAngle: 30
+    zOffset: 10
+  - name: Buildings
+    mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+    materials:
+    - {fileID: 2100000, guid: aa8fcc3a9daea77429cef370af47243f, type: 2}
+    density: 0.05
+    minScale: 3
+    maxScale: 3
+    minDistanceSameType: 5
+    minDistanceOtherTypes: 5
+    maxSlopeAngle: 12.5
+    zOffset: 9
+  - name: Debris
+    mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+    materials:
+    - {fileID: 2100000, guid: 574a8a3eb09a9ca479ba429dd4b71527, type: 2}
+    density: 0.025
+    minScale: 3
+    maxScale: 3
+    minDistanceSameType: 5
+    minDistanceOtherTypes: 5
+    maxSlopeAngle: 12.5
+    zOffset: 9
 --- !u!114 &6155246829787254093
 MonoBehaviour:
   m_ObjectHideFlags: 0
