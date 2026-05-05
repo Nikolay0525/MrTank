@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: BirchMaterial
+  m_Name: FicusMaterial
   m_Shader: {fileID: 4800000, guid: 9f47aa2112070eb48a2f869f1bf6b5cc, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -48,7 +48,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: ade27e9fcbf4eef43b78d8b1ddc32702, type: 3}
+        m_Texture: {fileID: 2800000, guid: 7cba4ac9aef4e80499e2dcb9d5bc51c4, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
