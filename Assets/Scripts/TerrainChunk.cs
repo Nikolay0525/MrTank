@@ -304,6 +304,7 @@ namespace Assets.Scripts
 
             float lastAnyX = -9999f;
             int lastAnyType = -1;
+            float lastAnyMinDistOther = 0f; 
 
             for (int s = 0; s < sceneryCount; s++)
             {
@@ -341,7 +342,9 @@ namespace Assets.Scripts
 
                     if (lastAnyType != -1 && lastAnyType != s)
                     {
-                        if (currentPoint.x - lastAnyX < sData.minDistanceOtherTypes) continue;
+                        float requiredDistance = Mathf.Max(lastAnyMinDistOther, sData.minDistanceOtherTypes);
+
+                        if (currentPoint.x - lastAnyX < requiredDistance) continue;
                     }
 
                     if (prng.NextDouble() <= sData.density && slopeAngle <= sData.maxSlopeAngle)
@@ -358,9 +361,11 @@ namespace Assets.Scripts
                         localPosLists[s][randomMaterial].Add(localPos);
                         scaleLists[s][randomMaterial].Add(scale);
 
+                        // Update trackers
                         lastSceneryX[s] = currentPoint.x;
                         lastAnyX = currentPoint.x;
                         lastAnyType = s;
+                        lastAnyMinDistOther = sData.minDistanceOtherTypes; 
 
                         break;
                     }
