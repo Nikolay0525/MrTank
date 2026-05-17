@@ -11,8 +11,8 @@ namespace Assets.Scripts
 
         [Header("Generation Parameters")]
         public float width = 20f;
-        public float heightMultiplier = 15f; // Increased for massive background mountains
-        public float noiseScale = 0.02f;     // Decreased for smoother slopes
+        public float heightMultiplier = 15f; 
+        public float noiseScale = 0.02f;    
         public int resolution = 20;
 
         private Mesh mesh;

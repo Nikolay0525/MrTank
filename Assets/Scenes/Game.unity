@@ -7634,7 +7634,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Assets.Scripts.VisualDeathHandler
   baseExplosionSize: 1.5
   baseStainSize: {x: 3, y: 6, z: 1}
-  fireEffect: {fileID: 0}
+  fireEffect: {fileID: 611530660}
   stainChildName: Mask
   explosionChildName: Explosion
   stainOffset: {x: 0, y: 0, z: 0}

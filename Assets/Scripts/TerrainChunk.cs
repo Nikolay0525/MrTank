@@ -19,8 +19,15 @@ namespace Assets.Scripts
         public float minDistanceSameType = 2f;
         public float minDistanceOtherTypes = 1f;
 
+        [Header("Rotation Settings")]
+        public float minRotation = 0f;
+        public float maxRotation = 0f;
+
+        public float edgeMargin;
+
         public float maxSlopeAngle = 25f;
         public float zOffset = 1f;
+        public float yOffset = 0f;
     }
 
     public struct SceneryGenData
@@ -31,8 +38,12 @@ namespace Assets.Scripts
         public float maxScale;
         public float minDistanceSameType;
         public float minDistanceOtherTypes;
+        public float minRotation;
+        public float maxRotation;
+        public float edgeMargin;
         public float maxSlopeAngle;
         public float zOffset;
+        public float yOffset;
     }
 
     [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer), typeof(EdgeCollider2D))]
@@ -40,6 +51,9 @@ namespace Assets.Scripts
     {
         [Header("Layer Settings")]
         public bool isBackgroundMode = false;
+
+        [Header("Overall Y-Axis Params")]
+        public float grassOffset = 0.15f;
 
         [Header("Z-Axis Settings")]
         public float grassZOffset = 0f;
@@ -71,6 +85,7 @@ namespace Assets.Scripts
 
         private Vector3[][][] sceneryLocalPositions;
         private Vector3[][][] sceneryScales;
+        private Quaternion[][][] sceneryRotations;
         private Matrix4x4[][][] sceneryMatrices;
 
         private class ChunkData
@@ -82,6 +97,8 @@ namespace Assets.Scripts
 
             public Vector3[][][] localPositions;
             public Vector3[][][] scales;
+
+            public Quaternion[][][] rotations;
         }
 
         private void Awake()
@@ -124,7 +141,7 @@ namespace Assets.Scripts
                     for (int i = 0; i < localPosArray.Length; i++)
                     {
                         Vector3 worldPos = transform.position + localPosArray[i];
-                        sceneryMatrices[s][m][i] = Matrix4x4.TRS(worldPos, Quaternion.identity, sceneryScales[s][m][i]);
+                        sceneryMatrices[s][m][i] = Matrix4x4.TRS(worldPos, sceneryRotations[s][m][i], sceneryScales[s][m][i]);
                     }
 
                     Graphics.DrawMeshInstanced(settings.mesh, 0, settings.materials[m], sceneryMatrices[s][m]);
@@ -176,10 +193,14 @@ namespace Assets.Scripts
                     density = scenerySettings[i].density,
                     minScale = scenerySettings[i].minScale,
                     maxScale = scenerySettings[i].maxScale,
+                    minRotation = scenerySettings[i].minRotation,
+                    maxRotation = scenerySettings[i].maxRotation,
                     minDistanceSameType = scenerySettings[i].minDistanceSameType,
                     minDistanceOtherTypes = scenerySettings[i].minDistanceOtherTypes,
+                    edgeMargin = scenerySettings[i].edgeMargin, 
                     maxSlopeAngle = scenerySettings[i].maxSlopeAngle,
-                    zOffset = scenerySettings[i].zOffset
+                    zOffset = scenerySettings[i].zOffset,
+                    yOffset = scenerySettings[i].yOffset
                 };
             }
 
@@ -189,28 +210,23 @@ namespace Assets.Scripts
 
             if (this == null) return;
 
-            if (!isBackgroundMode)
+            edgeCollider.points = data.colliderPoints;
+
+            if (grassTopRenderer != null)
             {
-                edgeCollider.points = data.colliderPoints;
+                grassTopRenderer.positionCount = data.colliderPoints.Length;
+                if (!isBackgroundMode && burntGrassRenderer != null) burntGrassRenderer.positionCount = data.colliderPoints.Length;
 
-                if (grassTopRenderer != null && burntGrassRenderer != null)
+                for (int i = 0; i < data.colliderPoints.Length; i++)
                 {
-                    grassTopRenderer.positionCount = data.colliderPoints.Length;
-                    burntGrassRenderer.positionCount = data.colliderPoints.Length;
+                    Vector3 pos = new Vector3(
+                        data.colliderPoints[i].x,
+                        data.colliderPoints[i].y + grassOffset,
+                        grassZOffset
+                    );
 
-                    float grassOffset = 0.15f;
-
-                    for (int i = 0; i < data.colliderPoints.Length; i++)
-                    {
-                        Vector3 pos = new Vector3(
-                            data.colliderPoints[i].x,
-                            data.colliderPoints[i].y + grassOffset,
-                            grassZOffset
-                        );
-
-                        grassTopRenderer.SetPosition(i, pos);
-                        burntGrassRenderer.SetPosition(i, new Vector3(pos.x, pos.y, grassZOffset - 0.01f));
-                    }
+                    grassTopRenderer.SetPosition(i, pos);
+                    if(!isBackgroundMode && burntGrassRenderer != null) burntGrassRenderer.SetPosition(i, new Vector3(pos.x, pos.y, grassZOffset - 0.01f));
                 }
             }
 
@@ -223,6 +239,7 @@ namespace Assets.Scripts
 
             sceneryLocalPositions = data.localPositions;
             sceneryScales = data.scales;
+            sceneryRotations = data.rotations;
 
             if (!isBackgroundMode)
             {
@@ -299,6 +316,7 @@ namespace Assets.Scripts
             int sceneryCount = sceneryGenData.Length;
             List<Vector3>[][] localPosLists = new List<Vector3>[sceneryCount][];
             List<Vector3>[][] scaleLists = new List<Vector3>[sceneryCount][];
+            List<Quaternion>[][] rotationLists = new List<Quaternion>[sceneryCount][];
 
             float[] lastSceneryX = new float[sceneryCount];
 
@@ -311,11 +329,13 @@ namespace Assets.Scripts
                 int matCount = sceneryGenData[s].materialsCount;
                 localPosLists[s] = new List<Vector3>[matCount];
                 scaleLists[s] = new List<Vector3>[matCount];
+                rotationLists[s] = new List<Quaternion>[matCount];
 
                 for (int m = 0; m < matCount; m++)
                 {
                     localPosLists[s][m] = new List<Vector3>();
                     scaleLists[s][m] = new List<Vector3>();
+                    rotationLists[s][m] = new List<Quaternion>();
                 }
                 lastSceneryX[s] = -9999f;
             }
@@ -338,6 +358,11 @@ namespace Assets.Scripts
 
                     if (sData.materialsCount == 0) continue;
 
+                    if (currentPoint.x < sData.edgeMargin || currentPoint.x > (w - sData.edgeMargin))
+                    {
+                        continue;
+                    }
+
                     if (currentPoint.x - lastSceneryX[s] < sData.minDistanceSameType) continue;
 
                     if (lastAnyType != -1 && lastAnyType != s)
@@ -355,13 +380,16 @@ namespace Assets.Scripts
                         float randomScaleX = randomScaleY;
                         Vector3 scale = new Vector3(randomScaleX, randomScaleY, 1f);
 
-                        float correctedY = currentPoint.y + (randomScaleY / 2f);
+                        float correctedY = currentPoint.y + (randomScaleY / 2f) + +sData.yOffset;
                         Vector3 localPos = new Vector3(currentPoint.x, correctedY, sData.zOffset);
+
+                        float randomAngle = (float)(prng.NextDouble() * (sData.maxRotation - sData.minRotation) + sData.minRotation);
+                        Quaternion rotation = Quaternion.Euler(0f, 0f, randomAngle);
 
                         localPosLists[s][randomMaterial].Add(localPos);
                         scaleLists[s][randomMaterial].Add(scale);
+                        rotationLists[s][randomMaterial].Add(rotation);
 
-                        // Update trackers
                         lastSceneryX[s] = currentPoint.x;
                         lastAnyX = currentPoint.x;
                         lastAnyType = s;
@@ -374,17 +402,20 @@ namespace Assets.Scripts
 
             Vector3[][][] finalLocalPos = new Vector3[sceneryCount][][];
             Vector3[][][] finalScales = new Vector3[sceneryCount][][];
+            Quaternion[][][] finalRotations = new Quaternion[sceneryCount][][];
 
             for (int s = 0; s < sceneryCount; s++)
             {
                 int matCount = sceneryGenData[s].materialsCount;
                 finalLocalPos[s] = new Vector3[matCount][];
                 finalScales[s] = new Vector3[matCount][];
+                finalRotations[s] = new Quaternion[matCount][];
 
                 for (int m = 0; m < matCount; m++)
                 {
                     finalLocalPos[s][m] = localPosLists[s][m].ToArray();
                     finalScales[s][m] = scaleLists[s][m].ToArray();
+                    finalRotations[s][m] = rotationLists[s][m].ToArray();
                 }
             }
 
@@ -395,7 +426,8 @@ namespace Assets.Scripts
                 uvs = uvs,
                 colliderPoints = colliderPoints,
                 localPositions = finalLocalPos,
-                scales = finalScales
+                scales = finalScales,
+                rotations = finalRotations
             };
         }
 

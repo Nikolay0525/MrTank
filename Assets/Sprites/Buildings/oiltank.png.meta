@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 1eb0c5c9274d9224082f9d4a4dcaf7cc
+guid: eae9c643ca413484b8569cb5b408cadc
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3500446970079045336
-    second: garage_0
+      213: -1316852639758969168
+    second: oiltank_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -47,7 +47,7 @@ TextureImporter:
   lightmap: 0
   compressionQuality: 50
   spriteMode: 2
-  spriteExtrude: 0
+  spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: garage_0
+      name: oiltank_0
       rect:
         serializedVersion: 2
-        x: 47
+        x: 35
         y: 0
-        width: 98
-        height: 81
+        width: 52
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8d667ae19f5149030800000000000000
-      internalID: 3500446970079045336
+      spriteID: 0b691a9408999bde0800000000000000
+      internalID: -1316852639758969168
       vertices: []
       indices: 
       edges: []
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      garage_0: 3500446970079045336
+      oiltank_0: -1316852639758969168
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

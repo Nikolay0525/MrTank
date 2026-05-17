@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: c79217ed4428ea148a43bdc96889e2de
+guid: 8b072ac031aa9864aa5c0bebbd57b39b
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -3587856369271830714
-    second: debrisHouse1_0
+      213: -1485651550858158191
+    second: debrisHouse2_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: debrisHouse1_0
+      name: debrisHouse2_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 192
-        height: 81
+        height: 104
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 6470e6434af553ec0800000000000000
-      internalID: -3587856369271830714
+      spriteID: 19f571b29c7e16be0800000000000000
+      internalID: -1485651550858158191
       vertices: []
       indices: 
       edges: []
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      debrisHouse1_0: -3587856369271830714
+      debrisHouse2_0: -1485651550858158191
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
