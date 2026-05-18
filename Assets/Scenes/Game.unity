@@ -6227,6 +6227,52 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ec6a5be0b389050438cda819b4c46d42, type: 3}
+--- !u!1 &898837857
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 898837859}
+  - component: {fileID: 898837858}
+  m_Layer: 0
+  m_Name: CloudsPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &898837858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 898837857}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91514581e6ab48449a4b3ea1cf60cd26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Assets.Scripts.ObjectPool
+  prefab: {fileID: 6260251770952473285, guid: c80a758c047fd0f4785f8da40ed3b5d4, type: 3}
+  poolSize: 30
+--- !u!4 &898837859
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 898837857}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &967185836
 GameObject:
   m_ObjectHideFlags: 0
@@ -6435,6 +6481,52 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+--- !u!1 &1239138081
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1239138083}
+  - component: {fileID: 1239138082}
+  m_Layer: 0
+  m_Name: PlanesPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1239138082
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1239138081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91514581e6ab48449a4b3ea1cf60cd26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Assets.Scripts.ObjectPool
+  prefab: {fileID: 3979653413043172619, guid: ae847e1c16f3b07408ef0a6274aa28bc, type: 3}
+  poolSize: 10
+--- !u!4 &1239138083
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1239138081}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1306851560
 GameObject:
   m_ObjectHideFlags: 0
@@ -6553,6 +6645,52 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1faab5c455c901344b399d1b4a4a8851, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIManager
+--- !u!1 &1336275548
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1336275550}
+  - component: {fileID: 1336275549}
+  m_Layer: 0
+  m_Name: BirdsPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1336275549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1336275548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91514581e6ab48449a4b3ea1cf60cd26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Assets.Scripts.ObjectPool
+  prefab: {fileID: 257290741010533316, guid: bb705a3a3bac7cf49b5918d259f67fa7, type: 3}
+  poolSize: 30
+--- !u!4 &1336275550
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1336275548}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!224 &1445772760 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 248083449542045965, guid: 183fab68086ac544797da31b58c00ccb, type: 3}
@@ -7044,57 +7182,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1841243842}
-  - component: {fileID: 1841243841}
-  - component: {fileID: 1841243840}
+  - component: {fileID: 1841243843}
   m_Layer: 0
-  m_Name: CloudPoolManager
+  m_Name: AirObjManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1841243840
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1841243839}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: deb7422fbeeaa1247aede6c36561e940, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Assets.Scripts.CloudSpawner
-  cloudSprites:
-  - {fileID: 5794706969414947667, guid: 2a9e25dd9ae13dc40bdd329a565e22fa, type: 3}
-  - {fileID: -8840182881893364109, guid: 185504ebaba96fe4797336fa6b8f966d, type: 3}
-  - {fileID: -820043299498583024, guid: e56a9475c1333ff40bbf0d61d1690016, type: 3}
-  - {fileID: 1785422511352129445, guid: 7339c631aee2f1a4ea6bdf2c87df8e6a, type: 3}
-  - {fileID: -8243296645107398831, guid: 8e9da04e5bcbd7143b82a06267b4d8eb, type: 3}
-  spawnInterval: 5
-  spawnX: 30
-  despawnX: -20
-  minY: 4
-  maxY: 8
-  zPosition: 10
-  minSpeed: 0.4
-  maxSpeed: 0.6
-  minScale: 2
-  maxScale: 5
---- !u!114 &1841243841
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1841243839}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 91514581e6ab48449a4b3ea1cf60cd26, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ObjectPool
-  prefab: {fileID: 6260251770952473285, guid: c80a758c047fd0f4785f8da40ed3b5d4, type: 3}
-  poolSize: 30
 --- !u!4 &1841243842
 Transform:
   m_ObjectHideFlags: 0
@@ -7110,6 +7205,60 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1841243843
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1841243839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: deb7422fbeeaa1247aede6c36561e940, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Assets.Scripts.ScenerySpawner
+  spawnX: 30
+  despawnX: -30
+  scenerySettings:
+  - pool: {fileID: 898837858}
+    spawnInterval: 10
+    timer: 0
+    minY: 3
+    maxY: 8
+    zPosition: 15
+    minScale: 3
+    maxScale: 4
+    minSpeed: 0.3
+    maxSpeed: 0.5
+    parallaxFactor: 0.1
+    randomDirection: 0
+    fixedDirection: -1
+  - pool: {fileID: 1336275549}
+    spawnInterval: 10
+    timer: 0
+    minY: 3
+    maxY: 6
+    zPosition: 14
+    minScale: 1
+    maxScale: 1
+    minSpeed: 0.75
+    maxSpeed: 1
+    parallaxFactor: 0.2
+    randomDirection: 1
+    fixedDirection: -1
+  - pool: {fileID: 1239138082}
+    spawnInterval: 10
+    timer: 0
+    minY: 4
+    maxY: 7
+    zPosition: 13
+    minScale: 1
+    maxScale: 1
+    minSpeed: 2
+    maxSpeed: 3
+    parallaxFactor: 0.2
+    randomDirection: 1
+    fixedDirection: -1
 --- !u!1 &1844827996
 GameObject:
   m_ObjectHideFlags: 0
@@ -8253,6 +8402,9 @@ SceneRoots:
   - {fileID: 1763395741}
   - {fileID: 2128819285}
   - {fileID: 1774764587}
+  - {fileID: 898837859}
+  - {fileID: 1336275550}
+  - {fileID: 1239138083}
   - {fileID: 1841243842}
   - {fileID: 740578178}
   - {fileID: 1869876768}
