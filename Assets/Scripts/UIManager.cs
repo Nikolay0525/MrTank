@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
-using Unity.Mathematics;
 
 namespace Assets.Scripts
 {
@@ -10,13 +9,15 @@ namespace Assets.Scripts
         public static UIManager Instance { get; private set; }
 
         [Header("UI Panels")]
-        public GameObject GaragePanel;
+        public GameObject HomePanel;
         public GameObject InGamePanel;
+        public GameObject GaragePanel;
         public GameObject ScorePanel;
         public GameObject GameOverPanel;
-        public GameObject GarageHelpPanel;
-        public GameObject DrivingHelpPanel;
         public GameObject PausePanel;
+        public GameObject StatsPanel;
+
+        [Header("Settings Panels")]
         public GameObject SettingsGeneral;
         public GameObject SettingsAudio;
         public GameObject SettingsGraphics;
@@ -30,10 +31,21 @@ namespace Assets.Scripts
         [Header("Trajectory Quality Text")]
         public TextMeshProUGUI TrajectoryQualityText;
 
+        [Header("Coins Text")]
+        public TextMeshProUGUI CoinsText;
+
+        private GameObject[] allPanels;
+
         private void Awake()
         {
             if (Instance == null) Instance = this;
             else Destroy(gameObject);
+
+            allPanels = new GameObject[]
+            {
+                HomePanel, GaragePanel, InGamePanel, ScorePanel, GameOverPanel, PausePanel,
+                StatsPanel, SettingsGeneral, SettingsAudio, SettingsGraphics
+            };
         }
 
         private void Start()
@@ -44,14 +56,8 @@ namespace Assets.Scripts
 
             if (tank != null && tank.currentState == TankController.TankState.Driving)
             {
-                GaragePanel.SetActive(false);
-                InGamePanel.SetActive(true);
-                ScorePanel.SetActive(true);
-
-                if (DifficultyManager.Instance != null)
-                {
-                    CurrentScoreText.text = DifficultyManager.Instance.GetCurrentScore();
-                }
+                ShowPanels(InGamePanel, ScorePanel);
+                UpdateScoreText();
             }
             else
             {
@@ -59,20 +65,28 @@ namespace Assets.Scripts
             }
         }
 
+        private void ShowPanels(params GameObject[] activePanels)
+        {
+            foreach (var panel in allPanels)
+            {
+                if (panel == null) continue;
+
+                bool shouldBeActive = System.Array.Exists(activePanels, p => p == panel);
+                panel.SetActive(shouldBeActive);
+            }
+        }
+
+        private void UpdateScoreText()
+        {
+            if (DifficultyManager.Instance != null)
+            {
+                CurrentScoreText.text = DifficultyManager.Instance.GetCurrentScore();
+            }
+        }
+
         public void OnClickToBattle()
         {
-
-            GaragePanel.SetActive(false);
-            InGamePanel.SetActive(true);
-            ScorePanel.SetActive(true);
-            GameOverPanel.SetActive(false);
-            GarageHelpPanel.SetActive(false);
-            DrivingHelpPanel.SetActive(false);
-            PausePanel.SetActive(false);
-
-            SettingsGeneral.SetActive(false);
-            SettingsAudio.SetActive(false);
-            SettingsGraphics.SetActive(false);
+            ShowPanels(InGamePanel, ScorePanel);
 
             TankController tank = FindObjectOfType<TankController>();
             if (tank != null)
@@ -80,82 +94,38 @@ namespace Assets.Scripts
                 tank.StartBattleFromGarage();
             }
 
-            if (DifficultyManager.Instance != null)
-            {
-                CurrentScoreText.text = DifficultyManager.Instance.GetCurrentScore();
-            }
+            UpdateScoreText();
         }
-
 
         public void ShowGameOver()
         {
-            GaragePanel.SetActive(false);
-            InGamePanel.SetActive(false);
-            ScorePanel.SetActive(false);
-            GameOverPanel.SetActive(true);
-            GarageHelpPanel.SetActive(false);
-            DrivingHelpPanel.SetActive(false);
-            PausePanel.SetActive(false);
-
-            SettingsGeneral.SetActive(false);
-            SettingsAudio.SetActive(false);
-            SettingsGraphics.SetActive(false);
+            ShowPanels(GameOverPanel);
 
             if (DifficultyManager.Instance != null)
             {
                 FinalScoreText.text = "Score: " + DifficultyManager.Instance.totalKills.ToString();
+
+                StatsManager.Instance.UpdateBestScore(DifficultyManager.Instance.totalKills);
             }
         }
 
         public void OnClickRetry()
         {
-            GaragePanel.SetActive(false);
-            InGamePanel.SetActive(true);
-            ScorePanel.SetActive(true);
-            GameOverPanel.SetActive(false);
-            GarageHelpPanel.SetActive(false);
-            DrivingHelpPanel.SetActive(false);
-            PausePanel.SetActive(false);
-
-            SettingsGeneral.SetActive(false);
-            SettingsAudio.SetActive(false);
-            SettingsGraphics.SetActive(false);
+            ShowPanels(InGamePanel, ScorePanel);
 
             TankController.shouldAutoStart = true;
-
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
+
         public void OnClickPause()
         {
-            GaragePanel.SetActive(false);
-            InGamePanel.SetActive(false);
-            ScorePanel.SetActive(true);
-            GameOverPanel.SetActive(false);
-            GarageHelpPanel.SetActive(false);
-            DrivingHelpPanel.SetActive(false);
-            PausePanel.SetActive(true);
-
-            SettingsGeneral.SetActive(false);
-            SettingsAudio.SetActive(false);
-            SettingsGraphics.SetActive(false);
-
+            ShowPanels(PausePanel, ScorePanel);
             Time.timeScale = 0f;
         }
 
         public void OnClickResume()
         {
-            GaragePanel.SetActive(false);
-            InGamePanel.SetActive(true);
-            ScorePanel.SetActive(true);
-            GameOverPanel.SetActive(false);
-            GarageHelpPanel.SetActive(false);
-            DrivingHelpPanel.SetActive(false);
-            PausePanel.SetActive(false);
-
-            SettingsGeneral.SetActive(false);
-            SettingsAudio.SetActive(false);
-            SettingsGraphics.SetActive(false);
-
+            ShowPanels(InGamePanel, ScorePanel);
             Time.timeScale = 1f;
         }
 
@@ -166,97 +136,36 @@ namespace Assets.Scripts
 
         public void OnClickBackToGaragePause()
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-
+            StatsManager.Instance.UpdateBestScore(DifficultyManager.Instance.totalKills);
             Time.timeScale = 1f;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
         public void OnClickGarage()
         {
-            GaragePanel.SetActive(true);
-            InGamePanel.SetActive(false);
-            ScorePanel.SetActive(false);
-            GameOverPanel.SetActive(false);
-            GarageHelpPanel.SetActive(false);
-            DrivingHelpPanel.SetActive(false);
-            PausePanel.SetActive(false);
-
-            SettingsGeneral.SetActive(false);
-            SettingsAudio.SetActive(false);
-            SettingsGraphics.SetActive(false);
+            CoinsText.text = StatsManager.Instance.GetCurrentCoins().ToString();
+            StatsManager.Instance.UpdateBestScore(DifficultyManager.Instance.totalKills);
+            ShowPanels(GaragePanel, HomePanel);
         }
 
-        public void OnClickGarageHelp()
+        public void OnClickStats()
         {
-            GaragePanel.SetActive(false);
-            InGamePanel.SetActive(false);
-            ScorePanel.SetActive(false);
-            GameOverPanel.SetActive(false);
-            GarageHelpPanel.SetActive(true);
-            DrivingHelpPanel.SetActive(false);
-            PausePanel.SetActive(false);
-
-            SettingsGeneral.SetActive(false);
-            SettingsAudio.SetActive(false);
-            SettingsGraphics.SetActive(false);
-        }
-        public void OnClickDrivingHelp()
-        {
-            GaragePanel.SetActive(false);
-            InGamePanel.SetActive(false);
-            ScorePanel.SetActive(false);
-            GameOverPanel.SetActive(false);
-            GarageHelpPanel.SetActive(false);
-            DrivingHelpPanel.SetActive(true);
-            PausePanel.SetActive(false);
-
-            SettingsGeneral.SetActive(false);
-            SettingsAudio.SetActive(false);
-            SettingsGraphics.SetActive(false);
+            ShowPanels(StatsPanel);
         }
 
         public void OnClickSettings()
         {
-            GaragePanel.SetActive(false);
-            InGamePanel.SetActive(false);
-            ScorePanel.SetActive(false);
-            GameOverPanel.SetActive(false);
-            GarageHelpPanel.SetActive(false);
-            DrivingHelpPanel.SetActive(false);
-            PausePanel.SetActive(false);
-
-            SettingsGeneral.SetActive(true);
-            SettingsAudio.SetActive(false);
-            SettingsGraphics.SetActive(false);
+            ShowPanels(SettingsGeneral);
         }
+
         public void OnClickAudioSettings()
         {
-            GaragePanel.SetActive(false);
-            InGamePanel.SetActive(false);
-            ScorePanel.SetActive(false);
-            GameOverPanel.SetActive(false);
-            GarageHelpPanel.SetActive(false);
-            DrivingHelpPanel.SetActive(false);
-            PausePanel.SetActive(false);
-
-            SettingsGeneral.SetActive(false);
-            SettingsAudio.SetActive(true);
-            SettingsGraphics.SetActive(false);
+            ShowPanels(SettingsAudio);
         }
 
         public void OnClickGraphicsSettings()
         {
-            GaragePanel.SetActive(false);
-            InGamePanel.SetActive(false);
-            ScorePanel.SetActive(false);
-            GameOverPanel.SetActive(false);
-            GarageHelpPanel.SetActive(false);
-            DrivingHelpPanel.SetActive(false);
-            PausePanel.SetActive(false);
-
-            SettingsGeneral.SetActive(false);
-            SettingsAudio.SetActive(false);
-            SettingsGraphics.SetActive(true);
+            ShowPanels(SettingsGraphics);
         }
 
         public void OnSliderQualityChanged()
@@ -264,9 +173,11 @@ namespace Assets.Scripts
             if (SettingsManager.Instance != null)
             {
                 TrajectoryQualityText.text = SettingsManager.Instance.trajectoryQuality.ToString("F2");
-                return;
             }
-            TrajectoryQualityText.text = "Can't get the value";
+            else
+            {
+                TrajectoryQualityText.text = "Can't get the value";
+            }
         }
     }
 }

@@ -54,6 +54,7 @@ namespace Assets.Scripts
         public void ExecutePerfectShot(TankController playerController)
         {
             if (isCurrentlyShooting) return;
+            DifficultyManager.Instance.ResetKillStreak();
             StartCoroutine(ShotSequence(playerController));
         }
 

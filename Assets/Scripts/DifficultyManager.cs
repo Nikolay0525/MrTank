@@ -8,6 +8,7 @@ namespace Assets.Scripts
 
         [Header("Progression Stats")]
         public int totalKills = 0;
+        public int totalKillStreak = 0;
         public int EnemiesPassedSinceLastStation = 999;
         [Tooltip("Kills per level")]
         public int killsPerLevel = 1;
@@ -38,10 +39,24 @@ namespace Assets.Scripts
         public void AddKill()
         {
             totalKills++;
+            totalKillStreak++;
+            StatsManager.Instance.AddKill();
+            StatsManager.Instance.SetNewKillStreakScore(totalKillStreak);
+            if (totalKillStreak > 1)
+            {
+                StatsManager.Instance.AddCoins(totalKillStreak);
+            }
+            else StatsManager.Instance.AddCoins(1);
+
             if (UIManager.Instance != null)
             {
                 UIManager.Instance.CurrentScoreText.text = "Score: " + totalKills.ToString();
             }
+        }
+
+        public void ResetKillStreak()
+        {
+            totalKillStreak = 0;
         }
 
         public float GetDifficultyLevel()

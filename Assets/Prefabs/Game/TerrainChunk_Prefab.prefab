@@ -157,7 +157,7 @@ MonoBehaviour:
   grassOffset: 0.15
   grassZOffset: -2
   enemyZOffset: 5
-  repairStationZOffset: 1
+  repairStationZOffset: 2
   grassTopRenderer: {fileID: 7416177845048196820}
   burntGrassRenderer: {fileID: 2117682422374005071}
   textureScale: 1

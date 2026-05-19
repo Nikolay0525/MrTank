@@ -27,7 +27,6 @@ namespace Assets.Scripts
         [Header("UI Integrations")]
         public CombatTimerUI combatTimerUI;
 
-
         [Header("Visual Effects")]
         public Animator fireEffectAnimator;
         public GameObject gunshotObj;
