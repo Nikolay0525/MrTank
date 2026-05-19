@@ -16,6 +16,9 @@ namespace Assets.Scripts
             public int maxKillStreak;
             public int bestScore;
             public int coins;
+
+            public List<int> unlockedTankIDs = new List<int> { 0 };
+            public int selectedTankID = 0;
         }
 
         public static StatsManager Instance { get; private set; }

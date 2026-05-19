@@ -12,6 +12,7 @@ namespace Assets.Scripts
         public GameObject HomePanel;
         public GameObject InGamePanel;
         public GameObject GaragePanel;
+        public GameObject TankSelectionPanel;
         public GameObject ScorePanel;
         public GameObject GameOverPanel;
         public GameObject PausePanel;
@@ -43,7 +44,7 @@ namespace Assets.Scripts
 
             allPanels = new GameObject[]
             {
-                HomePanel, GaragePanel, InGamePanel, ScorePanel, GameOverPanel, PausePanel,
+                HomePanel, GaragePanel, TankSelectionPanel, InGamePanel, ScorePanel, GameOverPanel, PausePanel,
                 StatsPanel, SettingsGeneral, SettingsAudio, SettingsGraphics
             };
         }
@@ -148,24 +149,29 @@ namespace Assets.Scripts
             ShowPanels(GaragePanel, HomePanel);
         }
 
+        public void OnClickTankSelection()
+        {
+            ShowPanels(TankSelectionPanel, HomePanel);
+        }
+
         public void OnClickStats()
         {
-            ShowPanels(StatsPanel);
+            ShowPanels(StatsPanel, HomePanel);
         }
 
         public void OnClickSettings()
         {
-            ShowPanels(SettingsGeneral);
+            ShowPanels(SettingsGeneral, HomePanel);
         }
 
         public void OnClickAudioSettings()
         {
-            ShowPanels(SettingsAudio);
+            ShowPanels(SettingsAudio, HomePanel);
         }
 
         public void OnClickGraphicsSettings()
         {
-            ShowPanels(SettingsGraphics);
+            ShowPanels(SettingsGraphics, HomePanel);
         }
 
         public void OnSliderQualityChanged()
