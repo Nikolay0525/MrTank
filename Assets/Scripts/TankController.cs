@@ -20,7 +20,7 @@ namespace Assets.Scripts
 
         [Header("Movement Dynamics")]
         public float accelerationRate = 2.5f;
-        public float decelerationRate = 5f; // Braking is usually faster than accelerating
+        public float decelerationRate = 5f;
 
         private float targetGlobalSpeed = 0f;
 
@@ -42,6 +42,8 @@ namespace Assets.Scripts
 
         private void Awake()
         {
+            TerrainChunk.hasGarageSpawned = false;
+
             if (shouldAutoStart)
             {
                 SetState(TankState.Driving);

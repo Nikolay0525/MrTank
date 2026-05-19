@@ -150,6 +150,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TerrainChunk
   isBackgroundMode: 1
+  enableStartingFlatZone: 0
+  flatZoneLength: 10
+  flatZoneTransition: 10
   grassOffset: 0.05
   grassZOffset: 0
   enemyZOffset: 0
@@ -181,6 +184,7 @@ MonoBehaviour:
     maxSlopeAngle: 30
     zOffset: 2
     yOffset: 0
+    allowSpawnInStartZone: 1
   - name: Bushes
     mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
     materials:
@@ -199,6 +203,7 @@ MonoBehaviour:
     maxSlopeAngle: 30
     zOffset: 10
     yOffset: 0
+    allowSpawnInStartZone: 1
   - name: Stumps
     mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
     materials:
@@ -215,6 +220,7 @@ MonoBehaviour:
     maxSlopeAngle: 30
     zOffset: 10
     yOffset: 0
+    allowSpawnInStartZone: 1
   - name: Buildings
     mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
     materials:
@@ -233,6 +239,7 @@ MonoBehaviour:
     maxSlopeAngle: 5
     zOffset: 9
     yOffset: 0
+    allowSpawnInStartZone: 1
   - name: Debris
     mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
     materials:
@@ -249,6 +256,7 @@ MonoBehaviour:
     maxSlopeAngle: 5
     zOffset: 9
     yOffset: 0
+    allowSpawnInStartZone: 1
   - name: Rocks
     mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
     materials:
@@ -266,6 +274,7 @@ MonoBehaviour:
     maxSlopeAngle: 30
     zOffset: 10
     yOffset: -0.8
+    allowSpawnInStartZone: 1
 --- !u!114 &7858635064554456804
 MonoBehaviour:
   m_ObjectHideFlags: 0

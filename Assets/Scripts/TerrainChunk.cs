@@ -28,6 +28,9 @@ namespace Assets.Scripts
         public float maxSlopeAngle = 25f;
         public float zOffset = 1f;
         public float yOffset = 0f;
+
+        [Header("Spawn Rules")]
+        public bool allowSpawnInStartZone = true;
     }
 
     public struct SceneryGenData
@@ -44,6 +47,7 @@ namespace Assets.Scripts
         public float maxSlopeAngle;
         public float zOffset;
         public float yOffset;
+        public bool allowSpawnInStartZone;
     }
 
     [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer), typeof(EdgeCollider2D))]
@@ -51,6 +55,11 @@ namespace Assets.Scripts
     {
         [Header("Layer Settings")]
         public bool isBackgroundMode = false;
+
+        [Header("Starting Zone Settings")]
+        public bool enableStartingFlatZone = true;
+        public float flatZoneLength = 10f;
+        public float flatZoneTransition = 10f;
 
         [Header("Overall Y-Axis Params")]
         public float grassOffset = 0.15f;
@@ -72,6 +81,14 @@ namespace Assets.Scripts
         public float heightMultiplier = 5f;
         public float noiseScale = 0.05f;
         public int resolution = 20;
+
+        [Header("Garage Settings")]
+        public GameObject garagePrefab;
+        public bool spawnGarage = false;
+        public float targetGarageGlobalX = 5f; 
+        public Vector3 garageOffset = new Vector3(0f, 0f, 0f);
+
+        public static bool hasGarageSpawned = false;
 
         [Header("Repair Station Settings")]
         public GameObject repairStationPrefab;
@@ -200,12 +217,13 @@ namespace Assets.Scripts
                     edgeMargin = scenerySettings[i].edgeMargin, 
                     maxSlopeAngle = scenerySettings[i].maxSlopeAngle,
                     zOffset = scenerySettings[i].zOffset,
-                    yOffset = scenerySettings[i].yOffset
+                    yOffset = scenerySettings[i].yOffset,
+                    allowSpawnInStartZone = scenerySettings[i].allowSpawnInStartZone
                 };
             }
 
             ChunkData data = await Task.Run(() =>
-                CalculateChunkData(globalXOffset, currentSeed, currentWidth, currentRes, currentHMulti, currentNScale, currentTScale, genData)
+                CalculateChunkData(globalXOffset, currentSeed, currentWidth, currentRes, currentHMulti, currentNScale, currentTScale, enableStartingFlatZone, flatZoneLength, flatZoneTransition, genData)
             );
 
             if (this == null) return;
@@ -245,14 +263,12 @@ namespace Assets.Scripts
             {
                 SpawnEnemy(data.colliderPoints);
                 SpawnRepairStation(data.colliderPoints);
+                SpawnGarage(data.colliderPoints, globalXOffset);
             }
         }
 
-        private ChunkData CalculateChunkData(float globalXOffset, float seed, float w, int res, float hMulti, float nScale, float tScale, SceneryGenData[] sceneryGenData)
+        private ChunkData CalculateChunkData(float globalXOffset, float seed, float w, int res, float hMulti, float nScale, float tScale, bool enableFlatZone, float flatZone, float transitionZone, SceneryGenData[] sceneryGenData)
         {
-            float flatZone = 10f;
-            float transitionZone = 10f;
-
             int overlapRes = res + 1;
             Vector3[] vertices = new Vector3[overlapRes + 1];
             Vector2[] colliderPoints = new Vector2[overlapRes + 1];
@@ -268,15 +284,17 @@ namespace Assets.Scripts
                 float centeredNoise = (rawNoise * 2f) - 1f;
 
                 float rawY = centeredNoise * hMulti;
-                float weight = 0f;
+                float weight = 1f;
 
-                if (globalX <= flatZone) weight = 0f;
-                else if (globalX <= flatZone + transitionZone)
+                if (enableFlatZone)
                 {
-                    float t = (globalX - flatZone) / transitionZone;
-                    weight = Mathf.SmoothStep(0f, 1f, t);
+                    if (globalX <= flatZone) weight = 0f;
+                    else if (globalX <= flatZone + transitionZone)
+                    {
+                        float t = (globalX - flatZone) / transitionZone;
+                        weight = Mathf.SmoothStep(0f, 1f, t);
+                    }
                 }
-                else weight = 1f;
 
                 float finalY = rawY * weight;
 
@@ -345,6 +363,8 @@ namespace Assets.Scripts
             for (int i = 1; i < colliderPoints.Length - 1; i++)
             {
                 Vector2 currentPoint = colliderPoints[i];
+                float currentGlobalX = globalXOffset + currentPoint.x;
+
                 Vector2 nextPoint = colliderPoints[i + 1];
                 Vector2 prevPoint = colliderPoints[i - 1];
                 Vector2 surfaceDirection = (nextPoint - prevPoint).normalized;
@@ -357,6 +377,11 @@ namespace Assets.Scripts
                     SceneryGenData sData = sceneryGenData[s];
 
                     if (sData.materialsCount == 0) continue;
+
+                    if (enableFlatZone && !sData.allowSpawnInStartZone && currentGlobalX <= flatZone)
+                    {
+                        continue;
+                    }
 
                     if (currentPoint.x < sData.edgeMargin || currentPoint.x > (w - sData.edgeMargin))
                     {
@@ -552,6 +577,44 @@ namespace Assets.Scripts
 
                 DifficultyManager.Instance.ResetStationCounter();
             }
+        }
+
+        private void SpawnGarage(Vector2[] colliderPoints, float globalXOffset)
+        {
+            if (!spawnGarage || hasGarageSpawned || garagePrefab == null)
+            {
+                return;
+            }
+
+            float chunkEndX = globalXOffset + width;
+            if (targetGarageGlobalX < globalXOffset || targetGarageGlobalX > chunkEndX)
+            {
+                return;
+            }
+
+            float localX = targetGarageGlobalX - globalXOffset;
+            float localY = 0f;
+
+            for (int i = 0; i < colliderPoints.Length - 1; i++)
+            {
+                if (localX >= colliderPoints[i].x && localX <= colliderPoints[i + 1].x)
+                {
+                    float t = (localX - colliderPoints[i].x) / (colliderPoints[i + 1].x - colliderPoints[i].x);
+                    localY = Mathf.Lerp(colliderPoints[i].y, colliderPoints[i + 1].y, t);
+                    break;
+                }
+            }
+
+            Vector3 finalSpawnPosition = new Vector3(
+                targetGarageGlobalX + garageOffset.x,
+                transform.position.y + localY + garageOffset.y,
+                transform.position.z + garageOffset.z
+            );
+
+            GameObject garage = Instantiate(garagePrefab, finalSpawnPosition, Quaternion.identity, this.transform);
+            garage.SetActive(true);
+
+            hasGarageSpawned = true;
         }
     }
 }

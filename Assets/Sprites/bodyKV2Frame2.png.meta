@@ -1,16 +1,10 @@
 fileFormatVersion: 2
-guid: 774cc6460d8bad04ab4ef8d2d8f7402d
+guid: 05347bff0e4734d4ab8c7628f7ce36ad
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 1303778731702983305
-    second: birdFrame1_0
-  - first:
-      213: -8009364660251056378
-    second: birdFrame1_1
-  - first:
-      213: -7589515110171907535
-    second: birdFrame1_2
+      213: -577040965610235504
+    second: bodyKV2Frame2_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -43,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -132,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: birdFrame1_0
+      name: bodyKV2Frame2_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 32
-        width: 39
-        height: 15
+        x: 9
+        y: 0
+        width: 175
+        height: 81
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -147,52 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 98a9dd849d3f71210800000000000000
-      internalID: 1303778731702983305
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: birdFrame1_1
-      rect:
-        serializedVersion: 2
-        x: 21
-        y: 44
-        width: 43
-        height: 9
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 6072b25e64509d090800000000000000
-      internalID: -8009364660251056378
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: birdFrame1_2
-      rect:
-        serializedVersion: 2
-        x: 22
-        y: 18
-        width: 42
-        height: 11
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 13a6eb0e730aca690800000000000000
-      internalID: -7589515110171907535
+      spriteID: 09914ff8c40fdf7f0800000000000000
+      internalID: -577040965610235504
       vertices: []
       indices: 
       edges: []
@@ -211,9 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      birdFrame1_0: 1303778731702983305
-      birdFrame1_1: -8009364660251056378
-      birdFrame1_2: -7589515110171907535
+      bodyKV2Frame2_0: -577040965610235504
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -151,8 +151,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TerrainChunk
   isBackgroundMode: 0
+  enableStartingFlatZone: 1
+  flatZoneLength: 20
+  flatZoneTransition: 20
   grassOffset: 0.15
-  grassZOffset: -5
+  grassZOffset: -2
   enemyZOffset: 5
   repairStationZOffset: 1
   grassTopRenderer: {fileID: 7416177845048196820}
@@ -162,6 +165,10 @@ MonoBehaviour:
   heightMultiplier: 2
   noiseScale: 0.05
   resolution: 20
+  garagePrefab: {fileID: 8906012906126540324, guid: 7f78c59aeba2c054299bfadde65a4a55, type: 3}
+  spawnGarage: 1
+  targetGarageGlobalX: 0
+  garageOffset: {x: -3, y: 0.9, z: 1}
   repairStationPrefab: {fileID: 9148085346665096821, guid: 86f52a4ab5b89b14398c172b0a26b42c, type: 3}
   repairStationSpawnChance: 0.5
   scenerySettings:
@@ -182,6 +189,7 @@ MonoBehaviour:
     maxSlopeAngle: 30
     zOffset: 10
     yOffset: 0
+    allowSpawnInStartZone: 1
   - name: Bushes
     mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
     materials:
@@ -200,6 +208,7 @@ MonoBehaviour:
     maxSlopeAngle: 30
     zOffset: 10
     yOffset: 0
+    allowSpawnInStartZone: 1
   - name: Stumps
     mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
     materials:
@@ -216,6 +225,7 @@ MonoBehaviour:
     maxSlopeAngle: 30
     zOffset: 10
     yOffset: 0
+    allowSpawnInStartZone: 1
   - name: Buildings
     mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
     materials:
@@ -234,6 +244,7 @@ MonoBehaviour:
     maxSlopeAngle: 5
     zOffset: 9
     yOffset: 0
+    allowSpawnInStartZone: 0
   - name: Debris
     mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
     materials:
@@ -250,6 +261,7 @@ MonoBehaviour:
     maxSlopeAngle: 5
     zOffset: 9
     yOffset: 0
+    allowSpawnInStartZone: 0
   - name: Rocks
     mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
     materials:
@@ -267,6 +279,7 @@ MonoBehaviour:
     maxSlopeAngle: 30
     zOffset: 10
     yOffset: -0.25
+    allowSpawnInStartZone: 1
 --- !u!114 &6155246829787254093
 MonoBehaviour:
   m_ObjectHideFlags: 0

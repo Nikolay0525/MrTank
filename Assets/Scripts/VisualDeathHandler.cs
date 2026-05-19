@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 namespace Assets.Scripts
 {
@@ -9,7 +10,11 @@ namespace Assets.Scripts
         public Vector3 baseStainSize = new Vector3(3f, 6f, 1);
 
         [Header("Tank Effects (Attached)")]
-        public ParticleSystem fireEffect;
+        public GameObject fireObject;
+        [Tooltip("How long the fire stays active before hiding")]
+        public float fireDuration = 3f;
+        [Tooltip("Duration of the fire scale up and scale down animations")]
+        public float fireScaleDuration = 0.5f;
 
         [Header("Ground Effects (Pooled)")]
         [Tooltip("Exact name of the stain/mask object inside the prefab")]
@@ -17,20 +22,100 @@ namespace Assets.Scripts
         [Tooltip("Exact name of the explosion animation object inside the prefab")]
         public string explosionChildName = "Explosion";
 
+        [Tooltip("Time before the burnt grass mask appears")]
+        public float stainAppearanceDelay = 1f;
+
         [Header("Offsets (Local)")]
         public Vector3 stainOffset = new Vector3(0, 0, 0);
         public Vector3 explosionOffset = new Vector3(0, 0.5f, 0);
 
         [Header("Randomization")]
-        [Tooltip("Random scale multiplier (e.g., 0.8 to 1.2)")]
+        [Tooltip("Random stain/explosion scale multiplier (e.g., 0.8 to 1.2)")]
         public Vector2 sizeRandomRange = new Vector2(0.8f, 1.2f);
         [Tooltip("Random angle variation for the explosion animation")]
         public float explosionAngleRandomRange = 15f;
         [Tooltip("Should the ground stain have a fully random 360-degree rotation?")]
         public bool fullyRandomStainRotation = true;
 
+        [Header("Animation")]
+        [Tooltip("Reference to the Animator component used for vibration. Will be auto-assigned if empty.")]
+        public Animator objectAnimator;
+
+        private Coroutine fireAnimationCoroutine;
+        private Coroutine stainDelayCoroutine;
+
+        private Vector3 initialFireScale;
+
+        private void Awake()
+        {
+            if (fireObject != null)
+            {
+                initialFireScale = fireObject.transform.localScale;
+            }
+
+            if (objectAnimator == null)
+            {
+                objectAnimator = GetComponentInChildren<Animator>();
+            }
+        }
+
+        private void OnEnable()
+        {
+            if (objectAnimator != null)
+            {
+                objectAnimator.enabled = true;
+            }
+        }
+
+        private IEnumerator FireAnimationRoutine()
+        {
+            if (fireObject == null) yield break;
+
+            fireObject.transform.localScale = Vector3.zero;
+            fireObject.SetActive(true);
+
+            float time = 0f;
+            while (time < fireScaleDuration)
+            {
+                time += Time.deltaTime;
+                float normalizedTime = time / fireScaleDuration;
+                fireObject.transform.localScale = Vector3.Lerp(Vector3.zero, initialFireScale, normalizedTime);
+                yield return null;
+            }
+            fireObject.transform.localScale = initialFireScale;
+
+            yield return new WaitForSeconds(fireDuration);
+
+            time = 0f;
+            while (time < fireScaleDuration)
+            {
+                time += Time.deltaTime;
+                float normalizedTime = time / fireScaleDuration;
+                fireObject.transform.localScale = Vector3.Lerp(initialFireScale, Vector3.zero, normalizedTime);
+                yield return null;
+            }
+
+            fireObject.transform.localScale = Vector3.zero;
+            fireObject.SetActive(false);
+        }
+
+        private IEnumerator ShowStainRoutine(GameObject stainObj, float delay)
+        {
+            yield return new WaitForSeconds(delay);
+
+            if (stainObj != null)
+            {
+                stainObj.SetActive(true);
+            }
+        }
+
         public void HandleDeathVisuals()
         {
+            if (objectAnimator != null)
+            {
+                objectAnimator.enabled = false;
+            }
+
             SpriteRenderer[] allRenderers = GetComponentsInChildren<SpriteRenderer>(true);
             SpriteRenderer mainSprite = null;
 
@@ -38,6 +123,11 @@ namespace Assets.Scripts
             {
                 if (sr != null)
                 {
+                    if (fireObject != null && sr.transform.IsChildOf(fireObject.transform))
+                    {
+                        continue;
+                    }
+
                     sr.color = Color.black;
                     if (mainSprite == null) mainSprite = sr;
                 }
@@ -49,10 +139,16 @@ namespace Assets.Scripts
                 col.enabled = false;
             }
 
-            if (fireEffect != null)
+            if (fireObject != null)
             {
-                fireEffect.transform.localScale = Vector3.one * baseExplosionSize;
-                fireEffect.Play();
+                fireObject.SetActive(true);
+
+                if (fireAnimationCoroutine != null)
+                {
+                    StopCoroutine(fireAnimationCoroutine);
+                }
+
+                fireAnimationCoroutine = StartCoroutine(FireAnimationRoutine());
             }
 
             if (DeathEffectPoolManager.Instance != null)
@@ -93,6 +189,15 @@ namespace Assets.Scripts
                         {
                             stainTransform.localRotation = Quaternion.identity;
                         }
+
+                        stainTransform.gameObject.SetActive(false);
+
+                        if (stainDelayCoroutine != null)
+                        {
+                            StopCoroutine(stainDelayCoroutine);
+                        }
+
+                        stainDelayCoroutine = StartCoroutine(ShowStainRoutine(stainTransform.gameObject, stainAppearanceDelay));
                     }
 
                     if (explosionTransform != null)
@@ -113,10 +218,19 @@ namespace Assets.Scripts
 
         public void ResetVisuals()
         {
+            if (objectAnimator != null)
+            {
+                objectAnimator.enabled = true;
+            }
+
             SpriteRenderer[] allRenderers = GetComponentsInChildren<SpriteRenderer>(true);
             foreach (SpriteRenderer sr in allRenderers)
             {
-                if (sr != null) sr.color = Color.white;
+                if (fireObject != null && sr.transform.IsChildOf(fireObject.transform))
+                {
+                    continue;
+                }
+                sr.color = Color.white;
             }
 
             Collider2D[] colliders = GetComponentsInChildren<Collider2D>(true);
@@ -125,10 +239,22 @@ namespace Assets.Scripts
                 col.enabled = true;
             }
 
-            if (fireEffect != null)
+            if (fireAnimationCoroutine != null)
             {
-                fireEffect.Stop();
-                fireEffect.Clear();
+                StopCoroutine(fireAnimationCoroutine);
+                fireAnimationCoroutine = null;
+            }
+
+            if (fireObject != null)
+            {
+                fireObject.SetActive(false);
+                fireObject.transform.localScale = initialFireScale;
+            }
+
+            if (stainDelayCoroutine != null)
+            {
+                StopCoroutine(stainDelayCoroutine);
+                stainDelayCoroutine = null;
             }
         }
     }
