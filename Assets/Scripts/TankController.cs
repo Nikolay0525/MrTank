@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 
 namespace Assets.Scripts
 {
@@ -60,10 +61,29 @@ namespace Assets.Scripts
 
         private void Update()
         {
+            if (Mathf.Approximately(Time.timeScale, 0f))
+                return;
+
             ProcessState();
             UpdateGlobalSpeed();
         }
+        private bool IsPointerOverUI()
+        {
+            if (EventSystem.current == null) return false;
 
+            if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
+            {
+                return EventSystem.current.IsPointerOverGameObject();
+            }
+
+            if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.wasPressedThisFrame)
+            {
+                int touchId = Touchscreen.current.primaryTouch.touchId.ReadValue();
+                return EventSystem.current.IsPointerOverGameObject(touchId);
+            }
+
+            return false;
+        }
         private void UpdateGlobalSpeed()
         {
             if (Mathf.Approximately(CurrentGlobalSpeed, targetGlobalSpeed))
@@ -102,8 +122,11 @@ namespace Assets.Scripts
                     }
 
                     bool isFired = false;
-                    if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame) isFired = true;
-                    else if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.wasPressedThisFrame) isFired = true;
+                    if (!IsPointerOverUI())
+                    {
+                        if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame) isFired = true;
+                        else if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.wasPressedThisFrame) isFired = true;
+                    }
 
                     if (isFired)
                     {

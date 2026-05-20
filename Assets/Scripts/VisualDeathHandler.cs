@@ -15,6 +15,8 @@ namespace Assets.Scripts
         public float fireDuration = 3f;
         [Tooltip("Duration of the fire scale up and scale down animations")]
         public float fireScaleDuration = 0.5f;
+        [Tooltip("Regulates how chunky are animation resized during time, more means more smooth")]
+        public int fireReSizeAnimationSteps = 10;
 
         [Header("Ground Effects (Pooled)")]
         [Tooltip("Exact name of the stain/mask object inside the prefab")]
@@ -79,7 +81,10 @@ namespace Assets.Scripts
             {
                 time += Time.deltaTime;
                 float normalizedTime = time / fireScaleDuration;
-                fireObject.transform.localScale = Vector3.Lerp(Vector3.zero, initialFireScale, normalizedTime);
+
+                float steppedTime = Mathf.Floor(normalizedTime * fireReSizeAnimationSteps) / fireReSizeAnimationSteps;
+
+                fireObject.transform.localScale = Vector3.Lerp(Vector3.zero, initialFireScale, steppedTime);
                 yield return null;
             }
             fireObject.transform.localScale = initialFireScale;
@@ -91,7 +96,10 @@ namespace Assets.Scripts
             {
                 time += Time.deltaTime;
                 float normalizedTime = time / fireScaleDuration;
-                fireObject.transform.localScale = Vector3.Lerp(initialFireScale, Vector3.zero, normalizedTime);
+
+                float steppedTime = Mathf.Floor(normalizedTime * fireReSizeAnimationSteps) / fireReSizeAnimationSteps;
+
+                fireObject.transform.localScale = Vector3.Lerp(initialFireScale, Vector3.zero, steppedTime);
                 yield return null;
             }
 

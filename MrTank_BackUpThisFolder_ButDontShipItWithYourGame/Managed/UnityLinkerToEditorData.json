@@ -9,14 +9,26 @@
         "name": "Animation",
         "dependencies": [
           {
+            "name": "AnimationClip",
+            "scenes": [
+              "Assets/Scenes/MrTankScene.unity"
+            ],
+            "dependencyType": 0,
+            "icon": null
+          },
+          {
             "name": "Animator",
-            "scenes": [],
+            "scenes": [
+              "Assets/Scenes/MrTankScene.unity"
+            ],
             "dependencyType": 0,
             "icon": null
           },
           {
             "name": "AnimatorController",
-            "scenes": [],
+            "scenes": [
+              "Assets/Scenes/MrTankScene.unity"
+            ],
             "dependencyType": 1,
             "icon": null
           },
@@ -24,6 +36,12 @@
             "name": "AnimatorOverrideController",
             "scenes": [],
             "dependencyType": 0,
+            "icon": null
+          },
+          {
+            "name": "Motion",
+            "scenes": [],
+            "dependencyType": 1,
             "icon": null
           },
           {
@@ -40,7 +58,7 @@
           {
             "name": "AudioBehaviour",
             "scenes": [
-              "Assets/Scenes/Game.unity"
+              "Assets/Scenes/MrTankScene.unity"
             ],
             "dependencyType": 0,
             "icon": null
@@ -54,7 +72,7 @@
           {
             "name": "AudioListener",
             "scenes": [
-              "Assets/Scenes/Game.unity"
+              "Assets/Scenes/MrTankScene.unity"
             ],
             "dependencyType": 0,
             "icon": null
@@ -97,7 +115,7 @@
           {
             "name": "Camera",
             "scenes": [
-              "Assets/Scenes/Game.unity"
+              "Assets/Scenes/MrTankScene.unity"
             ],
             "dependencyType": 0,
             "icon": null
@@ -135,7 +153,7 @@
           {
             "name": "EditorExtension",
             "scenes": [
-              "Assets/Scenes/Game.unity"
+              "Assets/Scenes/MrTankScene.unity"
             ],
             "dependencyType": 1,
             "icon": null
@@ -149,7 +167,7 @@
           {
             "name": "GameObject",
             "scenes": [
-              "Assets/Scenes/Game.unity"
+              "Assets/Scenes/MrTankScene.unity"
             ],
             "dependencyType": 0,
             "icon": null
@@ -175,7 +193,7 @@
           {
             "name": "LevelGameManager",
             "scenes": [
-              "Assets/Scenes/Game.unity"
+              "Assets/Scenes/MrTankScene.unity"
             ],
             "dependencyType": 1,
             "icon": null
@@ -207,7 +225,7 @@
           {
             "name": "LightmapSettings",
             "scenes": [
-              "Assets/Scenes/Game.unity"
+              "Assets/Scenes/MrTankScene.unity"
             ],
             "dependencyType": 0,
             "icon": null
@@ -215,7 +233,7 @@
           {
             "name": "LineRenderer",
             "scenes": [
-              "Assets/Scenes/Game.unity"
+              "Assets/Scenes/MrTankScene.unity"
             ],
             "dependencyType": 0,
             "icon": null
@@ -229,7 +247,7 @@
           {
             "name": "Material",
             "scenes": [
-              "Assets/Scenes/Game.unity"
+              "Assets/Scenes/MrTankScene.unity"
             ],
             "dependencyType": 0,
             "icon": null
@@ -237,7 +255,7 @@
           {
             "name": "Mesh",
             "scenes": [
-              "Assets/Scenes/Game.unity"
+              "Assets/Scenes/MrTankScene.unity"
             ],
             "dependencyType": 0,
             "icon": null
@@ -245,7 +263,7 @@
           {
             "name": "MeshFilter",
             "scenes": [
-              "Assets/Scenes/Game.unity"
+              "Assets/Scenes/MrTankScene.unity"
             ],
             "dependencyType": 0,
             "icon": null
@@ -253,7 +271,7 @@
           {
             "name": "MeshRenderer",
             "scenes": [
-              "Assets/Scenes/Game.unity"
+              "Assets/Scenes/MrTankScene.unity"
             ],
             "dependencyType": 0,
             "icon": null
@@ -261,7 +279,7 @@
           {
             "name": "MonoBehaviour",
             "scenes": [
-              "Assets/Scenes/Game.unity"
+              "Assets/Scenes/MrTankScene.unity"
             ],
             "dependencyType": 0,
             "icon": null
@@ -275,7 +293,7 @@
           {
             "name": "MonoScript",
             "scenes": [
-              "Assets/Scenes/Game.unity"
+              "Assets/Scenes/MrTankScene.unity"
             ],
             "dependencyType": 1,
             "icon": null
@@ -283,7 +301,7 @@
           {
             "name": "NamedObject",
             "scenes": [
-              "Assets/Scenes/Game.unity"
+              "Assets/Scenes/MrTankScene.unity"
             ],
             "dependencyType": 1,
             "icon": null
@@ -315,7 +333,7 @@
           {
             "name": "RectTransform",
             "scenes": [
-              "Assets/Scenes/Game.unity"
+              "Assets/Scenes/MrTankScene.unity"
             ],
             "dependencyType": 0,
             "icon": null
@@ -329,7 +347,7 @@
           {
             "name": "RenderSettings",
             "scenes": [
-              "Assets/Scenes/Game.unity"
+              "Assets/Scenes/MrTankScene.unity"
             ],
             "dependencyType": 0,
             "icon": null
@@ -361,7 +379,7 @@
           {
             "name": "Shader",
             "scenes": [
-              "Assets/Scenes/Game.unity"
+              "Assets/Scenes/MrTankScene.unity"
             ],
             "dependencyType": 0,
             "icon": null
@@ -381,7 +399,7 @@
           {
             "name": "Sprite",
             "scenes": [
-              "Assets/Scenes/Game.unity"
+              "Assets/Scenes/MrTankScene.unity"
             ],
             "dependencyType": 0,
             "icon": null
@@ -395,7 +413,7 @@
           {
             "name": "SpriteRenderer",
             "scenes": [
-              "Assets/Scenes/Game.unity"
+              "Assets/Scenes/MrTankScene.unity"
             ],
             "dependencyType": 0,
             "icon": null
@@ -415,7 +433,7 @@
           {
             "name": "Texture",
             "scenes": [
-              "Assets/Scenes/Game.unity"
+              "Assets/Scenes/MrTankScene.unity"
             ],
             "dependencyType": 0,
             "icon": null
@@ -423,7 +441,7 @@
           {
             "name": "Texture2D",
             "scenes": [
-              "Assets/Scenes/Game.unity"
+              "Assets/Scenes/MrTankScene.unity"
             ],
             "dependencyType": 0,
             "icon": null
@@ -483,6 +501,12 @@
             "icon": "package/com.unity.modules.graphicsstatecollectionserializer"
           },
           {
+            "name": "Required by Grid Module",
+            "scenes": [],
+            "dependencyType": 2,
+            "icon": "package/com.unity.modules.grid"
+          },
+          {
             "name": "Required by HierarchyCore Module",
             "scenes": [],
             "dependencyType": 2,
@@ -537,6 +561,12 @@
             "icon": "package/com.unity.modules.jsonserialize"
           },
           {
+            "name": "Required by ParticleSystem Module",
+            "scenes": [],
+            "dependencyType": 2,
+            "icon": "package/com.unity.modules.particlesystem"
+          },
+          {
             "name": "Required by Physics Module",
             "scenes": [],
             "dependencyType": 2,
@@ -567,6 +597,18 @@
             "icon": "package/com.unity.modules.runtimeinitializeonloadmanagerinitializer"
           },
           {
+            "name": "Required by SpriteMask Module",
+            "scenes": [],
+            "dependencyType": 2,
+            "icon": "package/com.unity.modules.spritemask"
+          },
+          {
+            "name": "Required by SpriteShape Module",
+            "scenes": [],
+            "dependencyType": 2,
+            "icon": "package/com.unity.modules.spriteshape"
+          },
+          {
             "name": "Required by TLS Module",
             "scenes": [],
             "dependencyType": 2,
@@ -589,6 +631,12 @@
             "scenes": [],
             "dependencyType": 2,
             "icon": "package/com.unity.modules.textrendering"
+          },
+          {
+            "name": "Required by Tilemap Module",
+            "scenes": [],
+            "dependencyType": 2,
+            "icon": "package/com.unity.modules.tilemap"
           },
           {
             "name": "Required by UI Module",
@@ -653,6 +701,23 @@
             "scenes": [],
             "dependencyType": 3,
             "icon": "class/DefaultAsset"
+          }
+        ]
+      },
+      {
+        "name": "Grid",
+        "dependencies": [
+          {
+            "name": "GridLayout",
+            "scenes": [],
+            "dependencyType": 0,
+            "icon": null
+          },
+          {
+            "name": "Required by Tilemap Module",
+            "scenes": [],
+            "dependencyType": 2,
+            "icon": "package/com.unity.modules.tilemap"
           }
         ]
       },
@@ -814,6 +879,23 @@
         ]
       },
       {
+        "name": "ParticleSystem",
+        "dependencies": [
+          {
+            "name": "ParticleSystem",
+            "scenes": [],
+            "dependencyType": 0,
+            "icon": null
+          },
+          {
+            "name": "ParticleSystemRenderer",
+            "scenes": [],
+            "dependencyType": 0,
+            "icon": null
+          }
+        ]
+      },
+      {
         "name": "Physics",
         "dependencies": [
           {
@@ -854,7 +936,7 @@
           {
             "name": "BoxCollider2D",
             "scenes": [
-              "Assets/Scenes/Game.unity"
+              "Assets/Scenes/MrTankScene.unity"
             ],
             "dependencyType": 0,
             "icon": null
@@ -862,7 +944,7 @@
           {
             "name": "CircleCollider2D",
             "scenes": [
-              "Assets/Scenes/Game.unity"
+              "Assets/Scenes/MrTankScene.unity"
             ],
             "dependencyType": 0,
             "icon": null
@@ -876,7 +958,7 @@
           {
             "name": "EdgeCollider2D",
             "scenes": [
-              "Assets/Scenes/Game.unity"
+              "Assets/Scenes/MrTankScene.unity"
             ],
             "dependencyType": 0,
             "icon": null
@@ -890,10 +972,16 @@
           {
             "name": "Rigidbody2D",
             "scenes": [
-              "Assets/Scenes/Game.unity"
+              "Assets/Scenes/MrTankScene.unity"
             ],
             "dependencyType": 0,
             "icon": null
+          },
+          {
+            "name": "Required by Tilemap Module",
+            "scenes": [],
+            "dependencyType": 2,
+            "icon": "package/com.unity.modules.tilemap"
           }
         ]
       },
@@ -970,6 +1058,12 @@
             "icon": "package/com.unity.modules.graphicsstatecollectionserializer"
           },
           {
+            "name": "Required by Grid Module",
+            "scenes": [],
+            "dependencyType": 2,
+            "icon": "package/com.unity.modules.grid"
+          },
+          {
             "name": "Required by HierarchyCore Module",
             "scenes": [],
             "dependencyType": 2,
@@ -1024,6 +1118,12 @@
             "icon": "package/com.unity.modules.jsonserialize"
           },
           {
+            "name": "Required by ParticleSystem Module",
+            "scenes": [],
+            "dependencyType": 2,
+            "icon": "package/com.unity.modules.particlesystem"
+          },
+          {
             "name": "Required by Physics Module",
             "scenes": [],
             "dependencyType": 2,
@@ -1054,6 +1154,18 @@
             "icon": "package/com.unity.modules.runtimeinitializeonloadmanagerinitializer"
           },
           {
+            "name": "Required by SpriteMask Module",
+            "scenes": [],
+            "dependencyType": 2,
+            "icon": "package/com.unity.modules.spritemask"
+          },
+          {
+            "name": "Required by SpriteShape Module",
+            "scenes": [],
+            "dependencyType": 2,
+            "icon": "package/com.unity.modules.spriteshape"
+          },
+          {
             "name": "Required by TLS Module",
             "scenes": [],
             "dependencyType": 2,
@@ -1076,6 +1188,12 @@
             "scenes": [],
             "dependencyType": 2,
             "icon": "package/com.unity.modules.textrendering"
+          },
+          {
+            "name": "Required by Tilemap Module",
+            "scenes": [],
+            "dependencyType": 2,
+            "icon": "package/com.unity.modules.tilemap"
           },
           {
             "name": "Required by UI Module",
@@ -1161,6 +1279,12 @@
             "icon": "package/com.unity.modules.graphicsstatecollectionserializer"
           },
           {
+            "name": "Required by Grid Module",
+            "scenes": [],
+            "dependencyType": 2,
+            "icon": "package/com.unity.modules.grid"
+          },
+          {
             "name": "Required by HierarchyCore Module",
             "scenes": [],
             "dependencyType": 2,
@@ -1215,6 +1339,12 @@
             "icon": "package/com.unity.modules.jsonserialize"
           },
           {
+            "name": "Required by ParticleSystem Module",
+            "scenes": [],
+            "dependencyType": 2,
+            "icon": "package/com.unity.modules.particlesystem"
+          },
+          {
             "name": "Required by Physics Module",
             "scenes": [],
             "dependencyType": 2,
@@ -1251,6 +1381,18 @@
             "icon": "package/com.unity.modules.scripting"
           },
           {
+            "name": "Required by SpriteMask Module",
+            "scenes": [],
+            "dependencyType": 2,
+            "icon": "package/com.unity.modules.spritemask"
+          },
+          {
+            "name": "Required by SpriteShape Module",
+            "scenes": [],
+            "dependencyType": 2,
+            "icon": "package/com.unity.modules.spriteshape"
+          },
+          {
             "name": "Required by TLS Module",
             "scenes": [],
             "dependencyType": 2,
@@ -1273,6 +1415,12 @@
             "scenes": [],
             "dependencyType": 2,
             "icon": "package/com.unity.modules.textrendering"
+          },
+          {
+            "name": "Required by Tilemap Module",
+            "scenes": [],
+            "dependencyType": 2,
+            "icon": "package/com.unity.modules.tilemap"
           },
           {
             "name": "Required by UI Module",
@@ -1315,6 +1463,30 @@
             "scenes": [],
             "dependencyType": 2,
             "icon": "package/com.unity.modules.unitywebrequest"
+          }
+        ]
+      },
+      {
+        "name": "SpriteMask",
+        "dependencies": [
+          {
+            "name": "SpriteMask",
+            "scenes": [
+              "Assets/Scenes/MrTankScene.unity"
+            ],
+            "dependencyType": 0,
+            "icon": null
+          }
+        ]
+      },
+      {
+        "name": "SpriteShape",
+        "dependencies": [
+          {
+            "name": "Required by SpriteMask Module",
+            "scenes": [],
+            "dependencyType": 2,
+            "icon": "package/com.unity.modules.spritemask"
           }
         ]
       },
@@ -1387,7 +1559,7 @@
           {
             "name": "Font",
             "scenes": [
-              "Assets/Scenes/Game.unity"
+              "Assets/Scenes/MrTankScene.unity"
             ],
             "dependencyType": 0,
             "icon": null
@@ -1425,12 +1597,35 @@
         ]
       },
       {
+        "name": "Tilemap",
+        "dependencies": [
+          {
+            "name": "Tilemap",
+            "scenes": [],
+            "dependencyType": 0,
+            "icon": null
+          },
+          {
+            "name": "TilemapRenderer",
+            "scenes": [],
+            "dependencyType": 0,
+            "icon": null
+          },
+          {
+            "name": "Required by SpriteMask Module",
+            "scenes": [],
+            "dependencyType": 2,
+            "icon": "package/com.unity.modules.spritemask"
+          }
+        ]
+      },
+      {
         "name": "UI",
         "dependencies": [
           {
             "name": "Canvas",
             "scenes": [
-              "Assets/Scenes/Game.unity"
+              "Assets/Scenes/MrTankScene.unity"
             ],
             "dependencyType": 0,
             "icon": null
@@ -1438,7 +1633,7 @@
           {
             "name": "CanvasGroup",
             "scenes": [
-              "Assets/Scenes/Game.unity"
+              "Assets/Scenes/MrTankScene.unity"
             ],
             "dependencyType": 0,
             "icon": null
@@ -1446,7 +1641,7 @@
           {
             "name": "CanvasRenderer",
             "scenes": [
-              "Assets/Scenes/Game.unity"
+              "Assets/Scenes/MrTankScene.unity"
             ],
             "dependencyType": 0,
             "icon": null

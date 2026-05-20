@@ -41,8 +41,8 @@ namespace Assets.Scripts
 
         public void UpdateButtonState()
         {
-            bool isUnlocked = StatsManager.Instance.currentStats.unlockedTankIDs.Contains(tankID);
-            bool isSelected = StatsManager.Instance.currentStats.selectedTankID == tankID;
+            bool isUnlocked = true; //StatsManager.Instance.currentStats.unlockedTankIDs.Contains(tankID);
+            bool isSelected = true; //StatsManager.Instance.currentStats.selectedTankID == tankID;
 
             if (isSelected)
             {

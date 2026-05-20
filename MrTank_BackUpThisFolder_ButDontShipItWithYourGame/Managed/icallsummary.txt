@@ -269,6 +269,7 @@ UnityEngine.AnimationCurve::Internal_Destroy
 UnityEngine.Animations.AnimationLayerMixerPlayable::SetSingleLayerOptimizationInternal
 UnityEngine.Animator::get_hasBoundPlayables_Injected
 UnityEngine.Animator::StringToHash_Injected
+UnityEngine.Animator::Play_Injected
 UnityEngine.Animator::ResetTriggerString_Injected
 UnityEngine.Animator::SetTriggerString_Injected
 UnityEngine.Application::get_isBatchMode
@@ -276,6 +277,7 @@ UnityEngine.Application::get_isFocused
 UnityEngine.Application::get_isPlaying
 UnityEngine.Application::get_runInBackground
 UnityEngine.Application::OpenURL_Injected
+UnityEngine.Application::get_persistentDataPath_Injected
 UnityEngine.Application::set_targetFrameRate
 UnityEngine.Application::get_platform
 UnityEngine.AsyncOperation::InternalDestroy
@@ -314,6 +316,7 @@ UnityEngine.Camera::ScreenToViewportPoint_Injected
 UnityEngine.Camera::SetupCurrent_Injected
 UnityEngine.Camera::WorldToScreenPoint_Injected
 UnityEngine.Camera::get_pixelRect_Injected
+UnityEngine.Camera::set_orthographicSize_Injected
 UnityEngine.Camera::set_rect_Injected
 UnityEngine.Camera::get_clearFlags_Injected
 UnityEngine.Camera::get_cameraType_Injected
@@ -459,6 +462,7 @@ UnityEngine.GameObject::GetComponentsInternal_Injected
 UnityEngine.GameObject::get_activeInHierarchy_Injected
 UnityEngine.GameObject::get_activeSelf_Injected
 UnityEngine.GameObject::get_layer_Injected
+UnityEngine.GameObject::FindGameObjectWithTag_Injected
 UnityEngine.GameObject::GetComponentInChildren_Injected
 UnityEngine.GameObject::GetComponentInParent_Injected
 UnityEngine.GameObject::GetComponent_Injected
@@ -758,6 +762,8 @@ UnityEngine.Object::FindObjectFromInstanceID_Injected
 UnityEngine.Object::ForceLoadFromInstanceID_Injected
 UnityEngine.Object::Internal_CloneSingleWithParent_Injected
 UnityEngine.Object::Internal_CloneSingle_Injected
+UnityEngine.Object::Internal_InstantiateSingleWithParent_Injected
+UnityEngine.Object::Internal_InstantiateSingle_Injected
 UnityEngine.Object::DestroyImmediate_Injected
 UnityEngine.Object::Destroy_Injected
 UnityEngine.Object::DontDestroyOnLoad_Injected
@@ -771,6 +777,11 @@ UnityEngine.Object::FindObjectsByType
 UnityEngine.Object::FindObjectsOfType
 UnityEngine.ObjectGUIState::Internal_Create
 UnityEngine.ObjectGUIState::Internal_Destroy
+UnityEngine.ParticleSystem::IsAlive_Injected
+UnityEngine.ParticleSystem::EmitOld_Internal_Injected
+UnityEngine.ParticleSystem::Emit_Injected
+UnityEngine.ParticleSystem::Emit_Internal_Injected
+UnityEngine.ParticleSystemRenderer::GetMeshes_Injected
 UnityEngine.Physics::get_invokeCollisionCallbacks
 UnityEngine.Physics::get_reuseCollisionCallbacks
 UnityEngine.Physics::GetBodyByInstanceID_Injected
@@ -852,6 +863,7 @@ UnityEngine.Renderer::get_sortingOrder_Injected
 UnityEngine.Renderer::GetMaterial_Injected
 UnityEngine.Renderer::GetSharedMaterial_Injected
 UnityEngine.Renderer::SetMaterial_Injected
+UnityEngine.Renderer::get_bounds_Injected
 UnityEngine.Renderer::set_enabled_Injected
 UnityEngine.Renderer::set_localBounds_Injected
 UnityEngine.Renderer::set_receiveShadows_Injected
@@ -892,6 +904,7 @@ UnityEngine.RenderTexture::SetShadowSamplingMode_Injected
 UnityEngine.RenderTexture::set_depthStencilFormat_Injected
 UnityEngine.RenderTexture::set_height_Injected
 UnityEngine.RenderTexture::set_width_Injected
+UnityEngine.Resources::EntityIdToObject_Injected
 UnityEngine.Resources::GetBuiltinResource_Injected
 UnityEngine.ResourcesAPIInternal::FindShaderByName_Injected
 UnityEngine.ResourcesAPIInternal::Load_Injected
@@ -1064,6 +1077,9 @@ UnityEngine.Texture2DArray::Internal_CreateImpl_Injected
 UnityEngine.Texture2DArray::get_isReadable_Injected
 UnityEngine.Texture3D::Internal_CreateImpl
 UnityEngine.Texture3D::get_isReadable_Injected
+UnityEngine.Tilemaps.Tilemap::RefreshTile_Injected
+UnityEngine.Tilemaps.Tilemap::RefreshTilesNative_Injected
+UnityEngine.Tilemaps.TilemapRenderer::OnSpriteAtlasRegistered_Injected
 UnityEngine.Time::get_realtimeSinceStartupAsDouble
 UnityEngine.Time::get_timeAsDouble
 UnityEngine.Time::get_frameCount

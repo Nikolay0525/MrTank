@@ -157,7 +157,7 @@ MonoBehaviour:
   grassOffset: 0.15
   grassZOffset: -2
   enemyZOffset: 5
-  repairStationZOffset: 2
+  repairStationZOffset: 3
   grassTopRenderer: {fileID: 7416177845048196820}
   burntGrassRenderer: {fileID: 2117682422374005071}
   textureScale: 1
@@ -167,8 +167,8 @@ MonoBehaviour:
   resolution: 20
   garagePrefab: {fileID: 8906012906126540324, guid: 7f78c59aeba2c054299bfadde65a4a55, type: 3}
   spawnGarage: 1
-  targetGarageGlobalX: 0
-  garageOffset: {x: -3, y: 0.9, z: 1}
+  targetGarageGlobalX: 10
+  garageOffset: {x: -13, y: 0.9, z: 1}
   repairStationPrefab: {fileID: 9148085346665096821, guid: 86f52a4ab5b89b14398c172b0a26b42c, type: 3}
   repairStationSpawnChance: 0.5
   scenerySettings:

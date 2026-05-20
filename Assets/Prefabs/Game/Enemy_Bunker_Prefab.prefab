@@ -314,8 +314,9 @@ MonoBehaviour:
   baseExplosionSize: 1.5
   baseStainSize: {x: 2, y: 4, z: 1}
   fireObject: {fileID: 723956966395960778}
-  fireDuration: 3
-  fireScaleDuration: 0.5
+  fireDuration: 2
+  fireScaleDuration: 1
+  fireReSizeAnimationSteps: 5
   stainChildName: Mask
   explosionChildName: Explosion
   stainAppearanceDelay: 1
@@ -617,11 +618,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3215626697290013203, guid: b2dc1da3f1aa0184eb91675123f94f88, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.4
+      value: 2.8
       objectReference: {fileID: 0}
     - target: {fileID: 3215626697290013203, guid: b2dc1da3f1aa0184eb91675123f94f88, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1.2
+      value: 2.4
       objectReference: {fileID: 0}
     - target: {fileID: 3215626697290013203, guid: b2dc1da3f1aa0184eb91675123f94f88, type: 3}
       propertyPath: m_LocalPosition.x
