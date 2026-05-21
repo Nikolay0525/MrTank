@@ -174,15 +174,15 @@ namespace Assets.Scripts
 
                 if (child.GetComponentInChildren<EnemyAI>(true) != null)
                 {
-                    EnemyPoolManager.Instance.ReturnEnemy(child);
+                    EnemySpawnerManager.Instance.ReturnEnemy(child);
                 }
                 else if (child.GetComponentInChildren<RepairStation>(true) != null)
                 {
-                    RepairStationPoolManager.Instance.ReturnRepairStation(child);
+                    PoolManager.Instance.ReturnObject(PoolType.RepairStation, child);
                 }
                 else if (child.GetComponent<GrassMarkFX>() != null)
                 {
-                    DeathEffectPoolManager.Instance.ReturnDeathEffect(child);
+                    PoolManager.Instance.ReturnObject(PoolType.DeathEffect, child);
                 }
                 else if (burntGrassRenderer != null && child == burntGrassRenderer.gameObject)
                 {
@@ -469,7 +469,7 @@ namespace Assets.Scripts
                     transform.position.z + enemyZOffset
                 );
 
-                GameObject enemy = EnemyPoolManager.Instance.TryGetEnemy();
+                GameObject enemy = EnemySpawnerManager.Instance.TryGetEnemy();
 
                 if (enemy != null)
                 {
@@ -565,7 +565,7 @@ namespace Assets.Scripts
                 transform.position.z + repairStationZOffset
             );
 
-            GameObject station = RepairStationPoolManager.Instance.GetRepairStation();
+            GameObject station = PoolManager.Instance.GetObject(PoolType.RepairStation);
 
             if (station != null)
             {

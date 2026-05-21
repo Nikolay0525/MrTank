@@ -81,7 +81,7 @@ namespace Assets.Scripts
 
             onResolutionCallback?.Invoke(isHit);
 
-            gameObject.SetActive(false);
+            PoolManager.Instance.ReturnObject(PoolType.Projectile, gameObject);
         }
 
         private void OnDisable()

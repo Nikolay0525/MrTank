@@ -25,7 +25,6 @@ namespace Assets.Scripts
                     playerHealth.Heal(healAmount);
                     isActiveIconObject.SetActive(false);
                     canHealAgain = false;
-                    //gameObject.SetActive(false);
                 }
             }
         }

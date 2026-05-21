@@ -77,7 +77,7 @@ namespace Assets.Scripts
             float worldAngleRad = gunPivot.eulerAngles.z * Mathf.Deg2Rad;
             Vector2 shootVector = new Vector2(Mathf.Cos(worldAngleRad), Mathf.Sin(worldAngleRad)) * projectileSpeed;
 
-            GameObject projectileInstance = ProjectilePoolManager.Instance.GetProjectile();
+            GameObject projectileInstance = PoolManager.Instance.GetObject(PoolType.Projectile);
 
             if (projectileInstance != null && firePoint != null)
             {

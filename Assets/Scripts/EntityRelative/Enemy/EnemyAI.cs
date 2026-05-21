@@ -119,7 +119,7 @@ namespace Assets.Scripts
                     fireEffectAnimator.Play(fireAnimationName, 0, 0f);
                 }
 
-                GameObject proj = ProjectilePoolManager.Instance.GetProjectile();
+                GameObject proj = PoolManager.Instance.GetObject(PoolType.Projectile);
                 proj.transform.position = firePoint.position;
                 proj.SetActive(true);
 
@@ -156,7 +156,7 @@ namespace Assets.Scripts
                     fireEffectAnimator.Play(fireAnimationName, 0, 0f);
                 }
 
-                GameObject proj = ProjectilePoolManager.Instance.GetProjectile();
+                GameObject proj = PoolManager.Instance.GetObject(PoolType.Projectile);
                 proj.transform.position = firePoint.position;
                 proj.SetActive(true);
 

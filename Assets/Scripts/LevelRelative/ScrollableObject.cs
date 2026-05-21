@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Assets.Scripts
 {
@@ -9,6 +10,7 @@ namespace Assets.Scripts
         public float despawnX = -30f;
 
         public float speedMultiplier = 1f;
+        public event Action<GameObject> OnDespawnReached;
 
         private void Update()
         {
@@ -18,13 +20,8 @@ namespace Assets.Scripts
 
             if (transform.position.x <= despawnX)
             {
-                Deactivate();
+                OnDespawnReached?.Invoke(gameObject);
             }
-        }
-
-        private void Deactivate()
-        {
-            gameObject.SetActive(false);
         }
     }
 }

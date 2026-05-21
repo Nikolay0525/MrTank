@@ -82,7 +82,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 4988968450402787727, guid: 3854b891c79f3814bae4acdb0a3b38d7, type: 3}
+  m_Sprite: {fileID: -4256865373228642391, guid: 8570273db95e91d4bb9049d4e7f8f2eb, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -102,7 +102,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7715024796706888240}
   - component: {fileID: 5162229523910723229}
-  - component: {fileID: 1684022914041299744}
+  - component: {fileID: 5441319811886816286}
   m_Layer: 9
   m_Name: Enemy_Body_Visual
   m_TagString: Untagged
@@ -123,7 +123,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 648302499871562819}
+  - {fileID: 3370321557363575795}
   - {fileID: 7447703699192111638}
   m_Father: {fileID: 3415866262798112228}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -176,7 +176,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -195516941540870080, guid: 36eaf96a125d3d0439654dd5e54579f8, type: 3}
+  m_Sprite: {fileID: 4032166741501277716, guid: c97731a6f74393e4cb391dbaf4bab6ab, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -186,7 +186,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!95 &1684022914041299744
+--- !u!95 &5441319811886816286
 Animator:
   serializedVersion: 7
   m_ObjectHideFlags: 0
@@ -196,7 +196,7 @@ Animator:
   m_GameObject: {fileID: 3272541949242042399}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 2311946daa26c8e48b5dd54cbe86b4e4, type: 2}
+  m_Controller: {fileID: 9100000, guid: cb93906cbe7dd9346b2e42f149431405, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -224,7 +224,7 @@ GameObject:
   - component: {fileID: 4292206461503941373}
   - component: {fileID: 8031972322344257965}
   m_Layer: 9
-  m_Name: Enemy_PzIV_Prefab
+  m_Name: Enemy_PzIII_Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -239,8 +239,8 @@ Transform:
   m_GameObject: {fileID: 5127492525543696117}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.4, y: 1.4, z: 1}
+  m_LocalPosition: {x: 0.00133, y: 1.35897, z: 0}
+  m_LocalScale: {x: 1.15, y: 1.15, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7715024796706888240}
@@ -266,7 +266,7 @@ MonoBehaviour:
     m_Bits: 256
   positionLerpSpeed: 15
   rotationLerpSpeed: 10
-  tankHeightOffset: 0.475
+  tankHeightOffset: 0.425
 --- !u!114 &210220284062044720
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -311,9 +311,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8378cc5507722b64caeb1419cf4dda3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Assets.Scripts.VisualDeathHandler
-  baseExplosionSize: 1.5
-  baseStainSize: {x: 2.5, y: 5, z: 1}
-  fireObject: {fileID: 3837501215612398496}
+  baseExplosionSize: 1.25
+  baseStainSize: {x: 9, y: 6, z: 1}
+  fireObject: {fileID: 1403848955302525968}
   fireDuration: 2
   fireScaleDuration: 1
   fireReSizeAnimationSteps: 5
@@ -325,7 +325,7 @@ MonoBehaviour:
   sizeRandomRange: {x: 1, y: 1.2}
   explosionAngleRandomRange: 15
   fullyRandomStainRotation: 0
-  objectAnimator: {fileID: 1684022914041299744}
+  objectAnimator: {fileID: 5441319811886816286}
 --- !u!61 &1009112534697212342
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -415,8 +415,8 @@ MonoBehaviour:
   firePoint: {fileID: 4066744998069205079}
   gunPivot: {fileID: 7447703699192111638}
   projectileSpeed: 12
-  damage: 50
-  projectileSize: 0.75
+  damage: 33
+  projectileSize: 0.5
   fireEffectAnimator: {fileID: 3036037697191947975}
   gunshotObj: {fileID: 2411878444813110846}
   fireAnimationName: Gunshot
@@ -446,7 +446,7 @@ Transform:
   m_GameObject: {fileID: 6699842397318382684}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.2, y: 0.185, z: 0}
+  m_LocalPosition: {x: -0.29, y: 0.14, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -604,7 +604,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
   m_SpriteSortPoint: 0
---- !u!1001 &2620823137434748496
+--- !u!1001 &172820035788902880
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -616,21 +616,25 @@ PrefabInstance:
       propertyPath: m_Name
       value: FireFX
       objectReference: {fileID: 0}
+    - target: {fileID: 1233568242700168688, guid: b2dc1da3f1aa0184eb91675123f94f88, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3215626697290013203, guid: b2dc1da3f1aa0184eb91675123f94f88, type: 3}
       propertyPath: m_LocalScale.x
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3215626697290013203, guid: b2dc1da3f1aa0184eb91675123f94f88, type: 3}
       propertyPath: m_LocalScale.y
-      value: 2.4
+      value: 2.6
       objectReference: {fileID: 0}
     - target: {fileID: 3215626697290013203, guid: b2dc1da3f1aa0184eb91675123f94f88, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.0191
+      value: 0.0042
       objectReference: {fileID: 0}
     - target: {fileID: 3215626697290013203, guid: b2dc1da3f1aa0184eb91675123f94f88, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.52
+      value: -0.57
       objectReference: {fileID: 0}
     - target: {fileID: 3215626697290013203, guid: b2dc1da3f1aa0184eb91675123f94f88, type: 3}
       propertyPath: m_LocalPosition.z
@@ -673,15 +677,15 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b2dc1da3f1aa0184eb91675123f94f88, type: 3}
---- !u!4 &648302499871562819 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3215626697290013203, guid: b2dc1da3f1aa0184eb91675123f94f88, type: 3}
-  m_PrefabInstance: {fileID: 2620823137434748496}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &3837501215612398496 stripped
+--- !u!1 &1403848955302525968 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1233568242700168688, guid: b2dc1da3f1aa0184eb91675123f94f88, type: 3}
-  m_PrefabInstance: {fileID: 2620823137434748496}
+  m_PrefabInstance: {fileID: 172820035788902880}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &3370321557363575795 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3215626697290013203, guid: b2dc1da3f1aa0184eb91675123f94f88, type: 3}
+  m_PrefabInstance: {fileID: 172820035788902880}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4070036664259227082
 PrefabInstance:

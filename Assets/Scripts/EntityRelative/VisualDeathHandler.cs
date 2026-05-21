@@ -159,9 +159,9 @@ namespace Assets.Scripts
                 fireAnimationCoroutine = StartCoroutine(FireAnimationRoutine());
             }
 
-            if (DeathEffectPoolManager.Instance != null)
+            if (PoolManager.Instance != null)
             {
-                GameObject groundFx = DeathEffectPoolManager.Instance.GetDeathEffect();
+                GameObject groundFx = PoolManager.Instance.GetObject(PoolType.DeathEffect);
 
                 if (groundFx != null)
                 {
