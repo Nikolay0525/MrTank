@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 5748917807196063934}
   - component: {fileID: 8589614120442084999}
   - component: {fileID: 7743625169822762232}
-  - component: {fileID: 6155246829787254093}
   - component: {fileID: 7416177845048196820}
+  - component: {fileID: 8106727859640599840}
   m_Layer: 8
   m_Name: TerrainChunk_Prefab
   m_TagString: Untagged
@@ -280,20 +280,6 @@ MonoBehaviour:
     zOffset: 10
     yOffset: -0.25
     allowSpawnInStartZone: 1
---- !u!114 &6155246829787254093
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3311521260783982503}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b63d88c22183ef40a442527c3b57991, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ScrollableObject
-  despawnX: -30
-  speedMultiplier: 1
 --- !u!120 &7416177845048196820
 LineRenderer:
   serializedVersion: 3
@@ -404,6 +390,18 @@ LineRenderer:
   m_UseWorldSpace: 0
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!114 &8106727859640599840
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3311521260783982503}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95be3bf52895209488478d65a00e1108, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Assets.Scripts.ObjectMover
 --- !u!1 &4610061745394703075
 GameObject:
   m_ObjectHideFlags: 0

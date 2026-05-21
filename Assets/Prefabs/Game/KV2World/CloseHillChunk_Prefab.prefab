@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 7636782157166516219}
   - component: {fileID: 6272018508504953810}
   - component: {fileID: 7724623598563589870}
-  - component: {fileID: 7858635064554456804}
   - component: {fileID: 6809641382663947314}
+  - component: {fileID: 4653091004042991872}
   m_Layer: 3
   m_Name: CloseHillChunk_Prefab
   m_TagString: Untagged
@@ -164,6 +164,10 @@ MonoBehaviour:
   heightMultiplier: 2
   noiseScale: 0.05
   resolution: 20
+  garagePrefab: {fileID: 0}
+  spawnGarage: 0
+  targetGarageGlobalX: 5
+  garageOffset: {x: 0, y: 0, z: 0}
   repairStationPrefab: {fileID: 0}
   repairStationSpawnChance: 0.2
   scenerySettings:
@@ -275,20 +279,6 @@ MonoBehaviour:
     zOffset: 10
     yOffset: -0.8
     allowSpawnInStartZone: 1
---- !u!114 &7858635064554456804
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6689110358511074825}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b63d88c22183ef40a442527c3b57991, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ScrollableObject
-  despawnX: -30
-  speedMultiplier: 0.5
 --- !u!120 &6809641382663947314
 LineRenderer:
   serializedVersion: 3
@@ -399,3 +389,15 @@ LineRenderer:
   m_UseWorldSpace: 0
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!114 &4653091004042991872
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6689110358511074825}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95be3bf52895209488478d65a00e1108, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Assets.Scripts.ObjectMover

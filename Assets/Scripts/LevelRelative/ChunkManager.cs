@@ -13,8 +13,13 @@ namespace Assets.Scripts
     public class LandscapeLayer
     {
         public PoolType poolType;
+
         public float verticalOffset;
         public float zOffset;
+
+        [Header("Movement Settings")]
+        public float despawnX = -30f;
+        public float parallaxMultiplier = 1f;
 
         [Header("Logic Setup")]
         public ChunkLogicType logicType;
@@ -41,8 +46,6 @@ namespace Assets.Scripts
         public float chunkWidth = 20f;
         public int initialChunks = 5;
         public float spawnDistance = 30f;
-
-        private Dictionary<GameObject, PoolType> activeChunksMap = new Dictionary<GameObject, PoolType>();
 
         private void Awake()
         {
@@ -109,14 +112,11 @@ namespace Assets.Scripts
                 TotalDistanceTraveled = layer.currentGlobalX;
             }
 
-            ScrollableObject scrollable = chunkObj.GetComponent<ScrollableObject>();
-            if (scrollable != null)
+            ObjectMover mover = chunkObj.GetComponent<ObjectMover>();
+            if (mover != null)
             {
-                scrollable.OnDespawnReached -= HandleChunkDespawn;
-                scrollable.OnDespawnReached += HandleChunkDespawn;
+                mover.Setup(layer.poolType, layer.despawnX, false, layer.parallaxMultiplier, 0f, -1);
             }
-
-            activeChunksMap[chunkObj] = layer.poolType;
 
             chunkObj.SetActive(true);
             layer.lastSpawned = chunkObj.transform;
@@ -134,21 +134,6 @@ namespace Assets.Scripts
                 {
                     SpawnNextChunk(layer);
                 }
-            }
-        }
-
-        private void HandleChunkDespawn(GameObject chunkObj)
-        {
-            ScrollableObject scrollable = chunkObj.GetComponent<ScrollableObject>();
-            if (scrollable != null)
-            {
-                scrollable.OnDespawnReached -= HandleChunkDespawn;
-            }
-
-            if (activeChunksMap.TryGetValue(chunkObj, out PoolType correctPoolType))
-            {
-                PoolManager.Instance.ReturnObject(correctPoolType, chunkObj);
-                activeChunksMap.Remove(chunkObj);
             }
         }
     }

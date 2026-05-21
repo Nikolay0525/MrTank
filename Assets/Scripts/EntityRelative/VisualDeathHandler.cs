@@ -5,48 +5,35 @@ namespace Assets.Scripts
 {
     public class VisualDeathHandler : MonoBehaviour
     {
-        [Header("Effect Parameters")]
-        public float baseExplosionSize = 1.0f;
-        public Vector3 baseStainSize = new Vector3(3f, 6f, 1);
+        [Header("Hierarchy Setup")]
+        public Transform tankVisualsRoot;
 
         [Header("Tank Effects (Attached)")]
         public GameObject fireObject;
-        [Tooltip("How long the fire stays active before hiding")]
         public float fireDuration = 3f;
-        [Tooltip("Duration of the fire scale up and scale down animations")]
         public float fireScaleDuration = 0.5f;
-        [Tooltip("Regulates how chunky are animation resized during time, more means more smooth")]
         public int fireReSizeAnimationSteps = 10;
 
-        [Header("Ground Effects (Pooled)")]
-        [Tooltip("Exact name of the stain/mask object inside the prefab")]
+        [Header("Ground Effects (Attached Child)")]
+        public GameObject deathEffectObject;
         public string stainChildName = "Mask";
-        [Tooltip("Exact name of the explosion animation object inside the prefab")]
         public string explosionChildName = "Explosion";
-
-        [Tooltip("Time before the burnt grass mask appears")]
         public float stainAppearanceDelay = 1f;
 
-        [Header("Offsets (Local)")]
-        public Vector3 stainOffset = new Vector3(0, 0, 0);
-        public Vector3 explosionOffset = new Vector3(0, 0.5f, 0);
-
-        [Header("Randomization")]
-        [Tooltip("Random stain/explosion scale multiplier (e.g., 0.8 to 1.2)")]
+        [Header("Randomization (Multipliers based on Editor scale)")]
         public Vector2 sizeRandomRange = new Vector2(0.8f, 1.2f);
-        [Tooltip("Random angle variation for the explosion animation")]
         public float explosionAngleRandomRange = 15f;
-        [Tooltip("Should the ground stain have a fully random 360-degree rotation?")]
         public bool fullyRandomStainRotation = true;
 
         [Header("Animation")]
-        [Tooltip("Reference to the Animator component used for vibration. Will be auto-assigned if empty.")]
         public Animator objectAnimator;
 
         private Coroutine fireAnimationCoroutine;
         private Coroutine stainDelayCoroutine;
 
         private Vector3 initialFireScale;
+        private Vector3 initialStainScale = Vector3.one;
+        private Vector3 initialExplosionScale = Vector3.one;
 
         private void Awake()
         {
@@ -58,6 +45,17 @@ namespace Assets.Scripts
             if (objectAnimator == null)
             {
                 objectAnimator = GetComponentInChildren<Animator>();
+            }
+
+            if (deathEffectObject != null)
+            {
+                Transform stainTransform = deathEffectObject.transform.Find(stainChildName);
+                if (stainTransform != null) initialStainScale = stainTransform.localScale;
+
+                Transform explosionTransform = deathEffectObject.transform.Find(explosionChildName);
+                if (explosionTransform != null) initialExplosionScale = explosionTransform.localScale;
+
+                deathEffectObject.SetActive(false);
             }
         }
 
@@ -81,9 +79,7 @@ namespace Assets.Scripts
             {
                 time += Time.deltaTime;
                 float normalizedTime = time / fireScaleDuration;
-
                 float steppedTime = Mathf.Floor(normalizedTime * fireReSizeAnimationSteps) / fireReSizeAnimationSteps;
-
                 fireObject.transform.localScale = Vector3.Lerp(Vector3.zero, initialFireScale, steppedTime);
                 yield return null;
             }
@@ -96,9 +92,7 @@ namespace Assets.Scripts
             {
                 time += Time.deltaTime;
                 float normalizedTime = time / fireScaleDuration;
-
                 float steppedTime = Mathf.Floor(normalizedTime * fireReSizeAnimationSteps) / fireReSizeAnimationSteps;
-
                 fireObject.transform.localScale = Vector3.Lerp(initialFireScale, Vector3.zero, steppedTime);
                 yield return null;
             }
@@ -124,20 +118,16 @@ namespace Assets.Scripts
                 objectAnimator.enabled = false;
             }
 
-            SpriteRenderer[] allRenderers = GetComponentsInChildren<SpriteRenderer>(true);
-            SpriteRenderer mainSprite = null;
-
-            foreach (SpriteRenderer sr in allRenderers)
+            if (tankVisualsRoot != null)
             {
-                if (sr != null)
+                SpriteRenderer[] allRenderers = tankVisualsRoot.GetComponentsInChildren<SpriteRenderer>(true);
+                foreach (SpriteRenderer sr in allRenderers)
                 {
                     if (fireObject != null && sr.transform.IsChildOf(fireObject.transform))
                     {
                         continue;
                     }
-
                     sr.color = Color.black;
-                    if (mainSprite == null) mainSprite = sr;
                 }
             }
 
@@ -150,77 +140,36 @@ namespace Assets.Scripts
             if (fireObject != null)
             {
                 fireObject.SetActive(true);
-
-                if (fireAnimationCoroutine != null)
-                {
-                    StopCoroutine(fireAnimationCoroutine);
-                }
-
+                if (fireAnimationCoroutine != null) StopCoroutine(fireAnimationCoroutine);
                 fireAnimationCoroutine = StartCoroutine(FireAnimationRoutine());
             }
 
-            if (PoolManager.Instance != null)
+            if (deathEffectObject != null)
             {
-                GameObject groundFx = PoolManager.Instance.GetObject(PoolType.DeathEffect);
+                Transform stainTransform = deathEffectObject.transform.Find(stainChildName);
+                Transform explosionTransform = deathEffectObject.transform.Find(explosionChildName);
 
-                if (groundFx != null)
+                if (stainTransform != null)
                 {
-                    Quaternion spawnRotation = transform.rotation;
-                    Vector3 spawnPos = transform.position;
+                    float randomStainMultiplier = Random.Range(sizeRandomRange.x, sizeRandomRange.y);
+                    stainTransform.localScale = initialStainScale * randomStainMultiplier;
 
-                    if (mainSprite != null)
-                    {
-                        spawnRotation = mainSprite.transform.rotation;
-                        spawnPos = new Vector3(mainSprite.bounds.center.x, mainSprite.bounds.min.y, transform.position.z);
-                    }
+                    stainTransform.localRotation = fullyRandomStainRotation ? Quaternion.Euler(0, 0, Random.Range(0f, 360f)) : Quaternion.identity;
+                    stainTransform.gameObject.SetActive(false);
 
-                    groundFx.transform.rotation = spawnRotation;
-                    groundFx.transform.position = spawnPos;
-                    groundFx.transform.SetParent(transform.parent);
-
-                    Transform stainTransform = groundFx.transform.Find(stainChildName);
-
-                    Transform explosionTransform = groundFx.transform.Find(explosionChildName);
-
-                    if (stainTransform != null)
-                    {
-                        float randomStainScale = baseExplosionSize * Random.Range(sizeRandomRange.x, sizeRandomRange.y);
-
-                        stainTransform.localScale = baseStainSize * randomStainScale;
-                        stainTransform.localPosition = stainOffset;
-
-                        if (fullyRandomStainRotation)
-                        {
-                            stainTransform.localRotation = Quaternion.Euler(0, 0, Random.Range(0f, 360f));
-                        }
-                        else
-                        {
-                            stainTransform.localRotation = Quaternion.identity;
-                        }
-
-                        stainTransform.gameObject.SetActive(false);
-
-                        if (stainDelayCoroutine != null)
-                        {
-                            StopCoroutine(stainDelayCoroutine);
-                        }
-
-                        stainDelayCoroutine = StartCoroutine(ShowStainRoutine(stainTransform.gameObject, stainAppearanceDelay));
-                    }
-
-                    if (explosionTransform != null)
-                    {
-                        float randomExpScale = baseExplosionSize * Random.Range(sizeRandomRange.x, sizeRandomRange.y);
-
-                        explosionTransform.localScale = Vector3.one * randomExpScale;
-                        explosionTransform.localPosition = explosionOffset;
-
-                        float randomExpRot = Random.Range(-explosionAngleRandomRange, explosionAngleRandomRange);
-                        explosionTransform.localRotation = Quaternion.Euler(0, 0, randomExpRot);
-                    }
-
-                    groundFx.SetActive(true);
+                    if (stainDelayCoroutine != null) StopCoroutine(stainDelayCoroutine);
+                    stainDelayCoroutine = StartCoroutine(ShowStainRoutine(stainTransform.gameObject, stainAppearanceDelay));
                 }
+
+                if (explosionTransform != null)
+                {
+                    float randomExpMultiplier = Random.Range(sizeRandomRange.x, sizeRandomRange.y);
+                    explosionTransform.localScale = initialExplosionScale * randomExpMultiplier;
+
+                    explosionTransform.localRotation = Quaternion.Euler(0, 0, Random.Range(-explosionAngleRandomRange, explosionAngleRandomRange));
+                }
+
+                deathEffectObject.SetActive(true);
             }
         }
 
@@ -231,14 +180,17 @@ namespace Assets.Scripts
                 objectAnimator.enabled = true;
             }
 
-            SpriteRenderer[] allRenderers = GetComponentsInChildren<SpriteRenderer>(true);
-            foreach (SpriteRenderer sr in allRenderers)
+            if (tankVisualsRoot != null)
             {
-                if (fireObject != null && sr.transform.IsChildOf(fireObject.transform))
+                SpriteRenderer[] allRenderers = tankVisualsRoot.GetComponentsInChildren<SpriteRenderer>(true);
+                foreach (SpriteRenderer sr in allRenderers)
                 {
-                    continue;
+                    if (fireObject != null && sr.transform.IsChildOf(fireObject.transform))
+                    {
+                        continue;
+                    }
+                    sr.color = Color.white;
                 }
-                sr.color = Color.white;
             }
 
             Collider2D[] colliders = GetComponentsInChildren<Collider2D>(true);
@@ -263,6 +215,11 @@ namespace Assets.Scripts
             {
                 StopCoroutine(stainDelayCoroutine);
                 stainDelayCoroutine = null;
+            }
+
+            if (deathEffectObject != null)
+            {
+                deathEffectObject.SetActive(false);
             }
         }
     }

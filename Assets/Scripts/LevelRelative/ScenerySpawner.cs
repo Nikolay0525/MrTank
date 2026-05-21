@@ -5,7 +5,7 @@ namespace Assets.Scripts
     [System.Serializable]
     public class ScenerySettings
     {
-        public ObjectPool pool;
+        public PoolType poolType;
 
         [Header("Spawn Timing")]
         public float spawnInterval = 3f;
@@ -83,9 +83,9 @@ namespace Assets.Scripts
 
         private void SpawnObject(ScenerySettings settings, float? prewarmX = null)
         {
-            if (settings == null || settings.pool == null) return;
+            if (settings == null) return;
 
-            GameObject spawnedObj = settings.pool.GetPooledObject();
+            GameObject spawnedObj = PoolManager.Instance.GetObject(settings.poolType);
 
             if (spawnedObj != null)
             {
@@ -110,14 +110,14 @@ namespace Assets.Scripts
                 float randomScale = Random.Range(settings.minScale, settings.maxScale);
                 spawnedObj.transform.localScale = new Vector3(randomScale, randomScale, 1f);
 
-                LinearMover mover = spawnedObj.GetComponent<LinearMover>();
+                ObjectMover mover = spawnedObj.GetComponent<ObjectMover>();
                 if (mover == null)
                 {
-                    mover = spawnedObj.AddComponent<LinearMover>();
+                    mover = spawnedObj.AddComponent<ObjectMover>();
                 }
 
                 float randomSpeed = Random.Range(settings.minSpeed, settings.maxSpeed);
-                mover.Setup(randomSpeed, endX, direction, settings.parallaxFactor);
+                mover.Setup(settings.poolType, endX, true , settings.parallaxFactor, randomSpeed, direction);
 
                 spawnedObj.SetActive(true);
             }

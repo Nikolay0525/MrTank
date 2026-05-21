@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5122472145110462149}
   - component: {fileID: 6426120445888404175}
   - component: {fileID: 1182551180986553414}
-  - component: {fileID: 8168594382413777697}
+  - component: {fileID: -3012058117663481259}
   m_Layer: 3
   m_Name: HillChunk_Prefab
   m_TagString: Untagged
@@ -109,7 +109,7 @@ MonoBehaviour:
   heightMultiplier: 2
   noiseScale: 0.05
   resolution: 20
---- !u!114 &8168594382413777697
+--- !u!114 &-3012058117663481259
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -118,8 +118,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 8254137720629885042}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b63d88c22183ef40a442527c3b57991, type: 3}
+  m_Script: {fileID: 11500000, guid: 95be3bf52895209488478d65a00e1108, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ScrollableObject
-  despawnX: -30
-  speedMultiplier: 0.25
+  m_EditorClassIdentifier: Assembly-CSharp::Assets.Scripts.ObjectMover

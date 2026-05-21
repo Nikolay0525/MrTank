@@ -5,15 +5,15 @@ namespace Assets.Scripts
     public class TankKinematics : MonoBehaviour
     {
         [Header("Dependencies")]
-        [Tooltip("Посилання на візуальний об'єкт корпусу")]
+        [Tooltip("Reference to the visual body object (if still needed for offsets)")]
         public Transform bodyVisual;
 
-        [Header("Параметри сканування")]
+        [Header("Scan Parameters")]
         public float raycastHeightOffset = 10f;
         public float raycastDistance = 30f;
         public LayerMask groundLayer;
 
-        [Header("Параметри інтерполяції")]
+        [Header("Interpolation Parameters")]
         public float positionLerpSpeed = 15f;
         public float rotationLerpSpeed = 10f;
         public float tankHeightOffset = 0.5f;
@@ -39,6 +39,7 @@ namespace Assets.Scripts
             {
                 float targetAngle = Mathf.Atan2(hit.normal.y, hit.normal.x) * Mathf.Rad2Deg - 90f;
                 Quaternion targetRotation = Quaternion.Euler(0f, 0f, targetAngle);
+
                 bodyVisual.rotation = Quaternion.Lerp(bodyVisual.rotation, targetRotation, Time.deltaTime * rotationLerpSpeed);
             }
         }
