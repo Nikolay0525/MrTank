@@ -12,5 +12,7 @@ namespace Assets.ScriptableObjects
         public string tankName;
         public int price;
         public Sprite shopIcon;
+
+        public SceneData sceneData;
     }
 }

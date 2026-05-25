@@ -1,7 +1,4 @@
 ﻿using Assets.ScriptableObjects;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,13 +17,14 @@ namespace Assets.Scripts
         private TankData data;
         private GarageManager manager;
 
-        private void Awake()
-        {
-            buttonText = actionButton.GetComponentInChildren<TextMeshProUGUI>();
-        }
 
         public void Setup(TankData tankData, int id, GarageManager garageManager)
         {
+            if (buttonText == null)
+            {
+                buttonText = actionButton.GetComponentInChildren<TextMeshProUGUI>();
+            }
+
             data = tankData;
             tankID = id;
             manager = garageManager;
@@ -36,13 +34,16 @@ namespace Assets.Scripts
 
             UpdateButtonState();
 
+            actionButton.onClick.RemoveAllListeners();
             actionButton.onClick.AddListener(OnButtonClicked);
+
+            buttonText = actionButton.GetComponentInChildren<TextMeshProUGUI>();
         }
 
         public void UpdateButtonState()
         {
-            bool isUnlocked = true; //StatsManager.Instance.currentStats.unlockedTankIDs.Contains(tankID);
-            bool isSelected = true; //StatsManager.Instance.currentStats.selectedTankID == tankID;
+            bool isUnlocked = StatsManager.Instance.currentStats.unlockedTankIDs.Contains(tankID);
+            bool isSelected = StatsManager.Instance.currentStats.selectedTankID == tankID;
 
             if (isSelected)
             {

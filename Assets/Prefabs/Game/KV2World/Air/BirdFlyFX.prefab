@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6853384293196132892}
+  - component: {fileID: 21159631464809215}
   - component: {fileID: 2456667685795285395}
   - component: {fileID: -4269402229316846440}
   m_Layer: 0
@@ -33,6 +34,30 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &21159631464809215
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 257290741010533316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9a62a36a4490db4493b369b1f79d86d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Assets.Scripts.SceneryConfig
+  spawnInterval: 10
+  timer: 0.62759775
+  minY: 3
+  maxY: 6
+  zPosition: 14
+  minScale: 1
+  maxScale: 1
+  minSpeed: 0.75
+  maxSpeed: 1
+  parallaxFactor: 0.2
+  randomDirection: 1
+  fixedDirection: -1
 --- !u!212 &2456667685795285395
 SpriteRenderer:
   serializedVersion: 2

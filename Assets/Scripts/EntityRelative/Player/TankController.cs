@@ -25,8 +25,7 @@ namespace Assets.Scripts
 
         private float targetGlobalSpeed = 0f;
 
-        [Header("UI Integrations")]
-        public CombatTimerUI combatTimerUI;
+        private CombatTimerUI combatTimerUI;
 
         [Header("Visual Effects")]
         public Animator fireEffectAnimator;
@@ -42,6 +41,12 @@ namespace Assets.Scripts
 
         private void Awake()
         {
+            if (UIManager.Instance.CombatTimer == null)
+            {
+                combatTimerUI = FindAnyObjectByType<CombatTimerUI>();
+            }
+            else combatTimerUI = UIManager.Instance.CombatTimer;
+
             TerrainChunk.hasGarageSpawned = false;
 
             if (shouldAutoStart)

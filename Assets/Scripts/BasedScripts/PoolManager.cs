@@ -1,34 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 
 namespace Assets.Scripts
 {
-    [Serializable]
-    public class PoolConfig
-    {
-        public PoolType poolType;
-        public GameObject prefab;
-        public int defaultSize = 10;
-        public int maxSize = 100;
-    }
-
     public class PoolManager : MonoBehaviour
     {
         public static PoolManager Instance { get; private set; }
 
-        [Header("Pool Configurations")]
-        public List<PoolConfig> poolConfigs;
+        private Dictionary<GameObject, ObjectPool<GameObject>> pools = new Dictionary<GameObject, ObjectPool<GameObject>>();
 
-        private Dictionary<PoolType, ObjectPool<GameObject>> pools;
+        private Dictionary<GameObject, GameObject> instanceToPrefabMap = new Dictionary<GameObject, GameObject>();
 
         private void Awake()
         {
             if (Instance == null)
             {
                 Instance = this;
-                InitializePools();
             }
             else
             {
@@ -36,58 +24,60 @@ namespace Assets.Scripts
             }
         }
 
-        private void InitializePools()
+        public void InitializePool(GameObject prefab, int defaultSize = 10, int maxSize = 100)
         {
-            pools = new Dictionary<PoolType, ObjectPool<GameObject>>();
+            if (prefab == null || pools.ContainsKey(prefab)) return;
 
-            foreach (var config in poolConfigs)
-            {
-                GameObject prefabToSpawn = config.prefab;
+            ObjectPool<GameObject> newPool = new ObjectPool<GameObject>(
+                createFunc: () =>
+                {
+                    GameObject obj = Instantiate(prefab);
+                    obj.transform.SetParent(transform);
+                    return obj;
+                },
+                actionOnGet: (obj) => obj.SetActive(true),
+                actionOnRelease: (obj) => obj.SetActive(false),
+                actionOnDestroy: (obj) => Destroy(obj),
+                collectionCheck: true,
+                defaultCapacity: defaultSize,
+                maxSize: maxSize
+            );
 
-                ObjectPool<GameObject> newPool = new ObjectPool<GameObject>(
-                    createFunc: () =>
-                    {
-                        GameObject obj = Instantiate(prefabToSpawn);
-                        obj.transform.SetParent(transform);
-                        return obj;
-                    },
-                    actionOnGet: (obj) => obj.SetActive(true),
-                    actionOnRelease: (obj) => obj.SetActive(false),
-                    actionOnDestroy: (obj) => Destroy(obj),
-                    collectionCheck: true,
-                    defaultCapacity: config.defaultSize,
-                    maxSize: config.maxSize
-                );
-
-                pools.Add(config.poolType, newPool);
-            }
+            pools.Add(prefab, newPool);
         }
 
-
-        public GameObject GetObject(PoolType poolType)
+        public GameObject GetObject(GameObject prefab)
         {
-            if (pools.TryGetValue(poolType, out ObjectPool<GameObject> pool))
+            if (prefab == null) return null;
+
+            if (!pools.ContainsKey(prefab))
             {
-                return pool.Get();
+                Debug.LogWarning($"[PoolManager] Pool for prefab '{prefab.name}' not found. Creating it dynamically.");
+                InitializePool(prefab);
             }
 
-            Debug.LogError($"[PoolManager] Pool with name '{poolType}' not find!");
-            return null;
+            GameObject instance = pools[prefab].Get();
+            instanceToPrefabMap[instance] = prefab;
+
+            return instance;
         }
 
-        public void ReturnObject(PoolType poolType, GameObject obj)
+        public void ReturnObject(GameObject instance)
         {
-            if (pools.TryGetValue(poolType, out ObjectPool<GameObject> pool))
-            {
-                obj.transform.SetParent(this.transform);
+            if (instance == null) return;
 
-                pool.Release(obj);
-            }
-            else
+            if (instanceToPrefabMap.TryGetValue(instance, out GameObject originalPrefab))
             {
-                Debug.LogWarning($"[PoolManager] Attempt to return object into not existing pool: '{poolType}'. Object destroyed.");
-                Destroy(obj);
+                if (pools.TryGetValue(originalPrefab, out ObjectPool<GameObject> pool))
+                {
+                    instance.transform.SetParent(this.transform);
+                    pool.Release(instance);
+                    return;
+                }
             }
+
+            Debug.LogWarning($"[PoolManager] Attempt to return an untracked object: '{instance.name}'. Destroying it.");
+            Destroy(instance);
         }
     }
 }

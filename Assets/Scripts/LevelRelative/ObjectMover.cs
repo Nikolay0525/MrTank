@@ -7,7 +7,6 @@ namespace Assets.Scripts
 {
     internal class ObjectMover : MonoBehaviour
     {
-        private PoolType myPoolType;
         private float despawnX;
         private bool shouldDespawnInRightSide;
         private float parallax;
@@ -15,9 +14,8 @@ namespace Assets.Scripts
         private int direction;
         private bool isSetup = false;
 
-        public void Setup(PoolType poolType, float despawnPosition, bool DespawnInRightSide, float parallaxMultiplier = 1f, float objectSpeed = 0f, int moveDirection = -1)
+        public void Setup(float despawnPosition, bool DespawnInRightSide, float parallaxMultiplier = 1f, float objectSpeed = 0f, int moveDirection = -1)
         {
-            myPoolType = poolType;
             despawnX = despawnPosition;
             shouldDespawnInRightSide = DespawnInRightSide;
             parallax = parallaxMultiplier;
@@ -51,7 +49,7 @@ namespace Assets.Scripts
             if (currentX < leftBound || shouldDespawnInRightSide && currentX > rightBound)
             {
                 isSetup = false;
-                PoolManager.Instance.ReturnObject(myPoolType, gameObject);
+                PoolManager.Instance.ReturnObject(gameObject);
             }
         }
     }

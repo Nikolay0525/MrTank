@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d58c6568882f204386870f024c3cf2f, type: 3}
   m_Name: Bishop
   m_EditorClassIdentifier: Assembly-CSharp::Assets.ScriptableObjects.TankData
-  id: 0
+  id: 1
   tankName: Bishop
   price: 1000
   shopIcon: {fileID: -3505690627962800557, guid: cedfe5b661677244d9a0a968adf3e285, type: 3}
+  sceneData: {fileID: 11400000, guid: ab3168d15542bb34d8cb3506465a8d44, type: 2}

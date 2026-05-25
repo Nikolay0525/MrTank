@@ -1,36 +1,8 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using Assets.ScriptableObjects;
 
 namespace Assets.Scripts
 {
-    public enum ChunkLogicType
-    {
-        ComplexTerrain,
-        SimpleBackground
-    }
-
-    [System.Serializable]
-    public class LandscapeLayer
-    {
-        public PoolType poolType;
-
-        public float verticalOffset;
-        public float zOffset;
-
-        [Header("Movement Settings")]
-        public float despawnX = -30f;
-        public float parallaxMultiplier = 1f;
-
-        [Header("Logic Setup")]
-        public ChunkLogicType logicType;
-        [Tooltip("Check this ONLY for the main ground to track distance")]
-        public bool isMainDistanceTracker;
-
-        [HideInInspector] public bool isFirst = true;
-        [HideInInspector] public float currentGlobalX = 0f;
-        [HideInInspector] public Transform lastSpawned;
-    }
-
     public class ChunkManager : MonoBehaviour
     {
         public static float TotalDistanceTraveled { get; private set; }
@@ -39,8 +11,8 @@ namespace Assets.Scripts
         [Header("Dependencies")]
         public Transform cameraTransform;
 
-        [Header("Landscape Layers Setup")]
-        public LandscapeLayer[] layers;
+        [Header("Scene Configuration")]
+        public SceneData currentSceneData;
 
         [Header("Generation Parameters")]
         public float chunkWidth = 20f;
@@ -51,19 +23,24 @@ namespace Assets.Scripts
         {
             SessionSeed = Random.Range(0f, 100000f);
 
-            foreach (var layer in layers)
+            if (currentSceneData != null && currentSceneData.layerPrefabs != null)
             {
-                layer.isFirst = true;
-                layer.lastSpawned = null;
-                layer.currentGlobalX = 0f;
+                foreach (var layer in currentSceneData.layerPrefabs)
+                {
+                    layer.isFirst = true;
+                    layer.lastSpawned = null;
+                    layer.currentGlobalX = 0f;
+                }
             }
         }
 
         private void Start()
         {
+            if (currentSceneData == null || currentSceneData.layerPrefabs == null) return;
+
             for (int i = 0; i < initialChunks; i++)
             {
-                foreach (var layer in layers)
+                foreach (var layer in currentSceneData.layerPrefabs)
                 {
                     SpawnNextChunk(layer);
                 }
@@ -72,15 +49,17 @@ namespace Assets.Scripts
 
         private void Update()
         {
-            foreach (var layer in layers)
+            if (currentSceneData == null || currentSceneData.layerPrefabs == null) return;
+
+            foreach (var layer in currentSceneData.layerPrefabs)
             {
                 CheckAndSpawn(layer);
             }
         }
 
-        private void SpawnNextChunk(LandscapeLayer layer)
+        private void SpawnNextChunk(LayerConfig layer)
         {
-            GameObject chunkObj = PoolManager.Instance.GetObject(layer.poolType);
+            GameObject chunkObj = PoolManager.Instance.GetObject(layer.gameObject);
             float spawnX = 0f;
 
             if (layer.isFirst)
@@ -115,7 +94,7 @@ namespace Assets.Scripts
             ObjectMover mover = chunkObj.GetComponent<ObjectMover>();
             if (mover != null)
             {
-                mover.Setup(layer.poolType, layer.despawnX, false, layer.parallaxMultiplier, 0f, -1);
+                mover.Setup(layer.despawnX, false, layer.parallaxMultiplier, 0f, -1);
             }
 
             chunkObj.SetActive(true);
@@ -123,7 +102,7 @@ namespace Assets.Scripts
             layer.currentGlobalX += chunkWidth;
         }
 
-        private void CheckAndSpawn(LandscapeLayer layer)
+        private void CheckAndSpawn(LayerConfig layer)
         {
             if (layer.lastSpawned != null)
             {

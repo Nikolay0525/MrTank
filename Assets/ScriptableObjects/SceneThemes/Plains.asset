@@ -12,6 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e154aaea6c98a7e4ea555a9ee3b562ad, type: 3}
   m_Name: Plains
   m_EditorClassIdentifier: Assembly-CSharp::Assets.ScriptableObjects.SceneData
-  playerTankPrefab: {fileID: 0}
-  layerPrefabs: []
-  enemyPrefabs: []
+  playerTankPrefab: {fileID: 8205151194453294827, guid: 2df2fa249c284e54881b798b0a925d2d, type: 3}
+  layerPrefabs:
+  - {fileID: 6794098396653952219, guid: 5553afc533837224da6081c92838ef22, type: 3}
+  - {fileID: -3864292744573876659, guid: 2ca46d6c0a2a84248b904528fa6a6a14, type: 3}
+  - {fileID: -4678858316763510747, guid: 367723a1257c31240b233516ea4fab26, type: 3}
+  - {fileID: -1752689773416442138, guid: 10b364ac0f0a2dd43a13cbb953ba66da, type: 3}
+  enemyPrefabs:
+  - {fileID: 1065013290810376224, guid: 91878dc7bf7019147b585c21a92866f3, type: 3}
+  - {fileID: -866309979139782626, guid: 16fa7be23d6dc374ab673ea6dd814af2, type: 3}
+  - {fileID: 8993127991788209337, guid: 656d62d374ba0494cace51e42772e35a, type: 3}
+  sceneryPrefabs:
+  - {fileID: -4100615441908108695, guid: c80a758c047fd0f4785f8da40ed3b5d4, type: 3}
+  - {fileID: 21159631464809215, guid: bb705a3a3bac7cf49b5918d259f67fa7, type: 3}
+  - {fileID: -3192233434019256199, guid: ae847e1c16f3b07408ef0a6274aa28bc, type: 3}

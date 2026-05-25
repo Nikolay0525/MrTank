@@ -4,11 +4,9 @@ using System.Text;
 
 namespace Assets.Scripts
 {
-    public enum EnemyType
+    public enum ChunkLogicType
     {
-        Light,
-        Medium,
-        Heavy,
-        Artillery
+        ComplexTerrain,
+        SimpleBackground
     }
 }

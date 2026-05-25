@@ -6,8 +6,10 @@ namespace Assets.Scripts
     [RequireComponent(typeof(LineRenderer))]
     public class AimingSystem : MonoBehaviour
     {
+        [Header("Prefabs used")]
+        public GameObject projectilePrefab;
+
         [Header("Dependencies")]
-        [Tooltip("Посилання на точку обертання гармати")]
         public Transform gunPivot;
 
         [Header("Ballistics")]
@@ -77,7 +79,7 @@ namespace Assets.Scripts
             float worldAngleRad = gunPivot.eulerAngles.z * Mathf.Deg2Rad;
             Vector2 shootVector = new Vector2(Mathf.Cos(worldAngleRad), Mathf.Sin(worldAngleRad)) * projectileSpeed;
 
-            GameObject projectileInstance = PoolManager.Instance.GetObject(PoolType.Projectile);
+            GameObject projectileInstance = PoolManager.Instance.GetObject(projectilePrefab);
 
             if (projectileInstance != null && firePoint != null)
             {

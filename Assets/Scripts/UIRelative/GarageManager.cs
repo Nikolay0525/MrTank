@@ -1,7 +1,5 @@
 ﻿using Assets.ScriptableObjects;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 using static Assets.Scripts.StatsManager;
 
@@ -9,11 +7,33 @@ namespace Assets.Scripts
 {
     public class GarageManager : MonoBehaviour
     {
-        public TankData[] allTanks; 
+        public static GarageManager Instance { get; private set; }
+
+        [Header("Shop Content")]
+        public TankData[] allTanks;
         public GameObject shopItemPrefab;
         public Transform contentContainer;
+        public TankData CurrentSelectedTank { get; private set; }
 
         private List<TankShopItem> spawnedItems = new List<TankShopItem>();
+
+        private void Awake()
+        {
+            if (Instance == null)
+            {
+                Instance = this;
+            }
+            else
+            {
+                Destroy(gameObject);
+                return;
+            }
+        }
+
+        private void Start()
+        {
+            UpdateCurrentTankReference();
+        }
 
         private void OnEnable()
         {
@@ -32,7 +52,7 @@ namespace Assets.Scripts
             {
                 GameObject go = Instantiate(shopItemPrefab, contentContainer);
                 TankShopItem item = go.GetComponent<TankShopItem>();
-                item.Setup(allTanks[i], i, this);
+                item.Setup(allTanks[i], allTanks[i].id, this);
                 spawnedItems.Add(item);
             }
         }
@@ -51,7 +71,10 @@ namespace Assets.Scripts
                 stats.unlockedTankIDs.Add(tankID);
                 stats.selectedTankID = tankID;
 
-                UIManager.Instance.CoinsText.text = stats.coins.ToString();
+                if (UIManager.Instance != null && UIManager.Instance.CoinsText != null)
+                {
+                    UIManager.Instance.CoinsText.text = stats.coins.ToString();
+                }
             }
             else
             {
@@ -60,7 +83,22 @@ namespace Assets.Scripts
             }
 
             StatsManager.Instance.SaveStats();
+            UpdateCurrentTankReference();
             RefreshAllButtons();
+        }
+
+        private void UpdateCurrentTankReference()
+        {
+            int currentID = StatsManager.Instance.currentStats.selectedTankID;
+
+            foreach (var tank in allTanks)
+            {
+                if (tank.id == currentID)
+                {
+                    CurrentSelectedTank = tank;
+                    break;
+                }
+            }
         }
 
         private void RefreshAllButtons()

@@ -178,7 +178,7 @@ namespace Assets.Scripts
                 }
                 else if (child.GetComponentInChildren<RepairStation>(true) != null)
                 {
-                    PoolManager.Instance.ReturnObject(PoolType.RepairStation, child);
+                    PoolManager.Instance.ReturnObject(child);
                 }
                 else if (burntGrassRenderer != null && child == burntGrassRenderer.gameObject)
                 {
@@ -561,7 +561,7 @@ namespace Assets.Scripts
                 transform.position.z + repairStationZOffset
             );
 
-            GameObject station = PoolManager.Instance.GetObject(PoolType.RepairStation);
+            GameObject station = PoolManager.Instance.GetObject(repairStationPrefab);///////////////////////////////////////////// TRANSFER ME INTO ANOTHER MANAGER, like ItemSpawner
 
             if (station != null)
             {

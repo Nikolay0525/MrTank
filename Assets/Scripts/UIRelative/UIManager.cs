@@ -35,6 +35,9 @@ namespace Assets.Scripts
         [Header("Coins Text")]
         public TextMeshProUGUI CoinsText;
 
+        [Header("Combat Timer")]
+        public CombatTimerUI CombatTimer;
+
         private GameObject[] allPanels;
 
         private void Awake()
@@ -53,7 +56,7 @@ namespace Assets.Scripts
         {
             OnSliderQualityChanged();
 
-            TankController tank = FindObjectOfType<TankController>();
+            TankController tank = FindAnyObjectByType<TankController>();
 
             if (tank != null && tank.currentState == TankController.TankState.Driving)
             {
@@ -89,7 +92,7 @@ namespace Assets.Scripts
         {
             ShowPanels(InGamePanel, ScorePanel);
 
-            TankController tank = FindObjectOfType<TankController>();
+            TankController tank = FindAnyObjectByType<TankController>();
             if (tank != null)
             {
                 tank.StartBattleFromGarage();

@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2650971872409534338}
+  - component: {fileID: -3864292744573876659}
   - component: {fileID: 2584394876764450678}
   - component: {fileID: 7636782157166516219}
   - component: {fileID: 6272018508504953810}
@@ -37,6 +38,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-3864292744573876659
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6689110358511074825}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 217014f450b75a94ab14405610edaf63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Assets.Scripts.LayerConfig
+  verticalOffset: 1
+  zOffset: 30
+  despawnX: -30
+  parallaxMultiplier: 0.5
+  logicType: 0
+  isMainDistanceTracker: 0
+  isFirst: 1
+  currentGlobalX: 0
+  lastSpawned: {fileID: 0}
 --- !u!33 &2584394876764450678
 MeshFilter:
   m_ObjectHideFlags: 0

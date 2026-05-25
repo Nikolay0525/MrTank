@@ -5,7 +5,8 @@ namespace Assets.Scripts
 {
     public class EnemyAI : MonoBehaviour
     {
-        public ObjectPool projectilePool;
+        public GameObject projectilePrefab;
+
         public Transform firePoint;
         public Transform gunPivot;
 
@@ -119,7 +120,7 @@ namespace Assets.Scripts
                     fireEffectAnimator.Play(fireAnimationName, 0, 0f);
                 }
 
-                GameObject proj = PoolManager.Instance.GetObject(PoolType.Projectile);
+                GameObject proj = PoolManager.Instance.GetObject(projectilePrefab);
                 proj.transform.position = firePoint.position;
                 proj.SetActive(true);
 
@@ -156,7 +157,7 @@ namespace Assets.Scripts
                     fireEffectAnimator.Play(fireAnimationName, 0, 0f);
                 }
 
-                GameObject proj = PoolManager.Instance.GetObject(PoolType.Projectile);
+                GameObject proj = PoolManager.Instance.GetObject(projectilePrefab);
                 proj.transform.position = firePoint.position;
                 proj.SetActive(true);
 

@@ -11,7 +11,7 @@ namespace Assets.Scripts
 
         private void Awake()
         {
-            playerController = FindObjectOfType<TankController>();
+            playerController = FindAnyObjectByType<TankController>();
         }
 
         private void OnTriggerEnter2D(Collider2D other)

@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2497015066520990161}
+  - component: {fileID: -3192233434019256199}
   - component: {fileID: -3046438000196739032}
   m_Layer: 0
   m_Name: Plane_Prefab
@@ -34,6 +35,30 @@ Transform:
   - {fileID: 3556707590619936805}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-3192233434019256199
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6235039756419956126}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9a62a36a4490db4493b369b1f79d86d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Assets.Scripts.SceneryConfig
+  spawnInterval: 10
+  timer: 0.8078973
+  minY: 4
+  maxY: 7
+  zPosition: 13
+  minScale: 1
+  maxScale: 1
+  minSpeed: 2
+  maxSpeed: 3
+  parallaxFactor: 0.2
+  randomDirection: 1
+  fixedDirection: -1
 --- !u!114 &-3046438000196739032
 MonoBehaviour:
   m_ObjectHideFlags: 0

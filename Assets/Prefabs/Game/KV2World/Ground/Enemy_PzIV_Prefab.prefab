@@ -347,6 +347,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3415866262798112228}
+  - component: {fileID: -866309979139782626}
   - component: {fileID: 1829445703045010939}
   - component: {fileID: 210220284062044720}
   - component: {fileID: 5772759740406717053}
@@ -374,6 +375,22 @@ Transform:
   - {fileID: 7282624161319332307}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-866309979139782626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5127492525543696117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10737dd8ac95b5f4598a4318ac2f40d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Assets.Scripts.EnemyConfig
+  enemyType: 1
+  minDistanceToSpawn: 0
+  maxDistanceToSpawn: 99999
+  spawnWeight: 1
 --- !u!114 &1829445703045010939
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -464,7 +481,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6011650019b606545850536b3ed9da9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAI
-  projectilePool: {fileID: 0}
+  projectilePrefab: {fileID: 252163599096119134, guid: 8ce68054dff866c4cb45a8dac932e55e, type: 3}
   firePoint: {fileID: 4066744998069205079}
   gunPivot: {fileID: 7447703699192111638}
   projectileSpeed: 12

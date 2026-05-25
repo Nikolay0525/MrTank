@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Assets.ScriptableObjects;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.Scripts
@@ -7,10 +8,8 @@ namespace Assets.Scripts
     {
         public static EnemySpawnerManager Instance;
 
-        [Header("Enemy Types Configuration")]
-        public List<PoolType> enemyPoolTypes;
-
-        private Dictionary<GameObject, PoolType> activeEnemiesMap = new Dictionary<GameObject, PoolType>();
+        [Header("Scene Configuration")]
+        public SceneData currentSceneData;
 
         private void Awake()
         {
@@ -26,43 +25,23 @@ namespace Assets.Scripts
 
         public GameObject TryGetEnemy()
         {
-            return GetRandomEnemy();
-        }
-
-        private GameObject GetRandomEnemy()
-        {
-            if (enemyPoolTypes == null || enemyPoolTypes.Count == 0)
+            if (currentSceneData == null || currentSceneData.enemyPrefabs.Count == 0)
             {
-                Debug.LogWarning("[EnemySpawnerManager] Enemy pool list is empty! Assign types in the Inspector.");
+                Debug.LogWarning("[EnemySpawnerManager] No enemies found in the current SceneData!");
                 return null;
             }
 
-            int randomIndex = Random.Range(0, enemyPoolTypes.Count);
-            PoolType selectedPoolType = enemyPoolTypes[randomIndex];
+            int randomIndex = Random.Range(0, currentSceneData.enemyPrefabs.Count);
+            EnemyConfig selectedConfig = currentSceneData.enemyPrefabs[randomIndex];
 
-            GameObject newEnemy = PoolManager.Instance.GetObject(selectedPoolType);
+            GameObject enemyPrefab = selectedConfig.gameObject;
 
-            if (newEnemy != null)
-            {
-                activeEnemiesMap[newEnemy] = selectedPoolType;
-            }
-
-            return newEnemy;
+            return PoolManager.Instance.GetObject(enemyPrefab);
         }
 
         public void ReturnEnemy(GameObject enemy)
         {
-            if (activeEnemiesMap.TryGetValue(enemy, out PoolType poolType))
-            {
-                PoolManager.Instance.ReturnObject(poolType, enemy);
-
-                activeEnemiesMap.Remove(enemy);
-            }
-            else
-            {
-                Debug.LogWarning($"[EnemySpawnerManager] Trying to return an unknown enemy: {enemy.name} not found in dictionary. Destroying it.");
-                Destroy(enemy);
-            }
+            PoolManager.Instance.ReturnObject(enemy);
         }
     }
 }
