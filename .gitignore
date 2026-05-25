@@ -99,3 +99,5 @@ InitTestScene*.unity*
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
 
 MrTank_BackUpThisFolder_ButDontShipItWithYourGame/
+MrTank_BurstDebugInformation_DoNotShip/
+MrTankDev_BackUpThisFolder_ButDontShipItWithYourGame/

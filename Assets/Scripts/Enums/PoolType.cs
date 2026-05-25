@@ -15,7 +15,7 @@ namespace Assets.Scripts
         Planes,
         RepairStation,
         Projectile,
-        DeathEffect,
+        Effect,
         LightTank,
         MediumTank,
         HeavyTank,

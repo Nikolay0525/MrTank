@@ -180,10 +180,6 @@ namespace Assets.Scripts
                 {
                     PoolManager.Instance.ReturnObject(PoolType.RepairStation, child);
                 }
-                else if (child.GetComponent<GrassMarkFX>() != null)
-                {
-                    PoolManager.Instance.ReturnObject(PoolType.DeathEffect, child);
-                }
                 else if (burntGrassRenderer != null && child == burntGrassRenderer.gameObject)
                 {
                     continue;
