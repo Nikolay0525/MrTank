@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Assets.ScriptableObjects;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -23,6 +24,36 @@ namespace Assets.Scripts
                 Destroy(gameObject);
             }
         }
+
+        public void PrewarmSceneData(SceneData newSceneData)
+        {
+            if (newSceneData == null) return;
+
+            if (newSceneData.layerPrefabs != null)
+            {
+                foreach (var layer in newSceneData.layerPrefabs)
+                {
+                    InitializePool(layer.gameObject, 4, 20);
+                }
+            }
+
+            if (newSceneData.enemyPrefabs != null)
+            {
+                foreach (var enemyConfig in newSceneData.enemyPrefabs)
+                {
+                    InitializePool(enemyConfig.gameObject, 5, 25);
+                }
+            }
+
+            if (newSceneData.sceneryPrefabs != null)
+            {
+                foreach (var scenery in newSceneData.sceneryPrefabs)
+                {
+                    InitializePool(scenery.gameObject, 20, 100);
+                }
+            }
+        }
+
 
         public void InitializePool(GameObject prefab, int defaultSize = 10, int maxSize = 100)
         {

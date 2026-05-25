@@ -1,16 +1,57 @@
-﻿using UnityEngine;
-using Assets.ScriptableObjects;
+﻿using Assets.ScriptableObjects;
+using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEngine;
 
 namespace Assets.Scripts
 {
     public class ScenerySpawner : MonoBehaviour
     {
+        public static ScenerySpawner Instance { get; private set; }
+
         [Header("Global Boundaries")]
         public float spawnX = 30f;
         public float despawnX = -30f;
 
         [Header("Scene Configuration")]
-        public SceneData currentSceneData;
+        private SceneData currentSceneData;
+
+        public HashSet<GameObject> activeScenery = new HashSet<GameObject>();
+
+        private void Awake()
+        {
+            if (Instance == null)
+            {
+                Instance = this;
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+
+            GarageManager.OnTankEquipped += InitializeWithNewData;
+        }
+
+        private void OnDestroy()
+        {
+            GarageManager.OnTankEquipped -= InitializeWithNewData;
+        }
+
+        private void InitializeWithNewData(SceneData newSceneData)
+        {
+            currentSceneData = newSceneData;
+
+            foreach (var scenery in activeScenery)
+            {
+                if (scenery != null && scenery.activeInHierarchy)
+                {
+                    PoolManager.Instance.ReturnObject(scenery);
+                }
+            }
+            activeScenery.Clear();
+
+            PreWarmScenery();
+        }
 
         private void Start()
         {
@@ -93,8 +134,19 @@ namespace Assets.Scripts
                 float randomSpeed = Random.Range(config.minSpeed, config.maxSpeed);
                 mover.Setup(endX, true, config.parallaxFactor, randomSpeed, direction);
 
+                mover.onDespawnCallback = ReturnObject;
+
                 spawnedObj.SetActive(true);
+
+                activeScenery.Add(spawnedObj);
             }
+        }
+
+        public void ReturnObject(GameObject sceneryObject)
+        {
+            activeScenery.Remove(sceneryObject);
+
+            PoolManager.Instance.ReturnObject(sceneryObject);
         }
     }
 }

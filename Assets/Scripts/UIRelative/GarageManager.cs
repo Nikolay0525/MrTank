@@ -1,4 +1,6 @@
 ﻿using Assets.ScriptableObjects;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static Assets.Scripts.StatsManager;
@@ -9,10 +11,17 @@ namespace Assets.Scripts
     {
         public static GarageManager Instance { get; private set; }
 
+        public static event Action<SceneData> OnTankEquipped;
+
         [Header("Shop Content")]
         public TankData[] allTanks;
         public GameObject shopItemPrefab;
         public Transform contentContainer;
+
+        [Header("Spawn Settings")]
+        public Transform playerSpawnPoint;
+        private GameObject currentTankInstance;
+
         public TankData CurrentSelectedTank { get; private set; }
 
         private List<TankShopItem> spawnedItems = new List<TankShopItem>();
@@ -96,17 +105,43 @@ namespace Assets.Scripts
                 if (tank.id == currentID)
                 {
                     CurrentSelectedTank = tank;
+
+                    if (CurrentSelectedTank.sceneData != null)
+                    {
+                        StartCoroutine(EquipTankRoutine(CurrentSelectedTank.sceneData));
+                    }
                     break;
                 }
             }
         }
 
+        private IEnumerator EquipTankRoutine(SceneData sceneData)
+        {
+            PoolManager.Instance.PrewarmSceneData(sceneData);
+
+            SpawnPlayerTank(sceneData.playerTankPrefab);
+
+            yield return null;
+
+            OnTankEquipped?.Invoke(sceneData);
+        }
+
+        private void SpawnPlayerTank(GameObject prefab)
+        {
+            if (prefab == null) return;
+
+            if (currentTankInstance != null)
+            {
+                Destroy(currentTankInstance);
+            }
+
+            Vector3 spawnPos = playerSpawnPoint != null ? playerSpawnPoint.position : Vector3.zero;
+            currentTankInstance = Instantiate(prefab, spawnPos, Quaternion.identity);
+        }
+
         private void RefreshAllButtons()
         {
-            foreach (var item in spawnedItems)
-            {
-                item.UpdateButtonState();
-            }
+            foreach (var item in spawnedItems) item.UpdateButtonState();
         }
     }
 }

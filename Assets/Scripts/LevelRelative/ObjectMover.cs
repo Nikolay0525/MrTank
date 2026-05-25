@@ -5,8 +5,10 @@ using UnityEngine;
 
 namespace Assets.Scripts
 {
-    internal class ObjectMover : MonoBehaviour
+    public class ObjectMover : MonoBehaviour
     {
+        public Action<GameObject> onDespawnCallback;
+
         private float despawnX;
         private bool shouldDespawnInRightSide;
         private float parallax;
@@ -49,7 +51,14 @@ namespace Assets.Scripts
             if (currentX < leftBound || shouldDespawnInRightSide && currentX > rightBound)
             {
                 isSetup = false;
-                PoolManager.Instance.ReturnObject(gameObject);
+                if (onDespawnCallback != null)
+                {
+                    onDespawnCallback.Invoke(gameObject);
+                }
+                else
+                {
+                    PoolManager.Instance.ReturnObject(gameObject);
+                }
             }
         }
     }

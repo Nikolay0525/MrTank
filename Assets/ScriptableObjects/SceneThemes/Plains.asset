@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e154aaea6c98a7e4ea555a9ee3b562ad, type: 3}
   m_Name: Plains
   m_EditorClassIdentifier: Assembly-CSharp::Assets.ScriptableObjects.SceneData
-  playerTankPrefab: {fileID: 8205151194453294827, guid: 2df2fa249c284e54881b798b0a925d2d, type: 3}
+  playerTankPrefab: {fileID: 1043465528220656139, guid: a2664046819b8574ea858d213a13ecef, type: 3}
   layerPrefabs:
   - {fileID: 6794098396653952219, guid: 5553afc533837224da6081c92838ef22, type: 3}
   - {fileID: -3864292744573876659, guid: 2ca46d6c0a2a84248b904528fa6a6a14, type: 3}

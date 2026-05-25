@@ -9,7 +9,9 @@ namespace Assets.Scripts
         public static EnemySpawnerManager Instance;
 
         [Header("Scene Configuration")]
-        public SceneData currentSceneData;
+        private SceneData currentSceneData;
+
+        public HashSet<GameObject> activeEnemies = new HashSet<GameObject>();
 
         private void Awake()
         {
@@ -21,6 +23,27 @@ namespace Assets.Scripts
             {
                 Destroy(gameObject);
             }
+
+            GarageManager.OnTankEquipped += InitializeWithNewData;
+        }
+
+        private void OnDestroy()
+        {
+            GarageManager.OnTankEquipped -= InitializeWithNewData;
+        }
+
+        private void InitializeWithNewData(SceneData newSceneData)
+        {
+            currentSceneData = newSceneData;
+
+            foreach (var enemy in activeEnemies)
+            {
+                if (enemy != null && enemy.activeInHierarchy)
+                {
+                    PoolManager.Instance.ReturnObject(enemy);
+                }
+            }
+            activeEnemies.Clear();
         }
 
         public GameObject TryGetEnemy()
@@ -35,12 +58,20 @@ namespace Assets.Scripts
             EnemyConfig selectedConfig = currentSceneData.enemyPrefabs[randomIndex];
 
             GameObject enemyPrefab = selectedConfig.gameObject;
+            GameObject spawnedEnemy = PoolManager.Instance.GetObject(enemyPrefab);
 
-            return PoolManager.Instance.GetObject(enemyPrefab);
+            if (spawnedEnemy != null)
+            {
+                activeEnemies.Add(spawnedEnemy);
+            }
+
+            return spawnedEnemy;
         }
 
         public void ReturnEnemy(GameObject enemy)
         {
+            activeEnemies.Remove(enemy);
+
             PoolManager.Instance.ReturnObject(enemy);
         }
     }

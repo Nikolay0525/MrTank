@@ -28,6 +28,11 @@ namespace Assets.Scripts
         [Header("Spawning")]
         public Transform firePoint;
 
+        [Header("Visual Effects")]
+        public Animator fireEffectAnimator;
+        public GameObject gunshotObj;
+        public string fireAnimationName = "Gunshot";
+
         private LineRenderer lineRenderer;
         private float currentAngle;
         private bool isAiming = false;
@@ -73,6 +78,12 @@ namespace Assets.Scripts
 
         public GameObject ExecuteShot(Action<bool> onResolutionCallback = null)
         {
+            if (fireEffectAnimator != null)
+            {
+                gunshotObj.SetActive(true);
+                fireEffectAnimator.Play(fireAnimationName, 0, 0f);
+            }
+
             isAiming = false;
             lineRenderer.enabled = false;
 

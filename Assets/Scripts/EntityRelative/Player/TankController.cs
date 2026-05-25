@@ -7,6 +7,8 @@ namespace Assets.Scripts
 {
     public class TankController : MonoBehaviour
     {
+        public static TankController Instance { get; private set; }
+
         public enum TankState { Garage, Driving, Combat, Dead }
         public enum CombatPhase { None, PlayerAiming, ProjectileInFlight, EnemyTurn }
 
@@ -27,11 +29,6 @@ namespace Assets.Scripts
 
         private CombatTimerUI combatTimerUI;
 
-        [Header("Visual Effects")]
-        public Animator fireEffectAnimator;
-        public GameObject gunshotObj;
-        public string fireAnimationName = "Gunshot";
-
         public static float CurrentGlobalSpeed { get; private set; }
 
         private float currentAimTimer;
@@ -41,11 +38,21 @@ namespace Assets.Scripts
 
         private void Awake()
         {
+            Instance = this;
+
             if (UIManager.Instance.CombatTimer == null)
             {
                 combatTimerUI = FindAnyObjectByType<CombatTimerUI>();
             }
             else combatTimerUI = UIManager.Instance.CombatTimer;
+
+            CameraController mainCamera = FindAnyObjectByType<CameraController>();
+            if (mainCamera != null)
+            {
+                mainCamera.target = this.transform;
+                mainCamera.tankController = this;
+            }
+            else Debug.LogError("[Tank Controller] main camera can't setup! Because it's null");
 
             TerrainChunk.hasGarageSpawned = false;
 
@@ -185,12 +192,6 @@ namespace Assets.Scripts
 
         private void ExecuteFire()
         {
-            if (fireEffectAnimator != null)
-            {
-                gunshotObj.SetActive(true);
-                fireEffectAnimator.Play(fireAnimationName, 0, 0f);
-            }
-
             activeProjectile = aimingSystem.ExecuteShot(HandleShotResult);
             currentPhase = CombatPhase.ProjectileInFlight;
         }
