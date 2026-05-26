@@ -29,12 +29,12 @@ namespace Assets.Scripts
                 Destroy(gameObject);
             }
 
-            GarageManager.OnTankEquipped += InitializeWithNewData;
+            LevelManager.OnTankEquipped += InitializeWithNewData;
         }
 
         private void OnDestroy()
         {
-            GarageManager.OnTankEquipped -= InitializeWithNewData;
+            LevelManager.OnTankEquipped -= InitializeWithNewData;
         }
 
         private void InitializeWithNewData(SceneData newSceneData)

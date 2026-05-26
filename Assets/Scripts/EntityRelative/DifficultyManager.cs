@@ -7,25 +7,25 @@ namespace Assets.Scripts
         public static DifficultyManager Instance { get; private set; }
 
         [Header("Progression Stats")]
-        public int totalKills = 0;
-        public int totalKillStreak = 0;
+        public int TotalKills = 0;
+        public int TotalKillstreak = 0;
         public int EnemiesPassedSinceLastStation = 999;
         [Tooltip("Kills per level")]
-        public int killsPerLevel = 1;
+        public int KillsPerLevel = 1;
 
         [Header("Player Settings")]
-        public float baseAimTime = 5f;
-        public float minAimTime = 1.5f;
-        public float aimReductionPerLevel = 0.2f;
+        public float BaseAimTime = 5f;
+        public float MinAimTime = 1.5f;
+        public float AimReductionPerLevel = 0.2f;
 
         [Header("Enemy Settings")]
-        public float baseHitChance = 0.15f;
-        public float maxHitChance = 0.9f;
-        public float hitChanceGainPerLevel = 0.07f;
+        public float BaseHitChance = 0.15f;
+        public float MaxHitChance = 0.9f;
+        public float HitChanceGainPerLevel = 0.07f;
 
-        public float initialMissRadius = 7f;
-        public float minMissRadius = 1.5f;
-        public float radiusReductionPerLevel = 0.6f;
+        public float InitialMissRadius = 7f;
+        public float MinMissRadius = 1.5f;
+        public float RadiusReductionPerLevel = 0.6f;
 
         private void Awake()
         {
@@ -38,65 +38,72 @@ namespace Assets.Scripts
 
         public void AddKill()
         {
-            totalKills++;
-            totalKillStreak++;
+            TotalKills++;
+            TotalKillstreak++;
             StatsManager.Instance.AddKill();
-            StatsManager.Instance.SetNewKillStreakScore(totalKillStreak);
-            if (totalKillStreak > 1)
+            StatsManager.Instance.SetNewKillStreakScore(TotalKillstreak);
+            if (TotalKillstreak > 1)
             {
-                StatsManager.Instance.AddCoins(totalKillStreak);
+                StatsManager.Instance.AddCoins(TotalKillstreak);
             }
             else StatsManager.Instance.AddCoins(1);
 
             if (UIManager.Instance != null)
             {
-                UIManager.Instance.CurrentScoreText.text = "Score: " + totalKills.ToString();
+                UIManager.Instance.CurrentScoreText.text = "Score: " + TotalKills.ToString();
             }
         }
 
         public void ResetKillStreak()
         {
-            totalKillStreak = 0;
+            TotalKillstreak = 0;
         }
 
         public float GetDifficultyLevel()
         {
-            return (float)totalKills / killsPerLevel;
+            return (float)TotalKills / KillsPerLevel;
         }
 
         public string GetCurrentScore()
         {
-            return UIManager.Instance.CurrentScoreText.text = "Score: " + totalKills.ToString();
+            return UIManager.Instance.CurrentScoreText.text = "Score: " + TotalKills.ToString();
         }
 
         public float GetPlayerAimTime()
         {
             float level = GetDifficultyLevel();
-            float time = baseAimTime - (level * aimReductionPerLevel);
-            return Mathf.Max(minAimTime, time);
+            float time = BaseAimTime - (level * AimReductionPerLevel);
+            return Mathf.Max(MinAimTime, time);
         }
 
         public float GetEnemyHitChance(int shotsFiredInDuel)
         {
             float level = GetDifficultyLevel();
-            float globalBonus = level * hitChanceGainPerLevel;
+            float globalBonus = level * HitChanceGainPerLevel;
             float localBonus = shotsFiredInDuel * 0.1f;
 
-            return Mathf.Clamp(baseHitChance + globalBonus + localBonus, 0f, maxHitChance);
+            return Mathf.Clamp(BaseHitChance + globalBonus + localBonus, 0f, MaxHitChance);
         }
 
         public float GetEnemyMissRadius(int shotsFiredInDuel)
         {
             float level = GetDifficultyLevel();
-            float radius = initialMissRadius - (level * radiusReductionPerLevel);
+            float radius = InitialMissRadius - (level * RadiusReductionPerLevel);
             float localRadiusReduction = shotsFiredInDuel * 0.5f;
 
-            return Mathf.Max(minMissRadius, radius - localRadiusReduction);
+            return Mathf.Max(MinMissRadius, radius - localRadiusReduction);
         }
 
         public void ResetStationCounter()
         {
             EnemiesPassedSinceLastStation = 0;
+        }
+
+        public void ResetDifficulty()
+        {
+            Instance.TotalKills = 0;
+            Instance.TotalKillstreak = 0;
+            Instance.EnemiesPassedSinceLastStation = 0;
         }
     }
 }

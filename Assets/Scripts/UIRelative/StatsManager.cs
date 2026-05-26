@@ -12,7 +12,7 @@ namespace Assets.Scripts
         [System.Serializable]
         public class PlayerStats
         {
-            public int totalKills;
+            public int TotalKills;
             public int maxKillStreak;
             public int bestScore;
             public int coins;
@@ -79,7 +79,7 @@ namespace Assets.Scripts
 
         public void AddKill()
         {
-            currentStats.totalKills++;
+            currentStats.TotalKills++;
             SaveStats();
         }
 

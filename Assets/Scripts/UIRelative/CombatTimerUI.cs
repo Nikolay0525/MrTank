@@ -1,3 +1,4 @@
+using Assets.ScriptableObjects;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,6 +14,21 @@ namespace Assets.Scripts
 
         private Transform targetTransform;
         private float maxTime;
+
+        private void OnEnable()
+        {
+            LevelManager.OnTankEquipped += HandleRestart;
+        }
+
+        private void OnDisable()
+        {
+            LevelManager.OnTankEquipped -= HandleRestart;
+        }
+
+        private void HandleRestart(SceneData data)
+        {
+            HideTimer();
+        }
 
         public void ShowTimer(Transform target, float timeToAim)
         {

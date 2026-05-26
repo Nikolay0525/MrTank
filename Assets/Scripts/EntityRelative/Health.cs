@@ -16,7 +16,14 @@ namespace Assets.Scripts
         public void ResetHealth()
         {
             currentHealth = maxHealth;
+            OnHealthChanged?.Invoke();
         }
+
+        private void OnEnable()
+        {
+            ResetHealth();
+        }
+
 
         private void Awake()
         {

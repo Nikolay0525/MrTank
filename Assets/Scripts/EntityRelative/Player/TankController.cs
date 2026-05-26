@@ -19,17 +19,16 @@ namespace Assets.Scripts
         [Header("Environment Control")]
         public float environmentSpeed = 4f;
         public AimingSystem aimingSystem;
-        public static bool shouldAutoStart = false;
+        public bool shouldAutoStart = false;
 
         [Header("Movement Dynamics")]
         public float accelerationRate = 2.5f;
         public float decelerationRate = 5f;
 
+        public float CurrentGlobalSpeed { get; private set; }
+
         private float targetGlobalSpeed = 0f;
-
         private CombatTimerUI combatTimerUI;
-
-        public static float CurrentGlobalSpeed { get; private set; }
 
         private float currentAimTimer;
         private GameObject activeProjectile;
@@ -56,19 +55,7 @@ namespace Assets.Scripts
 
             TerrainChunk.hasGarageSpawned = false;
 
-            if (shouldAutoStart)
-            {
-                SetState(TankState.Driving);
-
-                shouldAutoStart = false;
-
-                if (UIManager.Instance != null) UIManager.Instance.InGamePanel.SetActive(true);
-                if (UIManager.Instance != null) UIManager.Instance.GaragePanel.SetActive(false);
-            }
-            else
-            {
-                SetState(TankState.Garage);
-            }
+            SetState(TankState.Garage);
         }
 
         private void Update()

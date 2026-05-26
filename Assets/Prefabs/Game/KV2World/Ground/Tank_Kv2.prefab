@@ -64,7 +64,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8640863420200944568}
@@ -87,6 +87,7 @@ MonoBehaviour:
   currentPhase: 0
   environmentSpeed: 5
   aimingSystem: {fileID: 8358508795764674752}
+  shouldAutoStart: 0
   accelerationRate: 5
   decelerationRate: 5
 --- !u!120 &5903144399985354014
@@ -996,7 +997,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8778514606294386909}
@@ -1016,7 +1017,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4edbbf7604854d4283d70d39d59fa03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Assets.Scripts.NewMonoBehaviour
-  bodyVisual: {fileID: 8778514606294386909}
+  bodyVisual: {fileID: 3380803058519982908}
   raycastHeightOffset: 1
   raycastDistance: 30
   groundLayer:

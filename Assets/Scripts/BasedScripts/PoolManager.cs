@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 namespace Assets.Scripts
 {
@@ -28,6 +29,16 @@ namespace Assets.Scripts
         public void PrewarmSceneData(SceneData newSceneData)
         {
             if (newSceneData == null) return;
+
+            if (newSceneData.playerTankPrefab != null)
+            {
+                AimingSystem aimingSystem = newSceneData.playerTankPrefab.GetComponent<AimingSystem>();
+                GameObject projectile = aimingSystem.projectilePrefab;
+                if (projectile != null)
+                {
+                    InitializePool(projectile, 1, 5);
+                }
+            }
 
             if (newSceneData.layerPrefabs != null)
             {

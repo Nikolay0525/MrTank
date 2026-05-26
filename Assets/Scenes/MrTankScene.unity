@@ -159,19 +159,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d40e4923e00baa84dbe925ed4347b830, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DifficultyManager
-  totalKills: 0
-  totalKillStreak: 0
+  TotalKills: 0
+  TotalKillstreak: 0
   EnemiesPassedSinceLastStation: 999
-  killsPerLevel: 1
-  baseAimTime: 3
-  minAimTime: 1.5
-  aimReductionPerLevel: 0.1
-  baseHitChance: 0.15
-  maxHitChance: 0.9
-  hitChanceGainPerLevel: 0.07
-  initialMissRadius: 7
-  minMissRadius: 1.5
-  radiusReductionPerLevel: 0.6
+  KillsPerLevel: 1
+  BaseAimTime: 5
+  MinAimTime: 1.5
+  AimReductionPerLevel: 0.2
+  BaseHitChance: 0.15
+  MaxHitChance: 0.9
+  HitChanceGainPerLevel: 0.07
+  InitialMissRadius: 7
+  MinMissRadius: 1.5
+  RadiusReductionPerLevel: 0.6
 --- !u!4 &148741101
 Transform:
   m_ObjectHideFlags: 0
@@ -295,7 +295,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b9bf2ed404564944bccfe7a58236f25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Assets.Scripts.NewMonoBehaviour
-  currentSceneData: {fileID: 11400000, guid: ab3168d15542bb34d8cb3506465a8d44, type: 2}
 --- !u!4 &247105660
 Transform:
   m_ObjectHideFlags: 0
@@ -630,7 +629,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Assets.Scripts.StatsManager
   currentStats:
-    totalKills: 0
+    TotalKills: 0
     maxKillStreak: 0
     bestScore: 0
     coins: 0
@@ -896,7 +895,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Assets.Scripts.ScenerySpawner
   spawnX: 30
   despawnX: -30
-  currentSceneData: {fileID: 11400000, guid: ab3168d15542bb34d8cb3506465a8d44, type: 2}
 --- !u!1 &1857556873
 GameObject:
   m_ObjectHideFlags: 0
@@ -908,7 +906,7 @@ GameObject:
   - component: {fileID: 1857556875}
   - component: {fileID: 1857556874}
   m_Layer: 0
-  m_Name: GarageManager
+  m_Name: SceneManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -929,7 +927,6 @@ MonoBehaviour:
   allTanks:
   - {fileID: 11400000, guid: e92fc4f409900544cb049f2503d5d68d, type: 2}
   - {fileID: 11400000, guid: 48db425c91f234742b16e42cf0115311, type: 2}
-  - {fileID: 11400000, guid: fe2cf32692243fc4d840a6ea9fd28002, type: 2}
   shopItemPrefab: {fileID: 2822869731686417059, guid: 1f540b97f5b7b76488a349d8ac9c1601, type: 3}
   contentContainer: {fileID: 5417838131634080068}
   playerSpawnPoint: {fileID: 711460394}
@@ -1176,6 +1173,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6623248910689284441, guid: 8c69c888b652fa142bbf54a3c04a38d8, type: 3}
+      propertyPath: offset.y
+      value: 1.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1185,17 +1186,17 @@ PrefabInstance:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 1287401105}
   - {fileID: 418226871}
   - {fileID: 1841243842}
   - {fileID: 247105660}
-  - {fileID: 1287401105}
+  - {fileID: 1193477707}
+  - {fileID: 148741101}
+  - {fileID: 1857556875}
+  - {fileID: 1571202745}
   - {fileID: 519420032}
   - {fileID: 711460394}
   - {fileID: 8105443708978518366}
   - {fileID: 991288952}
-  - {fileID: 148741101}
   - {fileID: 223463521}
-  - {fileID: 1571202745}
-  - {fileID: 1193477707}
-  - {fileID: 1857556875}
   - {fileID: 2412895372692504644}

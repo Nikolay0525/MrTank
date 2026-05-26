@@ -40,7 +40,7 @@ namespace Assets.Scripts
 
             Vector3 ownMovement = Vector3.right * (speed * direction);
 
-            Vector3 landscapeMovement = Vector3.left * (TankController.CurrentGlobalSpeed * parallax);
+            Vector3 landscapeMovement = Vector3.left * (TankController.Instance.CurrentGlobalSpeed * parallax);
 
             transform.Translate((ownMovement + landscapeMovement) * Time.deltaTime);
 

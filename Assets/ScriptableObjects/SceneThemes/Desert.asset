@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e154aaea6c98a7e4ea555a9ee3b562ad, type: 3}
+  m_Name: Desert
+  m_EditorClassIdentifier: Assembly-CSharp::Assets.ScriptableObjects.SceneData
+  playerTankPrefab: {fileID: 1043465528220656139, guid: a2110ee662df1b042b8b3e74916eea85, type: 3}
+  layerPrefabs:
+  - {fileID: 6794098396653952219, guid: 5087b360b423c10449aa76778aeff6c7, type: 3}
+  - {fileID: -3864292744573876659, guid: dda83dad393d1f94ab8a52fde17e27df, type: 3}
+  - {fileID: -4678858316763510747, guid: b1df536d04b5fa54496cbcb0a0bd4e2b, type: 3}
+  - {fileID: -1752689773416442138, guid: adeb66bf74a919a47bedc8c440311196, type: 3}
+  enemyPrefabs:
+  - {fileID: 1065013290810376224, guid: cf5877f402413dc4eb303801b2dfbcfd, type: 3}
+  sceneryPrefabs:
+  - {fileID: -4100615441908108695, guid: c80a758c047fd0f4785f8da40ed3b5d4, type: 3}
+  - {fileID: 21159631464809215, guid: bb705a3a3bac7cf49b5918d259f67fa7, type: 3}
+  - {fileID: -3192233434019256199, guid: ae847e1c16f3b07408ef0a6274aa28bc, type: 3}

@@ -15,10 +15,10 @@ namespace Assets.Scripts
 
         private int tankID;
         private TankData data;
-        private GarageManager manager;
+        private LevelManager manager;
 
 
-        public void Setup(TankData tankData, int id, GarageManager garageManager)
+        public void Setup(TankData tankData, int id, LevelManager garageManager)
         {
             if (buttonText == null)
             {

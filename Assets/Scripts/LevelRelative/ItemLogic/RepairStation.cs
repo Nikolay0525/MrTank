@@ -4,7 +4,6 @@ namespace Assets.Scripts
 {
     public class RepairStation : MonoBehaviour
     {
-        public float healAmount = 100f;
         public LayerMask playerLayer;
         public GameObject isActiveIconObject;
         private bool canHealAgain = true; 
@@ -22,7 +21,7 @@ namespace Assets.Scripts
                 Health playerHealth = other.GetComponentInParent<Health>();
                 if (playerHealth != null || playerHealth.currentHealth != playerHealth.maxHealth)
                 {
-                    playerHealth.Heal(healAmount);
+                    playerHealth.Heal(playerHealth.maxHealth);
                     isActiveIconObject.SetActive(false);
                     canHealAgain = false;
                 }

@@ -107,18 +107,19 @@ namespace Assets.Scripts
 
             if (DifficultyManager.Instance != null)
             {
-                FinalScoreText.text = "Score: " + DifficultyManager.Instance.totalKills.ToString();
+                FinalScoreText.text = "Score: " + DifficultyManager.Instance.TotalKills.ToString();
 
-                StatsManager.Instance.UpdateBestScore(DifficultyManager.Instance.totalKills);
+                StatsManager.Instance.UpdateBestScore(DifficultyManager.Instance.TotalKills);
             }
         }
 
         public void OnClickRetry()
         {
-            ShowPanels(InGamePanel, ScorePanel);
+            Time.timeScale = 1f;
+            LevelManager.Instance.RestartSession(true);
 
-            TankController.shouldAutoStart = true;
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            ShowPanels(InGamePanel, ScorePanel);
+            UpdateScoreText();
         }
 
         public void OnClickPause()
@@ -135,20 +136,22 @@ namespace Assets.Scripts
 
         public void OnClickBackToGarageGO()
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            LevelManager.Instance.RestartSession();
+            OnClickGarage();
         }
 
         public void OnClickBackToGaragePause()
         {
-            StatsManager.Instance.UpdateBestScore(DifficultyManager.Instance.totalKills);
+            StatsManager.Instance.UpdateBestScore(DifficultyManager.Instance.TotalKills);
             Time.timeScale = 1f;
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            LevelManager.Instance.RestartSession();
+            OnClickGarage();
         }
 
         public void OnClickGarage()
         {
             CoinsText.text = StatsManager.Instance.GetCurrentCoins().ToString();
-            StatsManager.Instance.UpdateBestScore(DifficultyManager.Instance.totalKills);
+            StatsManager.Instance.UpdateBestScore(DifficultyManager.Instance.TotalKills);
             ShowPanels(GaragePanel, HomePanel);
         }
 

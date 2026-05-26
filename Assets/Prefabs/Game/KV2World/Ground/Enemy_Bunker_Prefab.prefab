@@ -240,6 +240,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2048953057860372677}
   - {fileID: 479739781619196836}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -290,7 +291,19 @@ MonoBehaviour:
         m_CallState: 2
   OnHealthChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6171628815968040642}
+        m_TargetAssemblyTypeName: Assets.Scripts.FloatingHealthBar, Assembly-CSharp
+        m_MethodName: OnHealthChanged
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &8031972322344257965
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -850,6 +863,127 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3215626697290013203, guid: b2dc1da3f1aa0184eb91675123f94f88, type: 3}
   m_PrefabInstance: {fileID: 1950763157285498938}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &4528246744981491705
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 3415866262798112228}
+    m_Modifications:
+    - target: {fileID: 2501969078831744828, guid: ec498dec4ad139e47827ad1d9e6c151e, type: 3}
+      propertyPath: m_Pivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2501969078831744828, guid: ec498dec4ad139e47827ad1d9e6c151e, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2501969078831744828, guid: ec498dec4ad139e47827ad1d9e6c151e, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2501969078831744828, guid: ec498dec4ad139e47827ad1d9e6c151e, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2501969078831744828, guid: ec498dec4ad139e47827ad1d9e6c151e, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2501969078831744828, guid: ec498dec4ad139e47827ad1d9e6c151e, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2501969078831744828, guid: ec498dec4ad139e47827ad1d9e6c151e, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 520
+      objectReference: {fileID: 0}
+    - target: {fileID: 2501969078831744828, guid: ec498dec4ad139e47827ad1d9e6c151e, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 292
+      objectReference: {fileID: 0}
+    - target: {fileID: 2501969078831744828, guid: ec498dec4ad139e47827ad1d9e6c151e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2501969078831744828, guid: ec498dec4ad139e47827ad1d9e6c151e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2501969078831744828, guid: ec498dec4ad139e47827ad1d9e6c151e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2501969078831744828, guid: ec498dec4ad139e47827ad1d9e6c151e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2501969078831744828, guid: ec498dec4ad139e47827ad1d9e6c151e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2501969078831744828, guid: ec498dec4ad139e47827ad1d9e6c151e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2501969078831744828, guid: ec498dec4ad139e47827ad1d9e6c151e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2501969078831744828, guid: ec498dec4ad139e47827ad1d9e6c151e, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2501969078831744828, guid: ec498dec4ad139e47827ad1d9e6c151e, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2501969078831744828, guid: ec498dec4ad139e47827ad1d9e6c151e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2501969078831744828, guid: ec498dec4ad139e47827ad1d9e6c151e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2501969078831744828, guid: ec498dec4ad139e47827ad1d9e6c151e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4305550475640007868, guid: ec498dec4ad139e47827ad1d9e6c151e, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6239622811014362346, guid: ec498dec4ad139e47827ad1d9e6c151e, type: 3}
+      propertyPath: m_Name
+      value: HealthCanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 7742136196392171835, guid: ec498dec4ad139e47827ad1d9e6c151e, type: 3}
+      propertyPath: targetHealth
+      value: 
+      objectReference: {fileID: 210220284062044720}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ec498dec4ad139e47827ad1d9e6c151e, type: 3}
+--- !u!224 &2048953057860372677 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 2501969078831744828, guid: ec498dec4ad139e47827ad1d9e6c151e, type: 3}
+  m_PrefabInstance: {fileID: 4528246744981491705}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6171628815968040642 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7742136196392171835, guid: ec498dec4ad139e47827ad1d9e6c151e, type: 3}
+  m_PrefabInstance: {fileID: 4528246744981491705}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5d062ab8510a954f97259935f2d739c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FloatingHealthBar
 --- !u!1001 &7909205370601047513
 PrefabInstance:
   m_ObjectHideFlags: 0

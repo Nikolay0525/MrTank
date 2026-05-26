@@ -1,13 +1,9 @@
-﻿using UnityEngine;
+﻿using Assets.ScriptableObjects;
 using System;
+using UnityEngine;
 
 namespace Assets.Scripts
 {
-    public enum DamageType
-    {
-        Direct,
-        AreaOfEffect
-    }
 
     [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
     public class Projectile : MonoBehaviour
@@ -27,12 +23,6 @@ namespace Assets.Scripts
         private Rigidbody2D rb;
         private Action<bool> onResolutionCallback;
         private bool isInitialized = false;
-
-        private void Awake()
-        {
-            rb = GetComponent<Rigidbody2D>();
-        }
-
         public void Initialize(Vector2 initialVelocity, float damage, float sizeMultiplier, Action<bool> callback = null)
         {
             rb.linearVelocity = initialVelocity;
@@ -42,6 +32,35 @@ namespace Assets.Scripts
 
             onResolutionCallback = callback;
             isInitialized = true;
+        }
+
+        private void Awake()
+        {
+            rb = GetComponent<Rigidbody2D>();
+        }
+
+        private void OnEnable()
+        {
+            LevelManager.OnTankEquipped += HandleRestart;
+        }
+
+
+        private void OnDisable()
+        {
+            isInitialized = false;
+            onResolutionCallback = null;
+            if (rb != null)
+            {
+                rb.linearVelocity = Vector2.zero;
+            }
+
+            LevelManager.OnTankEquipped -= HandleRestart;
+        }
+
+
+        private void HandleRestart(SceneData sceneData)
+        {
+            PoolManager.Instance.ReturnObject(gameObject);
         }
 
         private void FixedUpdate()
@@ -82,16 +101,6 @@ namespace Assets.Scripts
             onResolutionCallback?.Invoke(isHit);
 
             PoolManager.Instance.ReturnObject(gameObject);
-        }
-
-        private void OnDisable()
-        {
-            isInitialized = false;
-            onResolutionCallback = null;
-            if (rb != null)
-            {
-                rb.linearVelocity = Vector2.zero;
-            }
         }
 
         private bool ApplyDirectDamage(GameObject target)

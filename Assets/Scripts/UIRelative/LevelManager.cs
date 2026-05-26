@@ -7,9 +7,9 @@ using static Assets.Scripts.StatsManager;
 
 namespace Assets.Scripts
 {
-    public class GarageManager : MonoBehaviour
+    public class LevelManager : MonoBehaviour
     {
-        public static GarageManager Instance { get; private set; }
+        public static LevelManager Instance { get; private set; }
 
         public static event Action<SceneData> OnTankEquipped;
 
@@ -66,6 +66,59 @@ namespace Assets.Scripts
             }
         }
 
+        private void UpdateCurrentTankReference()
+        {
+            int currentID = StatsManager.Instance.currentStats.selectedTankID;
+
+            foreach (var tank in allTanks)
+            {
+                if (tank.id == currentID)
+                {
+                    CurrentSelectedTank = tank;
+
+                    if (CurrentSelectedTank.sceneData != null)
+                    {
+                        StartCoroutine(EquipTankRoutine(CurrentSelectedTank.sceneData, false));
+                    }
+                    break;
+                }
+            }
+        }
+
+        private IEnumerator EquipTankRoutine(SceneData sceneData, bool isAutoStart)
+        {
+            PoolManager.Instance.PrewarmSceneData(sceneData);
+
+            SpawnPlayerTank(sceneData.playerTankPrefab);
+
+            yield return null;
+
+            OnTankEquipped?.Invoke(sceneData);
+
+            if (isAutoStart && TankController.Instance != null)
+            {
+                TankController.Instance.StartBattleFromGarage();
+            }
+        }
+
+        private void SpawnPlayerTank(GameObject prefab)
+        {
+            if (prefab == null) return;
+
+            if (currentTankInstance != null)
+            {
+                Destroy(currentTankInstance);
+            }
+
+            Vector3 spawnPos = playerSpawnPoint != null ? playerSpawnPoint.position : Vector3.zero;
+            currentTankInstance = Instantiate(prefab, spawnPos, Quaternion.identity);
+        }
+
+        private void RefreshAllButtons()
+        {
+            foreach (var item in spawnedItems) item.UpdateButtonState();
+        }
+
         public void HandleTankAction(int tankID, int price)
         {
             PlayerStats stats = StatsManager.Instance.currentStats;
@@ -87,7 +140,7 @@ namespace Assets.Scripts
             }
             else
             {
-                Debug.Log("Not enough coins!");
+                Debug.Log("[LevelManager]Not enough coins!");
                 return;
             }
 
@@ -95,53 +148,17 @@ namespace Assets.Scripts
             UpdateCurrentTankReference();
             RefreshAllButtons();
         }
-
-        private void UpdateCurrentTankReference()
+        public void RestartSession(bool isAutoStart = false)
         {
-            int currentID = StatsManager.Instance.currentStats.selectedTankID;
-
-            foreach (var tank in allTanks)
+            if (DifficultyManager.Instance != null)
             {
-                if (tank.id == currentID)
-                {
-                    CurrentSelectedTank = tank;
-
-                    if (CurrentSelectedTank.sceneData != null)
-                    {
-                        StartCoroutine(EquipTankRoutine(CurrentSelectedTank.sceneData));
-                    }
-                    break;
-                }
-            }
-        }
-
-        private IEnumerator EquipTankRoutine(SceneData sceneData)
-        {
-            PoolManager.Instance.PrewarmSceneData(sceneData);
-
-            SpawnPlayerTank(sceneData.playerTankPrefab);
-
-            yield return null;
-
-            OnTankEquipped?.Invoke(sceneData);
-        }
-
-        private void SpawnPlayerTank(GameObject prefab)
-        {
-            if (prefab == null) return;
-
-            if (currentTankInstance != null)
-            {
-                Destroy(currentTankInstance);
+                DifficultyManager.Instance.ResetDifficulty();
             }
 
-            Vector3 spawnPos = playerSpawnPoint != null ? playerSpawnPoint.position : Vector3.zero;
-            currentTankInstance = Instantiate(prefab, spawnPos, Quaternion.identity);
-        }
-
-        private void RefreshAllButtons()
-        {
-            foreach (var item in spawnedItems) item.UpdateButtonState();
+            if (CurrentSelectedTank != null && CurrentSelectedTank.sceneData != null)
+            {
+                StartCoroutine(EquipTankRoutine(CurrentSelectedTank.sceneData, isAutoStart));
+            }
         }
     }
 }

@@ -24,7 +24,7 @@ namespace Assets.Scripts
                 Destroy(child.gameObject);
             }
 
-            CreateStatUI("Total kills", statsManager.currentStats.totalKills);
+            CreateStatUI("Total kills", statsManager.currentStats.TotalKills);
             CreateStatUI("Max kill streak", statsManager.currentStats.maxKillStreak);
             CreateStatUI("Best score", statsManager.currentStats.bestScore);
             CreateStatUI("Coins amount", statsManager.currentStats.coins);
