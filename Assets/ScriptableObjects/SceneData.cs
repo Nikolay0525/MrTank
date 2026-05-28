@@ -18,5 +18,9 @@ namespace Assets.ScriptableObjects
 
         [Header("ScenerySpawner Settings")]
         public List<Assets.Scripts.SceneryConfig> sceneryPrefabs;
+
+        [Header("Effects Settings")]
+        public EffectConfig groundHitEffectPrefab;
+        public EffectConfig enemyHitEffectPrefab;
     }
 }

@@ -3,8 +3,8 @@ guid: 18610cb7af07a724fa79f0683c6b5dc9
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 6431970922287338844
-    second: bodyBishopFrame2 1_0
+      213: 7449937839025880040
+    second: bodyBishopFrame2_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: bodyBishopFrame2 1_0
+      name: bodyBishopFrame2_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 128
-        height: 68
+        width: 192
+        height: 102
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c55149cc973f24950800000000000000
-      internalID: 6431970922287338844
+      spriteID: 8ebf0ed3efe736760800000000000000
+      internalID: 7449937839025880040
       vertices: []
       indices: 
       edges: []
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      bodyBishopFrame2 1_0: 6431970922287338844
+      bodyBishopFrame2_0: 7449937839025880040
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

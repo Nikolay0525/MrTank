@@ -46,9 +46,14 @@ namespace Assets.Scripts
             else combatTimerUI = UIManager.Instance.CombatTimer;
 
             CameraController mainCamera = FindAnyObjectByType<CameraController>();
+            TankKinematics tankBody = GetComponentInChildren<TankKinematics>();
             if (mainCamera != null)
             {
-                mainCamera.target = this.transform;
+                if(tankBody != null)
+                {
+                    mainCamera.target = tankBody.gameObject.transform;
+                }
+                else mainCamera.target = this.transform;
                 mainCamera.tankController = this;
             }
             else Debug.LogError("[Tank Controller] main camera can't setup! Because it's null");

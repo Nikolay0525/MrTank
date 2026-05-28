@@ -88,6 +88,20 @@ namespace Assets.Scripts
             bool isHit = false;
             isInitialized = false;
 
+            Health health = collision.gameObject.GetComponentInParent<Health>();
+            EffectType effectType = health != null
+                ? EffectType.EnemyHit
+                : EffectType.GroundHit;
+
+            Transform parentTransform = collision.collider.transform;
+            Vector2 hitPoint = collision.contacts[0].point;
+            Vector2 hitNormal = collision.contacts[0].normal;
+
+            if (EffectsManager.Instance != null)
+            {
+                EffectsManager.Instance.SpawnEffect(hitPoint, hitNormal, transform.rotation, parentTransform, effectType);
+            }
+
             switch (damageType)
             {
                 case DamageType.Direct:

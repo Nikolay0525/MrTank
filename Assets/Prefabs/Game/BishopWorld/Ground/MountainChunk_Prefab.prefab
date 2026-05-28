@@ -49,13 +49,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Assets.Scripts.LayerConfig
   verticalOffset: 0
-  zOffset: 90
+  zOffset: 75
   despawnX: -30
   parallaxMultiplier: 0.0625
   logicType: 1
   isMainDistanceTracker: 0
-  isFirst: 1
-  currentGlobalX: 0
+  isFirst: 0
+  currentGlobalX: 86
   lastSpawned: {fileID: 0}
 --- !u!33 &5122472145110462149
 MeshFilter:

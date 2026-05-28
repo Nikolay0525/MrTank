@@ -17,10 +17,15 @@ MonoBehaviour:
   - {fileID: 6794098396653952219, guid: 5087b360b423c10449aa76778aeff6c7, type: 3}
   - {fileID: -3864292744573876659, guid: dda83dad393d1f94ab8a52fde17e27df, type: 3}
   - {fileID: -4678858316763510747, guid: b1df536d04b5fa54496cbcb0a0bd4e2b, type: 3}
+  - {fileID: -4678858316763510747, guid: 18429dbc5815c444a893d0feb1e45b69, type: 3}
+  - {fileID: -4678858316763510747, guid: 19f3c5f20f6427d41a8361a5a31845d6, type: 3}
   - {fileID: -1752689773416442138, guid: adeb66bf74a919a47bedc8c440311196, type: 3}
+  - {fileID: -4678858316763510747, guid: f852901c97a51a1499c4164c307e98ff, type: 3}
   enemyPrefabs:
   - {fileID: 1065013290810376224, guid: cf5877f402413dc4eb303801b2dfbcfd, type: 3}
   sceneryPrefabs:
   - {fileID: -4100615441908108695, guid: c80a758c047fd0f4785f8da40ed3b5d4, type: 3}
   - {fileID: 21159631464809215, guid: bb705a3a3bac7cf49b5918d259f67fa7, type: 3}
   - {fileID: -3192233434019256199, guid: ae847e1c16f3b07408ef0a6274aa28bc, type: 3}
+  groundHitEffectPrefab: {fileID: 5445834713853543430, guid: 3945dbc0c17cea448bcd5cab456e8523, type: 3}
+  enemyHitEffectPrefab: {fileID: 7556798648129705472, guid: 9a8256db822182e47ab93b5c514fab6e, type: 3}

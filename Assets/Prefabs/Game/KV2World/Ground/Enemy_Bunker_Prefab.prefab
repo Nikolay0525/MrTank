@@ -583,7 +583,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4edbbf7604854d4283d70d39d59fa03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TankKinematics
-  bodyVisual: {fileID: 479739781619196836}
+  heightBody: {fileID: 3415866262798112228}
+  rotationBody: {fileID: 479739781619196836}
   raycastHeightOffset: 1
   raycastDistance: 30
   groundLayer:

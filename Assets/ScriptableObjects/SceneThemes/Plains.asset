@@ -26,3 +26,5 @@ MonoBehaviour:
   - {fileID: -4100615441908108695, guid: c80a758c047fd0f4785f8da40ed3b5d4, type: 3}
   - {fileID: 21159631464809215, guid: bb705a3a3bac7cf49b5918d259f67fa7, type: 3}
   - {fileID: -3192233434019256199, guid: ae847e1c16f3b07408ef0a6274aa28bc, type: 3}
+  groundHitEffectPrefab: {fileID: 5265646284361848523, guid: 10c59b2e09a8c6545a3f2dcec41e9527, type: 3}
+  enemyHitEffectPrefab: {fileID: 7556798648129705472, guid: 9a8256db822182e47ab93b5c514fab6e, type: 3}

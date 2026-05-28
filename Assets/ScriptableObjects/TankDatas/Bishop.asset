@@ -15,5 +15,5 @@ MonoBehaviour:
   id: 1
   tankName: Bishop
   price: 1000
-  shopIcon: {fileID: -3505690627962800557, guid: cedfe5b661677244d9a0a968adf3e285, type: 3}
+  shopIcon: {fileID: 8463525611283417056, guid: 067cfde120b14e84ea93a5d11b53b88d, type: 3}
   sceneData: {fileID: 11400000, guid: 7b69e2a7ebd7bca4bb00689094131a26, type: 2}
