@@ -163,9 +163,9 @@ MonoBehaviour:
   TotalKillstreak: 0
   EnemiesPassedSinceLastStation: 999
   KillsPerLevel: 1
-  BaseAimTime: 5
-  MinAimTime: 1.5
-  AimReductionPerLevel: 0.2
+  BaseAimTime: 4
+  MinAimTime: 2
+  AimReductionPerLevel: 0.1
   BaseHitChance: 0.15
   MaxHitChance: 0.9
   HitChanceGainPerLevel: 0.07

@@ -19,9 +19,7 @@ MonoBehaviour:
   - {fileID: -4678858316763510747, guid: 367723a1257c31240b233516ea4fab26, type: 3}
   - {fileID: -1752689773416442138, guid: 10b364ac0f0a2dd43a13cbb953ba66da, type: 3}
   enemyPrefabs:
-  - {fileID: 1065013290810376224, guid: 5b93dd89eeb03df40b0f832be2cc3cab, type: 3}
-  - {fileID: -866309979139782626, guid: 16fa7be23d6dc374ab673ea6dd814af2, type: 3}
-  - {fileID: 8993127991788209337, guid: 656d62d374ba0494cace51e42772e35a, type: 3}
+  - {fileID: -866309979139782626, guid: 935f9f54f9bf31441afdab4f44d4f44b, type: 3}
   sceneryPrefabs:
   - {fileID: -4100615441908108695, guid: c80a758c047fd0f4785f8da40ed3b5d4, type: 3}
   - {fileID: 21159631464809215, guid: bb705a3a3bac7cf49b5918d259f67fa7, type: 3}

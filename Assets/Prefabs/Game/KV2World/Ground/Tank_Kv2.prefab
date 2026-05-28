@@ -68,6 +68,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3380803058519982908}
+  - {fileID: 8531153229544219792}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &290967300001314503
@@ -267,7 +268,7 @@ MonoBehaviour:
   OnHealthChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 5176426788954729368}
         m_TargetAssemblyTypeName: Assets.Scripts.FloatingHealthBar, Assembly-CSharp
         m_MethodName: OnHealthChanged
         m_Mode: 1
@@ -1002,7 +1003,6 @@ Transform:
   - {fileID: 8778514606294386909}
   - {fileID: 1116563051615759514}
   - {fileID: 6524078335344313403}
-  - {fileID: 8531153229544219792}
   m_Father: {fileID: 7836283870087940301}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &299814121102364829
@@ -1106,7 +1106,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 3380803058519982908}
+    m_TransformParent: {fileID: 7836283870087940301}
     m_Modifications:
     - target: {fileID: 5953158513759043711, guid: 0bb768b21b593f446b8a5f6f0fbfde43, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1157,6 +1157,14 @@ PrefabInstance:
       value: 292
       objectReference: {fileID: 0}
     - target: {fileID: 7760694066864274996, guid: 0bb768b21b593f446b8a5f6f0fbfde43, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 7760694066864274996, guid: 0bb768b21b593f446b8a5f6f0fbfde43, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 7760694066864274996, guid: 0bb768b21b593f446b8a5f6f0fbfde43, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -1190,7 +1198,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7760694066864274996, guid: 0bb768b21b593f446b8a5f6f0fbfde43, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 1
+      value: 1.75
       objectReference: {fileID: 0}
     - target: {fileID: 7760694066864274996, guid: 0bb768b21b593f446b8a5f6f0fbfde43, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1218,6 +1226,17 @@ CanvasGroup:
   m_CorrespondingSourceObject: {fileID: 3896579135417885293, guid: 0bb768b21b593f446b8a5f6f0fbfde43, type: 3}
   m_PrefabInstance: {fileID: 2150249517860379300}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5176426788954729368 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6485575123023933756, guid: 0bb768b21b593f446b8a5f6f0fbfde43, type: 3}
+  m_PrefabInstance: {fileID: 2150249517860379300}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5d062ab8510a954f97259935f2d739c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FloatingHealthBar
 --- !u!224 &8531153229544219792 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7760694066864274996, guid: 0bb768b21b593f446b8a5f6f0fbfde43, type: 3}

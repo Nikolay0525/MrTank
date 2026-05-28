@@ -12,8 +12,8 @@ namespace Assets.Scripts
         public EnemyType enemyType;
 
         [Header("Spawn Conditions")]
-        public int minDistanceToSpawn = 0;
-        public int maxDistanceToSpawn = 99999;
-        public float spawnWeight = 1f;
+        public int minDifficultyLevelToSpawn = 15;
+        public int maxDifficultyLevelToSpawn = 30;
+        public float spawnWeight = 0.5f;
     }
 }

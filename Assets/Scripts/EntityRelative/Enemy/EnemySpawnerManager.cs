@@ -54,18 +54,53 @@ namespace Assets.Scripts
                 return null;
             }
 
-            int randomIndex = Random.Range(0, currentSceneData.enemyPrefabs.Count);
-            EnemyConfig selectedConfig = currentSceneData.enemyPrefabs[randomIndex];
+            var currentDifficultyLevel = DifficultyManager.Instance.GetDifficultyLevel();
 
-            GameObject enemyPrefab = selectedConfig.gameObject;
-            GameObject spawnedEnemy = PoolManager.Instance.GetObject(enemyPrefab);
+            float totalWeight = 0f;
 
-            if (spawnedEnemy != null)
+            for (int i = 0; i < currentSceneData.enemyPrefabs.Count; i++)
             {
-                activeEnemies.Add(spawnedEnemy);
+                EnemyConfig config = currentSceneData.enemyPrefabs[i];
+
+                if (currentDifficultyLevel >= config.minDifficultyLevelToSpawn &&
+                    currentDifficultyLevel <= config.maxDifficultyLevelToSpawn)
+                {
+                    totalWeight += config.spawnWeight;
+                }
             }
 
-            return spawnedEnemy;
+            if (totalWeight <= 0f)
+            {
+                return null;
+            }
+
+            float randomValue = Random.Range(0f, totalWeight);
+            float accumulatedWeight = 0f;
+
+            for (int i = 0; i < currentSceneData.enemyPrefabs.Count; i++)
+            {
+                EnemyConfig config = currentSceneData.enemyPrefabs[i];
+
+                if (currentDifficultyLevel >= config.minDifficultyLevelToSpawn &&
+                    currentDifficultyLevel <= config.maxDifficultyLevelToSpawn)
+                {
+                    accumulatedWeight += config.spawnWeight;
+
+                    if (randomValue <= accumulatedWeight)
+                    {
+                        GameObject spawnedEnemy = PoolManager.Instance.GetObject(config.gameObject);
+
+                        if (spawnedEnemy != null)
+                        {
+                            activeEnemies.Add(spawnedEnemy);
+                        }
+
+                        return spawnedEnemy;
+                    }
+                }
+            }
+
+            return null;
         }
 
         public void ReturnEnemy(GameObject enemy)

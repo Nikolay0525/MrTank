@@ -39,6 +39,16 @@ namespace Assets.Scripts
                 }
             }
 
+            if (newSceneData.enemyHitEffectPrefab != null)
+            {
+                InitializePool(newSceneData.enemyHitEffectPrefab.gameObject, 2, 10);
+            }
+
+            if (newSceneData.groundHitEffectPrefab != null)
+            {
+                InitializePool(newSceneData.groundHitEffectPrefab.gameObject, 2, 10);
+            }
+
             if (newSceneData.layerPrefabs != null)
             {
                 foreach (var layer in newSceneData.layerPrefabs)
@@ -77,6 +87,16 @@ namespace Assets.Scripts
                 {
                     requiredPrefabs.Add(aimingSystem.projectilePrefab);
                 }
+            }
+
+            if (newSceneData.enemyHitEffectPrefab != null)
+            {
+                requiredPrefabs.Add(newSceneData.enemyHitEffectPrefab.gameObject);
+            }
+
+            if (newSceneData.groundHitEffectPrefab != null)
+            {
+                requiredPrefabs.Add(newSceneData.groundHitEffectPrefab.gameObject);
             }
 
             if (newSceneData.layerPrefabs != null)
