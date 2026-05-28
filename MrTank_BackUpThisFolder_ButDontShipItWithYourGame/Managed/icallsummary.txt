@@ -269,6 +269,7 @@ UnityEngine.AnimationCurve::Internal_Destroy
 UnityEngine.Animations.AnimationLayerMixerPlayable::SetSingleLayerOptimizationInternal
 UnityEngine.Animator::get_hasBoundPlayables_Injected
 UnityEngine.Animator::StringToHash_Injected
+UnityEngine.Animator::GetAnimatorStateInfo_Injected
 UnityEngine.Animator::Play_Injected
 UnityEngine.Animator::ResetTriggerString_Injected
 UnityEngine.Animator::SetTriggerString_Injected
@@ -280,8 +281,6 @@ UnityEngine.Application::OpenURL_Injected
 UnityEngine.Application::get_persistentDataPath_Injected
 UnityEngine.Application::set_targetFrameRate
 UnityEngine.Application::get_platform
-UnityEngine.AsyncOperation::InternalDestroy
-UnityEngine.AsyncOperation::InternalSetManagedObject
 UnityEngine.Audio.ScriptableProcessorBindings::CheckProcessorExistsInternal_Injected
 UnityEngine.AudioSettings::StartAudioOutput
 UnityEngine.AudioSettings::StopAudioOutput
@@ -774,7 +773,6 @@ UnityEngine.Object::ToString_Injected
 UnityEngine.Object::set_hideFlags_Injected
 UnityEngine.Object::get_hideFlags_Injected
 UnityEngine.Object::FindObjectsByType
-UnityEngine.Object::FindObjectsOfType
 UnityEngine.ObjectGUIState::Internal_Create
 UnityEngine.ObjectGUIState::Internal_Destroy
 UnityEngine.Physics::get_invokeCollisionCallbacks
@@ -906,11 +904,6 @@ UnityEngine.ResourcesAPIInternal::FindObjectsOfTypeAll
 UnityEngine.ResourcesAPIInternal::LoadAll_Injected
 UnityEngine.Rigidbody2D::get_linearVelocity_Injected
 UnityEngine.Rigidbody2D::set_linearVelocity_Injected
-UnityEngine.SceneManagement.Scene::GetBuildIndexInternal_Injected
-UnityEngine.SceneManagement.SceneManager::get_sceneCount
-UnityEngine.SceneManagement.SceneManager::GetActiveScene_Injected
-UnityEngine.SceneManagement.SceneManager::GetSceneAt_Injected
-UnityEngine.SceneManagement.SceneManagerAPIInternal::LoadSceneAsyncNameIndexInternal_Injected
 UnityEngine.Screen::get_fullScreen
 UnityEngine.Screen::get_height
 UnityEngine.Screen::get_width

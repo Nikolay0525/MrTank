@@ -7,17 +7,13 @@ namespace Assets.Scripts
     public class FloatingHealthBar : MonoBehaviour
     {
         [Header("Dependencies")]
-        [Tooltip("Посилання на компонент Health об'єкта")]
+        [Tooltip("Health component")]
         public Health targetHealth;
-        [Tooltip("Посилання на графічний компонент Slider")]
+        [Tooltip("Slider component")]
         public Slider healthSlider;
 
-        private CanvasGroup canvasGroup;
-
-        private void Awake()
-        {
-            canvasGroup = GetComponent<CanvasGroup>();
-        }
+        [Header("Select HealthBar CanvasGroup")]
+        public CanvasGroup canvasGroup;
 
         private void Start()
         {

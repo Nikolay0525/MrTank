@@ -88,12 +88,13 @@ namespace Assets.Scripts
         private IEnumerator EquipTankRoutine(SceneData sceneData, bool isAutoStart)
         {
             PoolManager.Instance.PrewarmSceneData(sceneData);
-
             SpawnPlayerTank(sceneData.playerTankPrefab);
 
             yield return null;
 
             OnTankEquipped?.Invoke(sceneData);
+
+            PoolManager.Instance.CleanupOldPools(sceneData);
 
             if (isAutoStart && TankController.Instance != null)
             {

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 namespace Assets.Scripts
 {
@@ -65,8 +64,63 @@ namespace Assets.Scripts
             }
         }
 
+        public void CleanupOldPools(SceneData newSceneData)
+        {
+            if (newSceneData == null || pools.Count == 0) return;
 
-        public void InitializePool(GameObject prefab, int defaultSize = 10, int maxSize = 100)
+            HashSet<GameObject> requiredPrefabs = new HashSet<GameObject>();
+
+            if (newSceneData.playerTankPrefab != null)
+            {
+                AimingSystem aimingSystem = newSceneData.playerTankPrefab.GetComponent<AimingSystem>();
+                if (aimingSystem != null && aimingSystem.projectilePrefab != null)
+                {
+                    requiredPrefabs.Add(aimingSystem.projectilePrefab);
+                }
+            }
+
+            if (newSceneData.layerPrefabs != null)
+            {
+                foreach (var layer in newSceneData.layerPrefabs) requiredPrefabs.Add(layer.gameObject);
+            }
+
+            if (newSceneData.enemyPrefabs != null)
+            {
+                foreach (var enemyConfig in newSceneData.enemyPrefabs) requiredPrefabs.Add(enemyConfig.gameObject);
+            }
+
+            if (newSceneData.sceneryPrefabs != null)
+            {
+                foreach (var scenery in newSceneData.sceneryPrefabs) requiredPrefabs.Add(scenery.gameObject);
+            }
+
+            RemoveOldPools(requiredPrefabs);
+        }
+
+        private void RemoveOldPools(HashSet<GameObject> requiredPrefabs)
+        {
+            List<GameObject> existingKeys = new List<GameObject>(pools.Keys);
+
+            foreach (var existingPrefab in existingKeys)
+            {
+                if (!requiredPrefabs.Contains(existingPrefab))
+                {
+                    pools[existingPrefab].Dispose();
+                    pools.Remove(existingPrefab);
+                }
+            }
+
+            List<GameObject> existingInstances = new List<GameObject>(instanceToPrefabMap.Keys);
+            foreach (var instance in existingInstances)
+            {
+                if (!requiredPrefabs.Contains(instanceToPrefabMap[instance]))
+                {
+                    instanceToPrefabMap.Remove(instance);
+                }
+            }
+        }
+
+        private void InitializePool(GameObject prefab, int defaultSize = 10, int maxSize = 100)
         {
             if (prefab == null || pools.ContainsKey(prefab)) return;
 
