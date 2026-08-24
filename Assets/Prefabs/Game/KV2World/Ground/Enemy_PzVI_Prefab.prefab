@@ -389,7 +389,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Assets.Scripts.EnemyConfig
   enemyType: 2
-  minDifficultyLevelToSpawn: 0
+  minDifficultyLevelToSpawn: 20
   maxDifficultyLevelToSpawn: 10000000
   spawnWeight: 0.5
 --- !u!114 &210220284062044720
